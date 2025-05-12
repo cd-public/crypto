@@ -1,0 +1,343 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+---
+title: BigRSA
+subtitle: "HW 0x7: Due Th, 03 Apr"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Implement the Rivest–Shamir–Adleman public-key cryptosystem
+
+
+- This is cumulative homework assignment across 4096_t and RSAinC
+- Implement 4096 bit RSA.
+- This is an extended homework of more than week, due after break. I recommend:
+
+| Week:    | Tasks:    |
+| --------- | ---------- |
+| 10 Mar | 2048 bit prime generation  |
+| 17 Mar | Unsigned big extended GCD |
+| 24 Mar | Finish Key Generation and File I/O |
+| 31 Mar | Implement BigRSA |  
+
+- You will also probably need to manage a file structure wherein 4096_t and ops_ui are includeded into your BigRSA.
+- Use header files and examples from the labs.
+
+:::
+
+# Primes&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#primes" role="button" aria-expanded="false" aria-controls = "primes">Show</a>
+
+::: {#primes .collapse .multi-collapse}
+
+*Work on week of 10 Mar*
+
+## Implement Big Primality Testing
+
+- It turns out this is impossible. Nevertheless, we have a plan.
+
+### Implement randomization via `/dev/random`
+
+- `/dev/random` and the more prefered but less established `/dev/urandom` are file-like random number generations that could plausibly be cryptographically secure on your system.
+- We will not be able to implement cryptographically secure RSA, but we should follow the random number generation convention.
+- Basically, we read from `/dev/random` as we would any other file, here is an example of reading and printing 4096 "random" bits.
+  - `S` is a constant defined in 4096_t
+
+```{.C filename="BigRNG.c"}
+#include "4096_t.h"
+
+int main() {
+        uint64_t bignum[S];
+        FILE *fp = fopen("/dev/random", "r");
+        fread(bignum, sizeof(uint64_t), S, fp);
+        fclose(fp);
+        seebig(bignum);
+        return 0;
+}
+```
+
+- You will need to use randomization to select your primes.
+
+### Implement Big Prime Generation
+
+- Use:
+  - libgmp
+  - `/dev/random`
+- Basically, get this to work.
+  - It seemed fine for me.
+  - `-lgmp`
+
+```{.C filename="BigRNG.c"}
+void prigmp(uint64_t *big, uint8_t words) {
+    /* populate from buffer */
+    mpz_t m;
+    FILE *fp = fopen("/dev/random", "r");
+    memset(big, 0, BYTES);
+    fread(big, sizeof(uint64_t), words, fp);
+    fclose(fp);
+    mpz_init(m);
+    mpz_import(m, S, -1, sizeof(uint64_t), 0, 0, big);
+    mpz_nextprime(m, m);
+    mpz_export(big, NULL, -1, sizeof(uint64_t), 0, 0, m);
+    mpz_clear(m);
+    return;
+}
+```
+
+:::
+
+
+# BigGCD&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#biggcd" role="button" aria-expanded="false" aria-controls = "biggcd">Show</a>
+
+::: {#biggcd .collapse .multi-collapse}
+
+*Work on week of 17 Mar*
+
+## Implement BigGCD
+        
+- Modifying the extended Euclidean algorithm / extended gcd for use with the 4096_t ints.
+- I had to do the following:
+  - Change all arithmetic operations from using infix operators like $+$ or $/$.
+  - Modifying the Euclidean algorithm to use only positive values.
+  - Test extensively.
+- You can also implement 4096_t to accomodate negative values (which I did not do).
+  - I instead created different local values with my EEA function that tracked whether everything was positive or negative.
+  - Then wrote wrapper functions around the "big" operations that tracked the sign values.
+
+:::
+
+# BigKey&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#keygen" role="button" aria-expanded="false" aria-controls = "keygen">Show</a>
+
+::: {#keygen .collapse .multi-collapse}
+
+*Work on week of 24 Mar*
+
+## Generate Keys
+
+- Write a 4096 bit .bad and .pub file.
+- Implement in a .c file called "bigkey.c"
+  - It should behave identically to "keygen.c", but generate 4096 bit keys.
+  - The 4096 bit refers to how large the $n$ value should be
+  - E.g. the $e$ value may still be (decimal) 65537
+- The KeyGen description from "RSAinC" in provided below, as reference:
+
+### A Private Key in 3 Parts
+
+- We recall that the private key minimally contains:
+  - `n`, a modular base
+  - `e`, an encryptor, and 
+  - `d`, a descryptor.
+
+- Based on the KeyGen lab, it should be uncomplicated to calculate these values for 64 bit keys.
+- We will use `.bad` instead of `.pem` and insecurely store these values in plaintext.
+- We will then make executables to generate `.bad` and encrypt content provided a `.bad`
+    - We name a `.bad` so helpfully we don't use it by accident.
+- We will naively print 3 lines of hexademical values, `n`, `e`, then `d`.
+- We will write them to a 5-line file as follows:
+  - The first line is the precise header text.
+  - The second line is the `n` value in hexadecimal.
+  - The third line is the `e` value, which is `10001`.
+  - The fourth line is the `d` value, which should be kept secret.
+  - The fifth and final line is the precise footer text.
+
+```{.email filename="unsafe.bad"}
+-----BEGIN UNSAFE PRIVATE KEY-----
+95a61f99198bd8e9
+10001
+fbea5e6a3ed31e8f
+-----END UNSAFE PRIVATE KEY-----
+```
+### A Public Key in 2 Parts
+
+- We recall that the public key contains, and should only contain:
+  - `n`, a modular base, and
+  - `e`, an encryptor
+
+- Based on the KeyGen lab, we already have the ability to write these values to file.
+- We will use `.pub` instead of `.pem` or `.bad`
+  - Not a huge deal how these are stored, actually.
+  - The key itself though, is still unsafe to use.
+- We will naively print 2 lines of hexademical values, `n`, then `e`.
+- We will right them to a file prefixed and suffixed as follows:
+
+```{.email filename="unsafe.pub"}
+-----BEGIN UNSAFE PUBLIC KEY-----
+95a61f99198bd8e9
+10001
+-----END UNSAFE PUBLIC KEY-----
+```
+
+:::
+
+# BigRSA&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bigrsa" role="button" aria-expanded="false" aria-controls = "bigrsa">Show</a>
+
+::: {#bigrsa .collapse .multi-collapse}
+
+*Work on week of 31 Mar*
+
+## Implement End-to-end 4096 bit RSA
+
+- Do so in a novel file, `bigrsa.c`, which should:
+  - Accept 3 command line arguments:
+    - A flag `-d` or `-e` for decrypt or encrypt
+    - The file name of an input file.
+    - The file name of an output file.
+  - It should:
+    - Read the content of the input file.
+    - Encrypt or decrypt, as specified, the file contents.
+      - It should read `n` and `d` from "unsafe.bad" to decrypt.
+      - It should read `n` and `e` from "unsafe.pub" to encrypt.
+    - Write the encrypted or decrypted content to the output file.
+- Your BigRSA should function over either "keygen.c" 32 bit keys or "bigkey.c" 4096 bit keys.
+
+## A Note
+
+- Be advised that the square of a 4096 bit value requires 8198 bits to specify.
+- It is reasonable to test of 512 (`openssl` minimum) or 1024 (`ssh-keygen` minumum size)
+
+:::
+
+# Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls = "tester">Show</a>
+
+::: {#tester .collapse .multi-collapse}
+
+## "Tester"
+
+- Rather than provide an end-to-end containerized autograder, I am providing a Makefile.
+```{.email}
+wget https://github.com/cd-c89/refrsa/raw/refs/heads/main/Makefile # curl was struggling
+```
+
+```{.Makefile filename="Makefile"}
+CC = gcc # or clang
+CFLAGS = -std=c89 -Wall -Wextra -Werror -Wpedantic -O2
+CLIBS = -lgmp # for biggmp and primes
+BIGNUM = biggmp.c # or use 4096_t.c
+
+all: bigrsa bigkey
+
+bigrsa: bigrsa.c $(BIGNUM) 4096_t.h
+	$(CC) bigrsa.c $(BIGNUM) $(CFLAGS) -o bigrsa $(CLIBS)
+	
+bigkey: bigkey.c $(BIGNUM) 4096_t.h
+	$(CC) bigkey.c $(BIGNUM) $(CFLAGS) -o bigkey $(CLIBS)
+
+clean:
+	rm -f bigrsa bigkey unsafe.* *.txt
+
+check: bigrsa bigkey
+	./bigkey
+	echo "Multiple of four chars." > m.txt
+	./bigrsa -e m.txt c.txt
+	./bigrsa -d c.txt n.txt
+	diff m.txt n.txt
+```
+
+- I am also providing:
+  - A reference solution that uses this Makefile.
+  - A GitHub action that uses this Makefile:
+
+```{.yml filename="C89.yml"}
+name: C89 CI
+
+on: push
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - run: make check
+```
+
+- Read more in "Solved"
+
+:::
+
+# Solved&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#solved" role="button" aria-expanded="false" aria-controls = "solved">Show</a>
+
+::: {#solved .collapse .multi-collapse}
+
+## Solution
+
+::: {.callout-danger}
+
+*Spoiler alert*: This section contains spoilers, including a working solution, to the BigRSA assignment.
+
+:::
+
+::: {.callout-tip}
+## Spoiler Alert!
+
+This section contains spoilers, including a working solution, to the BigRSA assignment.
+
+:::
+
+## A Reference Solution
+
+- After careful reflection, the weight and challenge of this assignment made a single, in-container script insufficient, in my view, for testing.
+- In lieu, I am providing a full reference implementation, with a few caveats:
+  - I have maintained 4096_t solutions as closed source.
+    - Instead, I have implemented an interface to libgmp mpz_t numbers in `biggmp.c`
+    - If you are stuck on 4096_t, you should use this as well.
+  - I am trusting you to either look at, or not look at, my code, based on what works best for your learning.
+    - It is provided as is, and likely has few bugs, but probably not that few.
+  - I am not requiring you to have any particular interfacing, though I am providing one as an example.
+
+## A Perfect System
+
+- A perfect project will:
+  - Use a 'bigkey' executable once to perform key generation:
+    - Write keys to two files, one public and one private.
+  - Use a 'bigrsa' executable twice to perform "round trip" encryption on a greater than 64 bit data file.
+    - Write more than 64 bits to a data file.
+      - It is easier to do a precise multiple of 64
+    - Encrypt this file and store the ciphertext as a new file.
+    - Decrypt the cipher text file.
+    - Take a `diff` of the input file and the decrypted file.
+      - If the return code of diff `$?` is 0, the project is a success.
+
+## An explanation
+
+- Why this implementation?
+  - I could not find a way I liked to specify:
+    - Storing keys
+    - Story cipher texts
+    - Setting key lengths
+  - I felt any specification was unfairly restrictive.
+
+## How to use the reference repository
+
+- Either clone the repository and include your own `bigrsa` and `bigkey` or,
+- Add the relevant files to your `crypto` repository.
+- Study the Makefile closely, and use this reference material or `#help-line` if you are confused.
+  - My favorite [Makefile tutorial](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/)
+- You are not required to use GitHub actions (or containers, conspiciously absent) but may wish to do so.
+- You don't need to think about `clang` vs `gcc`, but I wanted to show you clang and Makefile variables.
+
+## The Repository
+
+::: {.callout-warning collapse="true"}
+## Expand for Reference Solution
+
+- The repository is publicly visible at [github.com/cd-c89/refrsa](https://github.com/cd-c89/refrsa)
+
+:::
+
+
+:::

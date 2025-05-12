@@ -1,0 +1,887 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+---
+title: Endian
+subtitle: "Lab 0x3"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Differentiate different integer encodings.
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- SHA      | - stdint   |
+|- Bits     | - fileio   |
+|- Arrays   | - htonll   |
+|- Printb   | - memset   |
+
+- There are no required exercises of this lab.
+- It is supplementary material to the SHAinC homework.
+- `Option` and `htonll` are the major optional exercises that support SHAinC.
+  - They are what I regard as likely to be the optimal solutions to problems I expect you to encounter.
+- 'Memset' might, or might not, help a lot (depending on how you think).
+- `Arrays` will help you at high probability if you encounter a segmentation fault.
+
+:::
+
+
+# Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls="podman">Show</a>
+
+::: {#podman .collapse .multi-collapse}
+
+# Setup
+
+- For this lab, I used the following Containerfile
+  - Same as the C89/99 lecture
+
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc vim -y
+```
+- I built via the following:
+```email
+podman build -t c89_99 .
+```
+- I conducted the full lab within a single container's `vim` instance.
+```email
+podman run -it printb vim endian.c
+```
+- I conducted all work within this `vim` window and its `:term`
+
+:::
+
+
+# stdint&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#stdint" role="button" aria-expanded="false" aria-controls = "stdint">Show</a>
+
+::: {#stdint .collapse .multi-collapse}
+
+## stdint.h
+
+- Before doing anything else, we should get 32 bit words.
+- I use `stdint.h`.
+- Change last weeks homework to:
+  -  Add an `include` and
+  -  Remove `unsigned` by converting to
+  -  `uint32_t`
+- Say I had this (incorrect) code:
+
+```{.c filename="macros.c"}
+#define CHOICE(e,f,g) ((e)?(f):(g))
+#define MEDIAN(e,f,g) ((!!(e) + !!(f) + !!(g)) > 1)
+#define ROTATE(a,n) ((a) >> (n))
+
+int main() {
+    unsigned e = 0xAA, f = 0x55, g = 0x66;
+    CHOICE(e,g,g);
+    MEDIAN(e,f,g);
+    ROTATE(e,f);
+    return 0;
+}
+```
+
+- Include `stdint` and update type names:
+
+```{.c filename="macros.c"}
+#include <stdint.h> / * !!! NEW */
+
+#define CHOICE(e,f,g) ((e)?(f):(g))
+#define MEDIAN(e,f,g) ((!!(e) + !!(f) + !!(g)) > 1)
+#define ROTATE(a,n) ((a) >> (n))
+
+int main() {
+    uint32_t e = 0xAA, f = 0x55, g = 0x66; /* !!! NEW */
+    CHOICE(e,g,g);
+    MEDIAN(e,f,g);
+    ROTATE(e,f);
+    return 0;
+}
+```
+
+::: {.callout-note}
+An astute student may note that one obvious way to make such change is to:
+
+1. Open Python
+2. Read in `macros.c` via `open` into a string variable.
+3. Close the file descriptor to `macros.c`
+4. Perform a replace from `unsigned to `uint32_t`.
+5. Write the file to `macros.c`
+
+While in this case we are performing a single string substitutions, and Python is hardly the best choice for so simple a transform, it is always appropriate to use scripts, rather than manual methods, write and edit code.
+:::
+
+- You also need to use exactly one 64 bit numerical value, *l*
+  - The message length in bits.
+  - We recall the SHA-2 standard caps messages at length `2 ** 62 - 1`
+  - Usually (almost always) a multiple of 8.
+  - Rarely needs all 64 bits, but is required to have them for the standard.
+- Other values - hash values, messages chunks, etc, are 32 bit.
+
+```{.c filename="macros.c"}
+#include <stdint.h> / * !!! NEW */
+
+int main() {
+    uint32_t h_i[0x08];  /* 256 bit hash */
+    uint32_t m_i[0x10];  /* 512 bit message chunk */
+    uint64_t l;        /* 64 bit message length */
+    /* Etc, etc. */
+    return 0;
+}
+```
+
+- We will use these variables to read information from a file.
+
+:::
+
+# FileIO&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#fileio" role="button" aria-expanded="false" aria-controls = "fileio">Show</a>
+
+::: {#fileio .collapse .multi-collapse}
+
+*I delivered remarks on file io in a previous term using [these slides](https://cd-public.github.io/courses/old/syss24/slides/slides/w05d01.html#/10).*
+
+## File I/O
+
+- We uphold the following exemplar of SHA256: `sha256sum`
+```sh
+$ echo "15 characters." > 15char.txt
+$ wc 15char.txt
+ 1  2 15 15char.txt
+$ cat 15char.txt
+15 characters.
+$ sha256sum 15char.txt
+5794032f0c0c7ec2c1f43ac9500f65076ad65ec45b8f76e7e2e4cf882b55c3bb  15char.txt
+```
+- It computes an SHA-256 hash based on a *filename*.
+- We introduce file input (not really output) for equivalence.
+  - fopen()
+  - fread()
+  - fprintf() 
+  - fclose()
+
+### fopen()
+
+- C `fopen` is almost identical to Python `open`
+  - Take a filename, and
+  - A mode, and
+  - Return a "file pointer" 
+    -  In Python, an `_io.TextIOWrapper`
+```py
+>>> open("lipsum.txt", "r")
+<_io.TextIOWrapper name='lipsum.txt' mode='r' encoding='cp1252'>
+```
+    - In C, a `FILE *`
+```C
+FILE *fopen(const char *pathname, const char *mode);
+```
+  - We capture the return value in a variable for use with other functions.
+
+::: {.callout-note}
+An astute student may note that while the Python script can be run directly, testing a line of C code requires additional supporting lines-of-code (LoC) in a complete `.c` file with:
+
+1. An `#include` preprocessor directive to incorporate the `stdio` library
+2. A `main` function, likely with a `return 0;`
+
+While in this case we are not using this line of code to do anything, versus single lines of Python, single lines of C code are not necessarily independently interpretable or testable.
+:::
+
+#### Null Checking
+
+- In C, and perhaps in Python, it is common to check if a `fopen` call is successful.
+  - `fopen` is something called a "system call" like printf, and should be "null checked".
+  - We:
+    - Capture the return value in a variable, and
+    - Compare the return value to `NULL` (that is, zero), and
+    - If the return value is `NULL`, exit with an error code.
+      - Usually in C this is `exit(1)`.
+      - Included in "stdlib.h"
+- Here is an example:
+  - We note that "f_name" is of type `char *` and includes the file extension.
+```{.C}
+#include <stdlib.h> /* exit */
+int main() {}
+    char *f_name = "my_file.txt";
+    FILE *fp = fopen(f_name, "r"); /* read mode */
+    if (fp == NULL) {
+        exit(1);
+    }
+    return 0;
+}
+```
+- You are under no real obligation to null check but...
+  - Without null checks, very bad times at low probability.
+  - Ground truth for return values is from the ["man pages"](https://man7.org/linux/man-pages/index.html)
+  - Or use 'man fopen' in a non-minimized (not `podman`) Linux system.
+
+### fread()
+
+- Once you have opened a file and null checked, it may be read.
+- As a rule, read files into character arrays.
+  - Not quite strings, but not quite not strings.
+- For SHA-256, read 512 bits at a time.
+  - That is 64 characters/bytes/`uint8t_t`s
+```{.C}
+  uint8_t bytes[64];
+```
+
+- C `fread` is quite distinct from Python `.read()`
+  - Python `.read` is object oriented (not C-like)
+- `fread` takes four arguments:
+```{.C}
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+```
+  - A memory location `ptr` into which to read bytes.
+    - Call it the "dst" or "destination", perhaps.
+  - A `size_t` "size", how big each thing to read is.
+    - `size_t` is usually a `uint64_t`, but doesn't have to be.
+    - Would be of size `1` for `char`
+    - Would be of size `8` for `uint64_t`
+    - Would be of size `sizeof(int)` for the default `int` type.
+  - A `size_t` 'nmemb' for "$n$ members"
+    - The number of things of 'size' to read.
+  - A `FILE *` 'stream' from which to read.
+- fread will read 'size' * 'nmemb' bytes from 'stream' into 'ptr'.
+
+```{.C}
+#include <stdlib.h> /* exit */
+int main() {}
+    uint8_t bytes[64];
+    /* Unsafe - needs nullchecks */
+    FILE *fp = fopen("my_file.txt", "r"); /* read mode */
+    fread(bytes, 1, 64, fp); /* read up to 64 * 8 -> 512 bits */
+    return 0;
+}
+```
+
+#### ~Null checking
+
+- `fread` has a variety of interesting return values.
+  - It will return the number of members read...
+  - Not necessarily the number of bytes (if 'size' is non-one)
+- Returns zero on error, but also...
+- Not all files are as large as the read buffer.
+  - In the above example, `bytes` is the buffer into which we read - the read buffer.
+- On SHA-256, you will have to read files of arbitrary size.
+  - They will not all be multiples of 512.
+  - You will have to follow the padding algorithm.
+  - Checking the return value of `fread` will be necessary to determine *l*.
+  - Make sure you check `sizeof(size_t)`!
+
+```{.C}
+size_t l = 0; /* SHA-256 length variable 'l' */
+l += fread(bytes, 1, 64, fp) >> 3; /* 2^3 bits per byte */
+```
+
+### fprintf
+
+- `fprintf` is like printf, but the leading `f` allows directing output somewhere other than standard output `stdout`.
+- I use it here to direct error messages to a special place, `stderr`
+  - `stderr` is easier to work with in a variety of complicated ways, but...
+  - It is "unbuffered", so print statements will be output to `stderr` immediately.
+  - Sometimes, `printf` statements are lost if errors occur in immediately successive lines of code.
+  - We can also capture `stderr` output specifically with shell commands:
+```sh
+$ ./endian 2> /dev/null
+```
+  - This [suppresses all error messages](https://unix.stackexchange.com/questions/581240/what-is-the-use-of-script-2-dev-null-in-the-following-script).
+- I use `fprintf` to write error messages within null checks.
+- Here is one example, from my sha256 reference solution:
+```{.C}
+FILE *fp = fopen(f_name, "r"); /* read mode */
+
+if (fp == NULL) {
+    fprintf(stderr, "fopen fails on f_name \"%s\", exiting...\n", f_name);
+    exit(1);
+}
+```
+- High reward and no risk.
+- I will use `2> /dev/null` in autograders for your convenience.
+
+### fclose
+
+- I am contractually obligated to tell you to close files.
+- The interesting bit here is the special `EOF` character.
+- [Read more](https://en.wikipedia.org/wiki/End-of-file).
+  - I refer to `EOF` a lot in my theory courses, as a "special character" that comes up a lot in automata and computability theory.
+- Sample code:
+```{.C}
+if (fclose(fp) == EOF) {
+    fprintf(stderr, "fclose fails on f_name \"%s\", exiting...\n", f_name);
+    exit(1);
+}
+```
+
+:::
+
+# Option&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#option" role="button" aria-expanded="false" aria-controls = "option">Show</a>
+
+::: {#option .collapse .multi-collapse}
+
+
+## Optional Exercise
+
+- Write a C language executable that 
+  - Given a file name at command line...
+  - Prints out the contents of the file...
+  - In hexadecimal...
+  - In chunks of size 512 bytes.
+- Sample input:
+```{.html .code-overflow-wrap filename="lipsum.txt"}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```
+
+- Sample command:
+```bash
+./fileio lipsum.txt
+```
+
+- Sample output:
+```{.email style="max-height:6em;overflow-y: scroll;"}
+4c6f7265 6d206970 73756d20 646f6c6f 
+72207369 7420616d 65742c20 636f6e73 
+65637465 74757220 61646970 69736369 
+6e672065 6c69742c 20736564 20646f20
+
+65697573 6d6f6420 74656d70 6f722069 
+6e636964 6964756e 74207574 206c6162 
+6f726520 65742064 6f6c6f72 65206d61 
+676e6120 616c6971 75612e20 55742065
+
+6e696d20 6164206d 696e696d 2076656e 
+69616d2c 20717569 73206e6f 73747275 
+64206578 65726369 74617469 6f6e2075 
+6c6c616d 636f206c 61626f72 6973206e
+
+69736920 75742061 6c697175 69702065 
+78206561 20636f6d 6d6f646f 20636f6e 
+73657175 61742e20 44756973 20617574 
+65206972 75726520 646f6c6f 7220696e
+
+20726570 72656865 6e646572 69742069 
+6e20766f 6c757074 61746520 76656c69 
+74206573 73652063 696c6c75 6d20646f 
+6c6f7265 20657520 66756769 6174206e
+
+756c6c61 20706172 69617475 722e2045 
+78636570 74657572 2073696e 74206f63 
+63616563 61742063 75706964 61746174 
+206e6f6e 2070726f 6964656e 742c2073
+
+756e7420 696e2063 756c7061 20717569 
+206f6666 69636961 20646573 6572756e 
+74206d6f 6c6c6974 20616e69 6d206964 
+20657374 206c6162 6f72756d 2e0a
+```
+- It is a simply matter to verify correctness.
+  - Take the first hexadecimal character - `0x4c`.
+  - Use e.g. Python `chr`.
+  - Get the letter `L`.
+```python
+chr(0x4c)
+```
+- ***Spoilers*** Solution:
+```{.C filename="fileio.c" style="max-height:8em;overflow-y: scroll;"}
+/* 
+ * fileio.c 
+ *
+ * Write a C language executable that given a file name 
+ * prints out the contents of the file in hexadecimal 
+ * in chunks of size 512 bytes.
+ */
+
+/*
+gcc fileio.c --std=c89 -Wall -Wextra -Werror -Wpedantic -O2 -o fileio
+*/
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[]) {
+
+    size_t i, l = 0;
+    uint8_t m[64];
+    FILE *fp; 
+
+    if (!(argc > 1)) {
+        fprintf(stderr, "No filename argument provided, exiting...\n");
+        exit(1);
+    }
+
+    fp = fopen(argv[1], "r"); /* read mode */
+
+    if (fp == NULL) {
+        fprintf(stderr, "fopen fails on argv[1] \"%s\", exiting...\n", argv[1]);
+        exit(1);
+    }
+
+    do {
+        l = fread(m, 1, 64, fp);
+        for (i = 0; i < l; i++) {
+            if (i % 4 == 0 && i > 0) {
+                printf(" ");
+            }
+            if (i % 16 == 0 && i > 0) {
+                printf("\n");
+            }
+            printf("%02x", m[i]);
+        }
+        printf("\n\n");
+    } while (l == 64);
+
+    if (fclose(fp) == EOF) {
+        fprintf(stderr, "fclose fails on argv[1] \"%s\", exiting...\n", argv[1]);
+        exit(1);
+    }
+
+    return 0;
+}
+```
+
+::: {.callout-note}
+An astute student may note that the "do... while" formulation is unusual.
+
+1. In this, we will always print *something*.
+2. The empty file (a file of size zero) and no file (the absence of a file of a given name) are distinct.
+3. Therefore, we always read from the file at least once after null-checking.
+4. However, we only read *again* if at least 512 bytes were read...
+5. Otherwise we read all the content of the file.
+
+The "do... while" formulation is uncommon, but makes this specific use case much easier. Where else might you use a "do... while"? Why?
+:::
+
+:::
+
+# astyle&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#astyle" role="button" aria-expanded="false" aria-controls = "astyle">Show</a>
+
+::: {#astyle .collapse .multi-collapse}
+
+## Optional Utility
+
+- You may find keeping your C code formatted in `vim` frustrating.
+- Simply exit `vim` and invoke `astyle`.
+```bash
+astyle fileio.c
+```
+- It is likely not on your system by default.
+  - Add to the Containerfile and rebuild, or
+```bash
+apt install astyle # this assumes ubuntu, not alpine
+```
+- There are [other such utilities](https://clang.llvm.org/extra/clang-tidy/), but this one is quick and nice.
+- If you are using a build script, you can simply add `astyle`.
+
+:::
+
+# Endian&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#endian" role="button" aria-expanded="false" aria-controls = "endian">Show</a>
+
+::: {#endian .collapse .multi-collapse}
+
+*Endianness is a challenge topic. Be systematic, patient, and indefatigable.*
+
+## Endianness
+
+- For an out-of-scope reason, most computers store bits differently than most networks.
+- SHA-256 analyzes bits on a computer that are slated to go out on a network.
+- This topic is called "Endianness"
+- We go live to a lightly-formatted [LLM generated .md write-up](https://chatgpt.com/share/67760b2c-bc3c-8003-aa86-92183c898650):
+
+### LLMs on Endianess
+
+- Endianness refers to the byte order used to store multi-byte data types.
+- Like `int`, `unigned`, and `size_t` in memory. 
+- There are two main types:
+  1. Little-Endian
+    - **Definition**: The least significant byte (LSB) is stored at the lowest memory address.
+    - **Example**: The number `0x1234ABCD` is stored in memory as:
+```email
+1234ABCD
+```
+    - *Editors Note:* This is very hard to check, I might add.
+
+  2. Big-Endian
+    - **Definition**: The most significant byte (MSB) is stored at the lowest memory address.
+    - **Example**: The number `0x1234ABCD` is stored in memory as:
+```email
+CDAB3412
+```
+
+::: {.callout-note}
+An astute student may note that `CDAB3412` does not appear to be the reversal of `1234ABCD`
+
+1. Endianness reverses specifically *bytes*, 8 bits of information.
+2. Hexadecimal notation expresses specifically *nibs* or *half-bytes*, 4 bits of information.
+3. `D` is a nib and `CD` is a byte.
+4. '1234' in reverse byte order is `3412` and is **!!!NOT!!!** `4321`
+5. `4321` would constitute a *nib* or *half-byte* reversal.
+
+I recommend thinking of every *pair* of hexadecimal characters as digit in base 0x100 or base 256 expression of some numerical value.
+:::
+
+- Why Endianness Matters
+  - **Data Interoperability**: Different systems may use different endianness, causing issues when sharing binary data.
+  - **Networking**: The Internet Protocol (IP) uses big-endian (network byte order).
+  - *Editors Note:* SHA-256 in practice uses big-endian.
+- Detecting Endianness in C
+  - You can determine the endianness of your system using the following code:
+
+```{.C filename="checke.c"}
+#include <stdio.h>
+
+int main() {
+  unsigned int x = 1;
+  char *c = (char *)&x;
+  if (*c) {
+      printf("Little-Endian\n");
+  } else {
+      printf("Big-Endian\n");
+  }
+  return 0;
+}
+```
+
+### Why it matters
+
+- To my knowledge, all reference SHA-256 solutions use big endian.
+- My physical device uses little endian, and I suspect yours does too.
+
+### arpa/inet.h
+
+- This was a big problem in the early internet days.
+- ARPA, now DARPA, more or less launched the modern internet.
+- They are responsible for the C89 eligible header `arpa/inet.h`
+  - It contains e.g. `htonl`
+    - "Host to network long"
+    - In 1989, `uint32_t` was commonly called a (unsigned) long.
+    - Endianness and signedness are non-interactive.
+      - Recall the [Encode](../encode.html) lecture on signedness.
+  - In 2024, often use `htobe32`
+    - "Host to big endian 32bit"
+    - From C99 `endian.h` 
+    - As with `%b`, you may use to debug but not to solve your homework.
+      - That said, it is better to turn in a solution using `endian.h` than no solution.
+      - This is an exception to the typical "no partial credit" policy.
+
+```{.C filename="endian.c"}
+/* endian.c - &exists; C99+ <endian.h> be advised */
+
+/*
+gcc endian.c -O2 -o endian
+*/
+
+#include <stdio.h>  /* fileio   */
+#include <stdint.h> /* uint32_t */
+
+/* Optionally - endianness compatability.  */
+#include <arpa/inet.h> /* htonl */
+#include <endian.h> /* htobe32 */
+
+uint32_t my_htonl(uint32_t n) {
+    return n;
+}
+
+int main() {
+    uint32_t test = 0x1234ABCD;
+    printf("%08X\n%08X\n%08X\n",
+           test,
+           htonl(test),
+           htobe32(test),
+           my_htonl(test)
+          );
+    return 0;
+}
+```
+
+- We will now step through an example solution to `my_htonl`.
+- We will leave as an exercise `htonll` - the 64 bit variant.
+- You can compare against the `htobe64` from `endian.h`
+  - Not using `htobe64` is not just a learning goal.
+  - Removing `endian.h` from my code sped it up 5x in testing.
+- I note I will assume the "host" is litte endian.
+  - It is trivial to check, and you may do so, or use a `#define`
+
+### Memory
+
+- The core insight of endianness is that it refers to bits in memory.
+- Recall we have used the notion of memory a few times:
+  - Strings in C are characters in adjacent memory locations.
+  - Bitwise operations act on bits in adjacent memory locations.
+  - The star `*` operator and array notation `[n]` are similar.
+- We will rearrange bits using a novel operator - `&`, which negates `*`.
+  - We note that unary prefix  `&` is a memory operator, distinct from
+  - Binary infix `&` which is a bitwise operator.
+
+### Initial State
+
+- We begin with the indentity operation on `uint32_t`.
+
+```c
+uint32_t my_htonl(uint32_t n) {
+    return n;
+}
+```
+
+### Variables
+
+- In C89 style, we first declare variables.
+- First is an alias for `n`.
+  - We will treat the 32 bit int as an array of 8 bit ints.
+  - An 8 bit int is of type `uint8_t`
+  - An array is of type `*`
+- We initialize it to no value, for now.
+
+```c
+uint32_t my_htonl(uint32_t n) {
+    uint8_t *alias;
+    return n;
+}
+```
+
+- We will also be swapping bits around.
+- In Python we can use *multiple assignment*
+```py
+x, y = y, x
+```
+- This only works with key-value pairs, not arrays.
+- We use a swapping variable, a la
+```py
+t : int
+t = x
+x = y
+y = t
+del t
+```
+- In C:
+```c
+uint32_t my_htonl(uint32_t n) {
+    uint8_t swap, *alias;
+    return n;
+}
+```
+- We will be looping over something that is quite like an array, so we need an index variable.
+  - I create this variable of type `size_t` because:
+    - We will compare it to a `sizeof`
+    - We will use it as an array index to denote memory locations.
+    - So the C implementation will guarantee `size_t` is appropriate for array indices.
+    - You can determine what a `size_t` is using the usual methods for examining C code.
+
+```c
+uint32_t my_htonl(uint32_t n) {
+    uint8_t swap, *alias;
+    size_t index;
+    return n;
+}
+```
+
+### Ampersand
+
+- We will now use the ampersand `&` operator.
+  - We want the `uint8_t *` array alias to refer to the same bits and the `uint32_t` numerical value `n`.
+  - The location of the bits that constitute `n` in memory is given by `&n`.
+  - So we set the alias equal to that location.
+```c
+uint32_t my_htonl(uint32_t n) {
+    uint8_t swap, *alias = &n;
+    size_t index;
+    return n;
+}
+```
+- If you are confused at all, you should stop and print out, minimally:
+  - The values of the star, amperand, and unmodified alias and n variables.
+  - Anything else you think of.
+  - You should do these all in different lines in case you get an error.
+  - You should think of the `&n` as the key of `n` in the key-value memory storage of the system.
+
+### Casting
+
+- When I run this code, I get this warning:
+```email
+endian.c: In function ‘my_htonl’:
+endian.c:15:26: warning: initialization of ‘uint8_t *’ {aka ‘unsigned char *’} from incompatible pointer type ‘uint32_t *’ {aka ‘unsigned int *’} [-Wincompatible-pointer-types]
+   15 |     uint8_t swap, *arr = &n;
+      |        
+```
+- That's a good warning, I am doing something extremely sketchy.
+  - After all, I told `gcc` that `n` was a 32 bit integer.
+  - Then I told it that the the location `n` was in held an array of 8 bit integers.
+  - Those things can't both be true.
+- We assure `gcc` that we know what we are doing with a *cast*
+  - We apply a *cast* to a value, like the value of the memory location of `n`
+  - A cast is a type name in parenthesis as a prefix.
+  - A cast assures the compiler of the intentionality of this mapping of bits to variable names.
+  - We are claiming we want to regard `n` as an array of 8 bit integers, as a `uint8_t *`.
+- So:
+```c
+uint32_t my_htonl(uint32_t n) {
+    uint8_t swap, *alias = (uint8_t *)&n;
+    size_t index;
+    return n;
+}
+```
+- This silenced all my `gcc` warnings and errors.
+
+
+### Main loop
+
+- It now suffices to rearrange the bits within 32 bit integer `n`
+- Helpfully, we can refer to these bits using the aliasing 8 bit integer array `alias`.
+```c
+uint32_t my_htonl(uint32_t n) {
+    uint8_t swap, *alias = (uint8_t *)&n;
+    size_t index;
+    swap = alias[0];
+    alias[0] = alias[3];
+    alias[3] = swap;
+    swap = alias[1];
+    alias[1] = alias[2];
+    alias[2] = swap;
+    return n;
+}
+```
+- You will note this contains repeated code, and is therefore *de facto* wrong, though it runs correctly.
+
+:::
+
+
+# htonll&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#htonll" role="button" aria-expanded="false" aria-controls = "htonll">Show</a>
+
+::: {#htonll .collapse .multi-collapse}
+
+## htonll
+
+- Write a 64 bit endianness inverter.
+- You should start with your `my_htonl` code if you are stuck.
+  - Refactor the internals into a loop
+  - Use `sizeof` for the loop termination.
+- Advanced students may wish to write a size agnostic `HTON` macro.
+  - This is non-trivial but probably possible (I didn't check).
+
+:::
+
+# memset&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#memset" role="button" aria-expanded="false" aria-controls = "memset">Show</a>
+
+::: {#memset .collapse .multi-collapse}
+
+## memset
+
+- The C89 "string.h" library contains a helpful function `memset`.
+
+```email
+NAME
+       memset - fill memory with a constant byte
+
+SYNOPSIS
+       #include <string.h>
+
+       void *memset(void *s, int c, size_t n);
+
+DESCRIPTION
+       The memset() function fills the first n bytes of the
+       memory area pointed to by s with the  constant  byte
+       c.
+
+RETURN VALUE
+       The  memset() function returns a pointer to the mem‐
+       ory area s.
+```
+
+- I use `memset` to zero out all my arrays before I use them.
+- This usually doesn't matter but is very nice with string data.
+
+## memcpy
+
+- The C89 "string.h" library contains a helpful function `memcpy`.
+  - I have never once in my life remembered destination is first, not source.
+  - I spent an hour trying to figure out a bug caused by that.
+
+```email
+NAME
+       memcpy - copy memory area
+
+SYNOPSIS
+       #include <string.h>
+
+       void *memcpy(void *dest, const void *src, size_t n);
+
+DESCRIPTION
+       The memcpy() function copies n bytes from memory area src to memory area dest.  The memory
+       areas must not overlap.  Use memmove(3) if the memory areas do overlap.
+
+RETURN VALUE
+       The memcpy() function returns a pointer to dest.
+
+ATTRIBUTES
+       For an explanation of the terms used in this section, see attributes(7).
+```
+
+- I use `memcpy` to move data into and out of SHA internal state:
+  - The working variables.
+  - The current $H_i$ hash value.
+  - The current $M_i$ message data.
+
+:::
+
+
+# Arrays&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#arrays" role="button" aria-expanded="false" aria-controls = "arrays">Show</a>
+
+::: {#arrays .collapse .multi-collapse}
+
+## Arrays
+
+- You will be tempted to write functions of this form:
+
+```C
+/* Take two arrays and a return a new array */
+char *new_hash(uint32_t *m_i, uint32_t *h_i) {
+    uint32_t h_i_1[8];
+    /* some operations */
+    return h_i_1;
+}
+```
+
+- This will cause a segmentation fault for the following reason.
+  - `h_i_1` refers to a memory location.
+  - That memory location is a local variable of the `new_hash` function
+  - When `new_hash` returns, it no longer manages it's local variables.
+  - Therefore, it is no longer safe to access that memory location.
+    - It is, essentially, reclaimed by the operating system.
+    - This occurs probabilitistically, but at high probability.
+  - So the next effort to access a value in `h_i_1` will trigger the OS to terminate your program.
+- Here is the C alternative:
+
+```C
+/* Take two arrays as arguments and update the second */
+void new_hash(uint32_t *m_i, uint32_t *h_i) {
+    uint32_t h_i_1[8];
+    /* some operations */
+    memcpy(h_i, h_i_1, sizeof(h_i_1));
+    return;
+}
+```
+
+- `h_i` is safe because it is managed by some other function.
+  - Likely `main` or some other function that called `new_hash`.
+- Therefore, it will not be reclaimed by the OS on return from `new_hash`.
+
+## Take-aways
+
+- Don't return arrays.
+- Provide arrays as arguments and update the provided arrays.
+- There are other ways to do this that we will learn in time.
+  - But they are unhelpful on SHA-256, and would enable low quality solutions.
+
+:::

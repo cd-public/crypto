@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Printb</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9884a2177d2957eae00b06e372949a78.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6143deb5822414b99d6193ead6da13dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Printb</h1>
+            <p class="subtitle lead">Lab 0x1</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+<section id="review-show" class="level1">
+<h1>Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a></h1>
+<div id="review" class="collapse multi-collapse">
+<section id="goal-think-about-c-variables-as-bits" class="level3">
+<h3 class="anchored" data-anchor-id="goal-think-about-c-variables-as-bits">Goal: Think about C variables as bits</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Review:</th>
+<th>Newish:</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>- for</td>
+<td>- bits</td>
+</tr>
+<tr class="even">
+<td>- C types</td>
+<td>- bytes</td>
+</tr>
+<tr class="odd">
+<td>- booleans</td>
+<td>- operators</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>In addition to large amounts of contextual and background material, there are three main exercises for this lab:
+<ul>
+<li>Script</li>
+<li>Printb</li>
+<li>it/ool</li>
+</ul></li>
+</ul>
+</section>
+</div>
+</section>
+<section id="podman-show" class="level1">
+<h1>Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls="podman">Show</a></h1>
+</section>
+<div id="podman" class="collapse multi-collapse">
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<ul>
+<li>For this lab, I used the following Containerfile
+<ul>
+<li>Same as lecture but I added <code>python3</code></li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Containerfile</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="Containerfile"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>FROM ubuntu</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>RUN apt update &amp;&amp; apt install gcc vim python3 -y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>I built via the following:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>podman build -t printb .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I conducted the full lab within a single container’s <code>vim</code> instance.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>podman run -it printb vim printb.c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I conducted all work within this <code>vim</code> window and it’s <code>:term</code></li>
+</ul>
+</section>
+</div>
+<section id="pybool-show" class="level1">
+<h1>PyBool&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bool" role="button" aria-expanded="false" aria-controls="bool">Show</a></h1>
+<div id="bool" class="collapse multi-collapse">
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section">==</h2>
+<ul>
+<li>To begin, we recall Enigma:
+<ul>
+<li>Unlike Python booleans, C has no boolean type.
+<ul>
+<li>Rather it has truthiness, akin to Python if statements with numerical conditions.</li>
+<li>The numerical value zero is false.</li>
+<li>All other numerical values are true.</li>
+</ul></li>
+</ul></li>
+<li>The simplest way for me to understand bools is via <em>equality testing</em>
+<ul>
+<li>First, Python</li>
+</ul></li>
+</ul>
+<section id="verify-install" class="level4">
+<h4 class="anchored" data-anchor-id="verify-install">Verify install</h4>
+<ul>
+<li>Before anything else, I verify I have an install of Python3.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I found I had 3.12.3 - not great, not terrible.</li>
+</ul>
+</section>
+<section id="python--c" class="level4">
+<h4 class="anchored" data-anchor-id="python--c">Python <code>-c</code></h4>
+<ul>
+<li>We can evaluate a single Python expression - a single line of code - via <code>-c</code></li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">"print(1 == 1)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>As expected, this prints <code>True</code> - capital “T”, lowercase “rue”.
+<ul>
+<li>We’ve seen this before.</li>
+</ul></li>
+</ul>
+</section>
+<section id="format-print" class="level4">
+<h4 class="anchored" data-anchor-id="format-print">Format print</h4>
+<ul>
+<li>However, this isn’t exactly true-to-form</li>
+<li>Python <code>print</code> is not a format print by default.</li>
+<li>For equivalence, we must use a format print.</li>
+<li>We can naively use a format without specifying a type…</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">'print(f"{1==1}")'</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This still gives <code>True</code>, but also has no C equivalent!
+<ul>
+<li>We have to provide some letter to determine <em>how a value is printed</em></li>
+</ul></li>
+</ul>
+</section>
+<section id="b-2-b" class="level3">
+<h3 class="anchored" data-anchor-id="b-2-b">2 <code>%b</code> | ! 2 <code>%b</code></h3>
+<section id="java" class="level4">
+<h4 class="anchored" data-anchor-id="java">Java</h4>
+<ul>
+<li>There is a language called Java, technically.
+<ul>
+<li>&lt;loud grumbling&gt;</li>
+</ul></li>
+<li>It has a format print, and uses <code>%b</code> for booleans, I hear.
+<ul>
+<li>Credit <a href="https://stackoverflow.com/a/24819035">Stack Overflow</a></li>
+</ul></li>
+<li>You can test if you want:
+<ul>
+<li>Yoink a Java container.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> run <span class="at">-it</span> openjdk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>It will drop you into something called jshell</li>
+<li>We can do a quick Java printf</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">printf</span><span class="op">(</span><span class="st">"1 == 1 is </span><span class="sc">%b\n</span><span class="st">"</span><span class="op">,</span><span class="dv">1</span> <span class="op">==</span> <span class="dv">1</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I got this output, which I don’t understand at all</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span> == 1 is true</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">$1</span> ==<span class="op">&gt;</span> java.io.PrintStream@34c45dca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>It does say “true” though, that’s fun!</li>
+<li>Apparently you can use the following to leave jshell</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>ex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I cleaned the Java off my system with</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> system prune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I made sure it was gone with</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">podman</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="pythonic-b" class="level4">
+<h4 class="anchored" data-anchor-id="pythonic-b">Pythonic <code>b</code></h4>
+<ul>
+<li>After that digression, let’s try <code>b</code> in Python</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">'print(f"{(1==1):b}")'</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>It prints, of all things:</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Well, that’s interesting.
+<ul>
+<li>If you want some fun first</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">'print(f"{2:b} or not {2:b}")'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+</section>
+</section>
+</div>
+</section>
+<section id="script-show" class="level1">
+<h1>Script&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#cbool" role="button" aria-expanded="false" aria-controls="cbool">Show</a></h1>
+<div id="cbool" class="collapse multi-collapse">
+<section id="scripted-testing-of-programmingcomputing" class="level3">
+<h3 class="anchored" data-anchor-id="scripted-testing-of-programmingcomputing">Scripted Testing of Programming/Computing</h3>
+<p><em>Or, “Computer Science”</em></p>
+<section id="c-truthiness" class="level4">
+<h4 class="anchored" data-anchor-id="c-truthiness">C truthiness</h4>
+<ul>
+<li>Python is written in C and correspondingly lacks a way to print something as a boolean.
+<ul>
+<li>Unlike C, Python has a boolean class, but C has no classes, and…</li>
+<li>Therefore C has no booleans (or strings or etc.)</li>
+</ul></li>
+<li>C has a somewhat complicated relationship with booleans we will explore, but
+<ul>
+<li>In the meantime, stick to <code>==</code></li>
+</ul></li>
+<li>To decide how to <code>printf</code> and <code>==</code>, we consult the C89 specification:
+<ul>
+<li>Look at <a href="http://port70.net/%7Ensz/c/c89/c89-draft.html#4.9.6">4.9.6</a></li>
+</ul></li>
+</ul>
+<blockquote style="max-height:10em;overflow-y: scroll;" class="blockquote">
+<p>d Matches an optionally signed decimal integer, whose format is the same as expected for the subject sequence of the strtol function with the value 10 for the base argument. The corresponding argument shall be a pointer to integer.</p>
+<p>i Matches an optionally signed integer, whose format is the same as expected for the subject sequence of the strtol function with the value 0 for the base argument. The corresponding argument shall be a pointer to integer.</p>
+<p>o Matches an optionally signed octal integer, whose format is the same as expected for the subject sequence of the strtoul function with the value 8 for the base argument. The corresponding argument shall be a pointer to unsigned integer.</p>
+<p>u Matches an optionally signed decimal integer, whose format is the same as expected for the subject sequence of the strtoul function with the value 10 for the base argument. The corresponding argument shall be a pointer to unsigned integer.</p>
+<p>x Matches an optionally signed hexadecimal integer, whose format is the same as expected for the subject sequence of the strtoul function with the value 16 for the base argument. The corresponding argument shall be a pointer to unsigned integer.</p>
+<p>e,f,g Matches an optionally signed floating-point number, whose format is the same as expected for the subject string of the strtod function. The corresponding argument shall be a pointer to floating.</p>
+<p>s Matches a sequence of non-white-space characters. The corresponding argument shall be a pointer to the initial character of an array large enough to accept the sequence and a terminating null character, which will be added automatically.</p>
+<p>[ Matches a nonempty sequence of characters from a set of expected characters (the scanset ). The corresponding argument shall be a pointer to the initial character of an array large enough to accept the sequence and a terminating null character, which will be added automatically. The conversion specifier includes all subsequent characters in the format string, up to and including the matching right bracket ( ] ). The characters between the brackets (the scanlist ) comprise the scanset, unless the character after the left bracket is a circumflex ( ^ ), in which case the scanset contains all characters that do not appear in the scanlist between the circumflex and the right bracket. As a special case, if the conversion specifier begins with [] or [^] , the right bracket character is in the scanlist and the next right bracket character is the matching right bracket that ends the specification. If a - character is in the scanlist and is not the first, nor the second where the first character is a ^ , nor the last character, the behavior is implementation-defined.</p>
+<p>c Matches a sequence of characters of the number specified by the field width (1 if no field width is present in the directive). The corresponding argument shall be a pointer to the initial character of an array large enough to accept the sequence. No null character is added.</p>
+<p>p Matches an implementation-defined set of sequences, which should be the same as the set of sequences that may be produced by the %p conversion of the fprintf function. The corresponding argument shall be a pointer to a pointer to void . The interpretation of the input item is implementation-defined; however, for any input item other than a value converted earlier during the same program execution, the behavior of the %p conversion is undefined.</p>
+n No input is consumed. The corresponding argument shall be a pointer to integer into which is to be written the number of characters read from the input stream so far by this call to the fscanf function. Execution of a %n directive does not increment the assignment count returned at the completion of execution of the fscanf function.
+</blockquote>
+<ul>
+<li>In brief</li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>% suffix</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>d</td>
+<td>decimal (base 10)</td>
+</tr>
+<tr class="even">
+<td>i</td>
+<td>integer</td>
+</tr>
+<tr class="odd">
+<td>o</td>
+<td>octal (base 8)</td>
+</tr>
+<tr class="even">
+<td>u</td>
+<td>unsigned (positive)</td>
+</tr>
+<tr class="odd">
+<td>x</td>
+<td>hexadecimal (base 16)</td>
+</tr>
+<tr class="even">
+<td>e,f,g</td>
+<td>float</td>
+</tr>
+<tr class="odd">
+<td>s</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td>c</td>
+<td>character (ascii/utf-8)</td>
+</tr>
+<tr class="odd">
+<td>p</td>
+<td>pointer (more latter)</td>
+</tr>
+<tr class="even">
+<td>n</td>
+<td>nothing</td>
+</tr>
+<tr class="odd">
+<td>%</td>
+<td>literal %</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Many of these are meant for scanning, not printing, so they are weird (i, n)</li>
+<li>Even briefer:</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>codes <span class="op">=</span> [<span class="st">'d'</span>,<span class="st">'i'</span>,<span class="st">'o'</span>,<span class="st">'u'</span>,<span class="st">'x'</span>,<span class="st">'e'</span>,<span class="st">'f'</span>,<span class="st">'g'</span>,<span class="st">'s'</span>,<span class="st">'c'</span>,<span class="st">'p'</span>,<span class="st">'n'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Wait a minute. I know how to:
+<ul>
+<li>Write a loop in Python</li>
+<li>Make a string in Python</li>
+<li>Write a string to a file in Python</li>
+<li>Run commands in Python
+<ul>
+<li>Including <code>podman</code> commands</li>
+</ul></li>
+</ul></li>
+<li>I know how to:</li>
+</ul>
+</section>
+</section>
+<section id="major-exercise-script" class="level3">
+<h3 class="anchored" data-anchor-id="major-exercise-script">Major Exercise: Script</h3>
+<ul>
+<li>Write a script t test all format codes in C89 to print <code>1 == 1</code> and think about the results.</li>
+<li>Spoiler alert: I did not see anything that said “True”.</li>
+</ul>
+</section>
+</div>
+</section>
+<section id="binary-show" class="level1">
+<h1>Binary&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#binary" role="button" aria-expanded="false" aria-controls="binary">Show</a></h1>
+<div id="binary" class="collapse multi-collapse">
+<section id="obx" class="level3">
+<h3 class="anchored" data-anchor-id="obx">ObX</h3>
+<ul>
+<li>Python classes <em>obscure</em> the internal data represention of the device.</li>
+<li>The C program language <em>clarifies</em> the representation so we can work with it more directly.</li>
+<li>One detail revealed is <em>binary</em> versus <em>booleans</em>
+<ul>
+<li>The binary number 0b0 is regarded as the PyBoolean value False</li>
+<li>The binary number 0b1 is regarded as the PyBoolean value True</li>
+<li>The next binary number is 0b01, how to think of this?
+<ul>
+<li>That could be a numerical value
+<ul>
+<li>Which would be the truthy value True, or</li>
+</ul></li>
+<li>That could be an array of booleans
+<ul>
+<li>0b01[0] == False and 0b01[1] == True, perhaps</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Treating numerical values as boolean arrays is a core insight of (some) cryptographic algorithms.
+<ul>
+<li>It touches on the broader learning goal of “pointers”</li>
+<li>This is partially revealed in Python, versus Java, with the <code>b</code> format code</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">"[print(f'{i:04b}') for i in range(10)]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="a-b-c-format-code" class="level3">
+<h3 class="anchored" data-anchor-id="a-b-c-format-code">A <code>%b</code> C format code</h3>
+<ul>
+<li>The C programming recently gained a <code>%b</code> format code
+<ul>
+<li>It lacked one until C23 - just last year</li>
+<li>C23 is not widely adopted…
+<ul>
+<li>The C language toolchain is a massive software endeavour</li>
+<li>Changes to the ecosystem can take decades</li>
+<li>Think: How often does a new operating system code out.
+<ul>
+<li>Not like, Windows 11… like <em>Windows</em></li>
+</ul></li>
+</ul></li>
+<li>Some compilers, like <code>gcc</code>, kinda support <code>%b</code> usage
+<ul>
+<li>I just ran some code in a few, and it sort worked.</li>
+<li>Here is an odd feature of C:
+<ul>
+<li>Just because it isn’t C, doesn’t mean <code>gcc</code> can’t handle it</li>
+<li>These are usually called “gnu extensions” or “non-standard features”</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>You can use <code>%b</code> in whatever version of <code>gcc</code> I had in my container…
+<ul>
+<li>Try both of these:</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> printb.c</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> printb.c <span class="at">-pedantic</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+<section id="minor-exercise" class="level4">
+<h4 class="anchored" data-anchor-id="minor-exercise">Minor Exercise</h4>
+<ul>
+<li>Using <code>%b</code>, write a C program that compiles to an executable which, when run, produces the following output:</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>0000</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>0001</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>0010</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>0011</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>0100</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>0101</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>0110</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>0111</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>1000</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>1001</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>1010</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>It may be helpful to work with Python first.</li>
+</ul>
+</section>
+</section>
+</div>
+</section>
+<section id="printb-show" class="level1">
+<h1>Printb&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#printb" role="button" aria-expanded="false" aria-controls="printb">Show</a></h1>
+<div id="printb" class="collapse multi-collapse">
+<section id="major-exercise-printb" class="level3">
+<h3 class="anchored" data-anchor-id="major-exercise-printb">Major Exercise: Printb</h3>
+<p><em>This code base will see use on the new homework, Macros</em></p>
+<ul>
+<li>It is a fairly simply matter to produce a pedantic-compliant <code>printb</code> function, which prints a numerical value in binary with:
+<ul>
+<li>C math,</li>
+<li>printf statements, and</li>
+<li>for loops.
+<ul>
+<li>Or perhaps while loops</li>
+</ul></li>
+</ul></li>
+<li>Do so. For now, target the <code>char</code> type, or another type of your choice.</li>
+</ul>
+<section id="extensions" class="level4">
+<h4 class="anchored" data-anchor-id="extensions">Extensions</h4>
+<ul>
+<li>Advanced students may wish to consider:
+<ul>
+<li>While loops</li>
+<li>Bit shift operators like <code>&gt;&gt;</code></li>
+<li>Bitwise operators like <code>&amp;</code></li>
+<li>The <code>atoi</code> function for testing</li>
+<li>Standarizing a left pad via any number of methods</li>
+<li>Macros, to be char-nonspecific</li>
+</ul></li>
+</ul>
+</section>
+<section id="reference-implementation" class="level4">
+<h4 class="anchored" data-anchor-id="reference-implementation">Reference implementation</h4>
+<ul>
+<li>The reference implementation, which is not pedantic-compliant, is</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>printb_not_quite.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb20" data-filename="printb_not_quite.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> printb<span class="op">(</span><span class="dt">char</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%b</span><span class="st">"</span><span class="op">,</span> n<span class="op">);</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- #define printb(x) for (int ind = 8 * sizeof(x); ind ; ind--) { printf("%d", (x >> ind) & 1); } -->
+</section>
+</section>
+</div>
+</section>
+<section id="itool-show" class="level1">
+<h1>it/ool&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bitool" role="button" aria-expanded="false" aria-controls="bitool">Show</a></h1>
+<div id="bitool" class="collapse multi-collapse">
+<section id="b-..-it-ool" class="level3">
+<h3 class="anchored" data-anchor-id="b-..-it-ool">“B” + .. ? “it” : “ool”</h3>
+<p><em>This title is combination of Pythonic and C, don’t look at it too closely.</em></p>
+<ul>
+<li>Python:
+<ul>
+<li>Has bools</li>
+<li>Doesn’t have bits, or binary, really
+<ul>
+<li>But also not <em>not</em> really, binary is everywhere</li>
+</ul></li>
+<li>But decimal is clear the expected representation in Python.</li>
+</ul></li>
+<li>C
+<ul>
+<li>Is unopinionated on bases between 8, 10, 16</li>
+<li>Has strong unofficial support for binary</li>
+<li>Has no booleans.</li>
+</ul></li>
+<li>This unsurprising leads to differences in boolean algebra.
+<ul>
+<li>My take: C values a boolean arrays</li>
+</ul></li>
+<li>Here are some C operators, with number of arguments.
+<ul>
+<li>There are 10, but most of this lab is about the first 8</li>
+</ul></li>
+</ul>
+<table style="width:100%">
+<thead>
+<tr>
+<th style="width:33%">
+Operator
+</th>
+<th style="width:33%">
+<a href="https://en.wikipedia.org/wiki/Arity">Arity</a>
+</th>
+<th style="width:33%">
+Example
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+&amp;
+</td>
+<td>
+2
+</td>
+<td>
+<code>x &amp; y</code>
+</td>
+</tr>
+<tr>
+<td>
+|
+</td>
+<td>
+2
+</td>
+<td>
+<code>x | y</code>
+</td>
+</tr>
+<tr>
+<td>
+^
+</td>
+<td>
+2
+</td>
+<td>
+<code>x ^ y</code>
+</td>
+</tr>
+<tr>
+<td>
+~
+</td>
+<td>
+1
+</td>
+<td>
+<code> ~y</code>
+</td>
+</tr>
+<tr>
+<td>
+&amp;&amp;
+</td>
+<td>
+2
+</td>
+<td>
+<code>x &amp;&amp; y</code>
+</td>
+</tr>
+<tr>
+<td>
+||
+</td>
+<td>
+2
+</td>
+<td>
+<code>x || y</code>
+</td>
+</tr>
+<tr>
+<td>
+!=
+</td>
+<td>
+2
+</td>
+<td>
+<code>x != y</code>
+</td>
+</tr>
+<tr>
+<td>
+!
+</td>
+<td>
+1
+</td>
+<td>
+<code> !y</code>
+</td>
+</tr>
+<tr>
+<td>
+&gt;&gt;
+</td>
+<td>
+2
+</td>
+<td>
+<code>x &gt;&gt; y</code>
+</td>
+</tr>
+<tr>
+<td>
+&lt;&lt;
+</td>
+<td>
+2
+</td>
+<td>
+<code>x &lt;&lt; y</code>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="major-exercise-itool" class="level3">
+<h3 class="anchored" data-anchor-id="major-exercise-itool">Major Exercise: it/ool</h3>
+<p><em>These results will see use on the new homework, Macros</em></p>
+<ul>
+<li>Determine the logical, or other, operation to which each operator corresponds, and</li>
+<li>Determine whether it is acting on bits-as-booleans or bits-as-boolean-arrays</li>
+</ul>
+</section>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

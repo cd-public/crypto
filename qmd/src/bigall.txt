@@ -1,0 +1,836 @@
+---
+title: Finite
+theme: dark
+author: Prof. Calvin
+subtitle: "Week 0x4"
+institute: Crypto
+format: 
+    revealjs: 
+        code-fold: true
+        theme: dark
+        mainfont: monospace
+        slide-number: true
+        show-slide-number: all
+        width: 1050
+        height: 700
+        footer: "[Home](../index.html)"
+
+execute:
+    echo: false
+---
+# Announcements
+
+- **Welcome** to variously CS 276/CS 540
+  - This was called "BigNum"
+  - Renamed after doing some theory work
+- **Action Items**:
+  - How was macros?
+    - More puzzle oriented that code oriented.
+  - Next homework - `4096_t` -  due next Thurs
+
+# Apocryphal Quote
+
+- I cannot find it, but I believe a philosopher one jested:
+
+> I am a weapons-grade finitist. I don't believe in numbers larger than two.
+
+- Arrays of such numbers are sufficient for computation of arbitrary precision.
+- We can not capture the infinite, but we may model it.
+  
+# Today
+
+- Reintroduce the technologies
+  - `stdint`
+- Some number theory
+  - Finite sets, rings
+  - Arbitrary/high precision integers
+  - Arithmetic operations
+  - Function types
+  
+# What are integers?
+
+- Denote integers as the mathematical symbol $\mathbb{Z}$
+  - Something to do with the German/Deutsch
+- Not particular useful in cryptography, actually
+  - We tend to want the naturals, denoted $\mathbb{N}$
+  - Counting numbers, $0$ and up.
+
+# In Python
+
+- We can write them in Python with `itertools`
+
+```{.python filename="fields.py"}
+from itertools import count
+N = count()
+make_z = lambda n : n // 2 if n % 2 else -n // 2
+Z = (make_z(n) for n in count(1))
+# We can see elements of these infinite collections with
+[next(N) for _ in range(5)], [next(Z) for _ in range(5)]
+```
+
+- What do you see?
+```python
+([0, 1, 2, 3, 4], [0, -1, 1, -2, 2])
+```
+
+# Aside
+
+- It is moderately controversial to assert:
+$$
+0 \in \mathbb{N}
+$$
+  - Enderton, Herbert B. (1977). Elements of set theory. New York: Academic Press. p. 66. ISBN 0122384407.
+- Fortunately this is a CS class.
+```python
+assert(0 in count())
+```
+
+# $\mathbb{N}$ is akin to `uint`
+
+- The natural numbers $\mathbb{N}$ probably look a lot like the unsigned integers.
+- There's only one real problem.
+- We don't have the unsigned integers in C
+  - We don't have them in Python either, but for a different reason.
+
+# The Problem
+
+- Python has been lying to us for years that its integer have no upper limit.
+  - We say $\nexists n : n \notin$ `count()`
+  - Let's just try a reasonably sized number, say googolplex $= 10^{10^{100}}$
+
+# Test with `-c`
+
+- We use the `-c` flag to Python to run a script directly at command line.
+```python
+python3 -c "print('hello world')"
+```
+- Perform multi-line calculuations using `;`
+  - Oh - like C. 🤔
+
+```python
+python3 -c "from itertools import count; print(0 in count())"
+```
+
+# Time it
+
+- Running on Linux 
+   - `podman start -l ; podman exec -it -l`
+- We can use `time` to... time things.
+```email
+$ time python3 -c "from itertools import count; print(0 in count())"
+True
+0.01user 0.00system 0:00.01elapsed 109%CPU (0avgtext+0avgdata 8748maxresident)k
+0inputs+0outputs (0major+942minor)pagefaults 0swaps
+```
+
+# Pivot to bash
+
+- Looks nicer in `/bin/bash`
+```email
+$ /bin/bash
+user@DESKTOP-THMS2PJ:~/tmp$ time python3 -c "from itertools import count; print(0 in count())"
+True
+
+real    0m0.013s
+user    0m0.014s
+sys     0m0.000s
+```
+
+- We could argue it takes .013 seconds to check
+- Or .013 seconds to find itertools on a SDD
+
+# Bigger Numbers
+
+- Check e.g. 1000
+```email
+$ /bin/bash
+user@DESKTOP-THMS2PJ:~/tmp$ time python3 -c "from itertools import count; print(1000 in count())"
+True
+
+real    0m0.012s
+user    0m0.012s
+sys     0m0.000s
+```
+
+- Trivial.
+
+# Test it
+
+- Try a few powers yourself. What do you find?
+
+```email
+time python3 -c "from itertools import count; n=1; print(10**n in count())"
+```
+
+# 
+
+::::{.columns}
+
+:::{.column width="%50"}
+
+|10^$n$|`real`|
+|-|-|
+|1|00.012|
+|2|00.012|
+|3|00.012|
+|4|00.013|
+|5|00.013|
+|6|00.027|
+|7|00.164|
+|8|01.498|
+|9|16.810|
+
+:::
+
+
+:::{.column width="%50"}
+
+- Expect:
+$$
+t(10^{10}) \in [140,170]
+$$
+- Expect for $n \gt 9$
+$$
+t(10^n) \in [14,17] \times 10^{n-9}
+$$
+- Expect $10^{10^{100}}$ in
+  - (Googol - 9) seconds
+  - 316 novemvigintilion years
+
+:::
+
+::::
+
+# C for Clear
+
+- C is a little more forthright about how big its numbers get.
+```{.C filename="max.c"}
+#include <stdio.h>
+#include <stdint.h>
+
+int main() {
+	uint32_t n = 0;
+	while ((n + 1) > n) {
+		n++;
+	}
+	printf("n = %u\n", n);
+	return 0;
+}
+```
+
+# C fast
+
+- For me, this took 5.19s on `uint32_t`
+  - Same value in Python was 1m9.32s
+- How long for  `uint64_t`?
+  - In Python?
+- How would speed up the code?
+  - What assumptions did you make?
+- How many base 10 digits does the largest number we can store in 32 bytes have?
+
+# limits.h 
+
+- C discloses the maximum values it can tolerate in `<limits.h>`
+```{.C filename="num.c"}
+#include <stdio.h>
+#include <limits.h>
+
+int main() {
+    printf("n = %u\n", UINT_MAX);
+    return 0;
+}
+```
+- The correct answer was binary search.
+  - The incorrect answer (so far) was subtraction.
+
+# Rings
+
+- As far as I know (not a mathematician) the `uint`s and `int`s in C are *rings*
+  - They have addition and multiplication
+- They aren't fields - zero is divisible
+  - Spoiler alert, but $2^{\frac{n}{2}} \times 2^{\frac{n}{2}} \equiv 0 \pmod{2^n}$
+
+# Rings vs Integers
+
+- Rings have some "goofy" features
+  - $a, b \in$ `uint`$n$`_t` $\nRightarrow a + b > a$
+  - Same with multiplication.
+- Let's look at an example.
+
+# Checkers
+
+```{.C filename="num.c"}
+#include <stdlib.h>
+#include <stdint.h>
+
+int main(int argc, char **argv) {
+    uint8_t x, y;
+    x = atoi(argv[1]);
+    y = atoi(argv[2]);
+    return x + y;
+}
+```
+
+- `atoi` - alphabetical to int
+- From `<stdlib.h>` per `man atoi`, but might work without that.
+
+# Do some additions
+
+```email
+$  ./a.out 100 100 ; echo $?
+200
+$ ./a.out 200 100 ; echo $?
+44
+```
+- 44? From whence?
+
+# uint8_t is *finite*
+
+```email
+>>> 200 + 100
+300
+>>> 2 ** 8
+256
+>>> 300 - 256
+44
+>>> 300 % 256
+44
+```
+- Operations on `uint8_t` values are equivalent to operations on the natural numbers modulo $2^8$
+$$
+\mathbb{N}_{2^8}
+$$
+
+# In practice
+
+- $\exists$ `INT_MAX`, `UINT_MAX`, `CHAR_MAX`, etc.
+  - They use C names, not `stdint` names
+- Sums and products less than these values are unaffected
+- Sums and products greater than these values are taken modulo said max.
+- $\forall a, b \in$ `uint`$n$`_t` $: a + b \equiv a + b \pmod {2^n}$
+
+# Problem Statement
+
+- Quoth GitHub
+
+> [`ssh-keygen -t rsa -b 4096 -C "your_email@example.com"`](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+
+- Wait a minute. 
+- What does that 4096 stand for?
+  - For what does that 4096 stand?
+
+# 4096 bits
+
+- Modern security recommendations are for 4096 bit cryptographic keys.
+  - 2048 is generally considered "okay" or "acceptable"
+
+```email
+NAME
+     ssh-keygen — OpenSSH authentication key utility
+
+SYNOPSIS
+     ssh-keygen [-q] [-a rounds] [-b bits] 
+```
+
+# Today
+
+- Reintroduce the technologies
+  - &check; `stdint`
+- Some number theory
+  - &check; Finite sets, rings
+  - Arbitrary/high precision integers
+  - Arithmetic operations
+  - Function types
+
+# Big Values
+
+- Next week, we will implement RSA
+  - We'll talk about what it is then.
+- This week, we need a way to deal with integers that big.
+- We will use *modular arithmetic*.
+  - Finite `uint64_t` models infinite $\mathbb{N}$
+
+# Simple Example
+
+- Recall this example from a data application.
+- We had a data set for which we determined a mean height in inches.
+- We converted it to inches and feet.
+```python
+>>> 69.3 // 12, 69.3 % 12
+(5.0, 9.299999999999997)
+```
+
+# Addition is easy
+
+- WNBA MVP and Olympic Gold Medalist A'ja Wilson is [6 ft 4 in](https://en.wikipedia.org/wiki/A%27ja_Wilson)
+- How much taller is that than 5 ft 9.3 in
+  - Can convert to non-integer inches, but...
+  - We already had the .299... problem
+
+# Difference
+
+- We perform "long subtraction"
+- It's fun!
+
+| |ft|in.|.in|
+|-|--|---|---|
+|A'ja|6|4|0|
+|Mean|5|9|3|
+
+# Difference
+
+- $0 - 3 \equiv 7 \pmod(10)$
+- Tenths of inches
+
+| |ft|in.|.in|
+|-|--|---|---|
+|A'ja|6|4|0|
+|Mean|5|9|3|
+|Diff| | |7|
+
+# Difference
+
+- But wait - 3 is more than zero?
+- Track via a "carry"
+
+| |ft|in.|.in|
+|-|--|---|---|
+|A'ja|6|4|0|
+|Mean|5|9|3|
+|Carry|0|1|0|
+|Diff| | |7|
+
+# Difference
+
+- $4 - 9 - 1 \equiv 6 \pmod{12}$
+- 12 in = 1 ft
+
+| |ft|in.|.in|
+|-|--|---|---|
+|A'ja|6|4|0|
+|Mean|5|9|3|
+|Carry|0|1|0|
+|Diff| |6|7|
+
+
+# Difference
+
+- Another carry.
+- 12 in = 1 ft
+
+| |ft|in.|.in|
+|-|--|---|---|
+|A'ja|6|4|0|
+|Mean|5|9|3|
+|Carry|1|0|0|
+|Diff| |6|7|
+
+
+# Difference
+
+- $6 - 5 - 1 = 0$
+- Nonmodular - feet has no max.
+
+| |ft|in.|.in|
+|-|--|---|---|
+|A'ja|6|4|0|
+|Mean|5|9|3|
+|Carry|1|0|0|
+|Diff|0|6|7|
+
+# Conclusion
+
+- Iconic living legend A'ja Wilson is tall af.
+- We can do addition and substraction on larger values than `UINT_MAX` or 'ULONG_MAX' by:
+  - Breaking numbers in smaller ranges
+    - A tenths digit
+    - A ones digit
+    - A twelves digit
+
+# Exercise
+
+- Make a height adder, try `man scanf`
+```{.C filename="hadder.c"}
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+
+int main() {
+        int buf[6];
+        printf("Insert 2 heights as XftY.Zin, each on their own line\n");
+        scanf("%dft%d.%din", &buf[0], &buf[1], &buf[2]);
+        scanf("%dft%d.%din", &buf[3], &buf[4], &buf[5]);
+
+        printf("%dft%d.%din\n", buf[0], buf[1], buf[2]);
+
+        return 0;
+}
+```
+
+#
+
+```{.C filename="ididit.c"}
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+int main() {
+        int buf[6], carry;
+        printf("Sum heights\n");
+        printf("Insert 2 heights as XftY.Zin, each on their own line\n");
+        scanf("%dft%d.%din", &buf[0], &buf[1], &buf[2]);
+        scanf("%dft%d.%din", &buf[3], &buf[4], &buf[5]);
+        carry = (buf[2] + buf[5]) > 9;
+        buf[2] = (buf[2] + buf[5]) % 10;
+        carry = (buf[1] + buf[4] + carry) > 11;
+        buf[1] = (buf[1] + buf[4] + carry) % 12;
+        buf[0] = (buf[0] + buf[3] + carry);
+        printf("%dft%d.%din\n", buf[0], buf[1], buf[2]);
+        return 0;
+}
+```
+
+# Usefulness
+
+- We can now do arithmetic correctly
+  - @Python
+- What else can we do?
+  - Arbitrary (not infinite) precision.
+
+# FAQ
+
+- Can we use this to add numbers bigger than $2^n$ using adds over at most $n$ bits at a time?
+  - Sure! Change the modulos and you're set.
+    - Get it? Because the numbers form a set?
+- Can we do this for more than 3 fields?
+  - Sure! Just put the middle (both consumes and produces a carry bit) in a loop!
+
+# Today
+
+- Reintroduce the technologies
+  - &check; `stdint`
+- Some number theory
+  - &check; Finite sets, rings
+  - &check; Arbitrary/high precision integers
+  - Arithmetic operations
+  - Function types
+
+# Easy Mode
+
+- Addition and subtraction are easy.
+- For some value of easy.
+  - Cut a too-big number into chunks.
+  - Add or subtract within chunks of the same index/offset/significance.
+  - Only wrinkle is a carry bit.
+- Identical to digit-based addition.
+  - `uint8_t`s as digits in base 256 arithmetic
+
+# Hard Mode
+
+- Some cryptographical algorithms, however, use two extremely advanced arithmetic operations:
+  - Multiplication, and
+  - Division, and
+  - Modulo
+- Fortunately this only two operations (need a combined `divmod`)
+
+# Example
+
+- Imagine an engineering team lead for:
+  - 14 MS-level Computer Scientists
+    - 9-12 hrs/wk
+    - 14 week contract
+  - 34 BS-level Computer Scientists
+    - 6-9 hrs/wk
+    - 15.5 week contract
+- How many person hours is this?
+
+# Napkin Math
+
+- I'd say
+  - $14 \times 12 \times 14$
+  - $34 \times 9 \times 15.5$
+- I... can't quite do that in one fell swoop.
+  - $14 \times 12$ is trivially $12^2 + 24 = 168$
+  - $9 \times 15.5$ is trivially $155 - 15.5 = 139.5$
+
+# $34 \times 139.5$
+
+- That just isn't easy 
+ - (140 * 34 isn't bad, but we need a motivating example). 
+- Express *digit-wise*:
+
+| |1|3|9|5|
+|-|-|-|-|-|
+|3|-|-|-|-|
+|4|-|-|-|-|
+
+# $34 \times 139.5$
+
+- Compute all products over single-digit factors
+
+| |1|3|9|5|
+|-|-|-|-|-|
+|3|3|9|27|15|
+|4|4|12|36|20|
+
+- These:
+  - Aren't single digit
+  - Aren't of the same signficance
+
+# $34 \times 139.5$
+
+- Include sigificance
+
+| |100|30|9|.5|
+|-|-|-|-|-|
+|30|3000|900|270|15|
+|4|400|120|36|2|
+
+# Dear Watson
+
+
+::::{.columns}
+
+:::{.column width="%50"}
+
+
+| |100|30|9|.5|
+|-|-|-|-|-|
+|30|3000|900|270|15|
+|4|400|120|36|2|
+
+
+:::
+
+
+:::{.column width="%50"}
+
+$$
+\begin{align*}
+5& \times 4  \times 10^{-1}  &= 2&\\
++5& \times 3  \times 10^{0}  &= 15&\\
++9& \times 4  \times 10^{0}  &= 36&\\
++9& \times 3  \times 10^{1}  &= 270&\\
++3& \times 4  \times 10^{1}  &= 120&\\
++3& \times 3  \times 10^{2}  &= 900&\\
++1& \times 4  \times 10^{2}  &= 400&\\
++1& \times 3  \times 10^{3}  &= 3000&\\
+\end{align*}
+$$
+
+:::
+
+::::
+
+# Express as
+$$
+\begin{align*}
+139.5& = &1 * 10^2 + &3 * 10^1 + &9 * 10^0& + 5 * 10^{-1}\\
+34& = &&3 * 10^1 + &4 * 10^0&\\
+\end{align*}
+$$
+
+- Take $x = 10$
+$$
+\begin{align*}
+139.5& = &1 * x^2 + &3 * x + &9& + 5 * x^{-1}\\
+34& = &&3 * x + &4&\\
+\end{align*}
+$$
+
+- That is polynomial; can work with those.
+
+# Polynomial
+
+$$
+(x^2 + 3x + 9 + 5x^{-1})(3x + 4)
+$$
+
+$$
+(x^2 + 3x + 9 + 5x^{-1})(3x) + (x^2 + 3x + 9 + 5x^{-1})(4)
+$$
+
+
+$$
+(3x^3 + 9x^2 + 27x + 15) + (4x^2 + 12x + 36 + 20x^{-1})
+$$
+
+$$
+3x^3 + 13x^2 + 39x + 51 + 20x^{-1}
+$$
+
+# Aside
+
+- I think this is covered around ~8th grade
+- I don't want to assume the integrity to US public school system
+  - Or anything school system
+  - Shout out school
+- The point of this class isn't middle/high school math
+  - That's the point of life itself /s
+
+# Considerations
+
+- It is natural to express multiplication of e.g. 4096 bit integers as a polynomial over, say, 64 bit integers.
+- One teeny problem:
+  - Overflow.
+
+# Overflow
+
+- The point of calculating this was to get things down to single digit:
+
+$$
+3x^3 + 13x^2 + 39x + 51 + 20x^{-1}
+$$
+
+- 13, 39, 51, and 20 are all not compliant (debatably 20 is okay)
+- Essentially, 1-digit multiply may produce a 2-digit product.
+
+# Uh oh
+
+```{.C filename="/bin/sh"}
+$ cat num.c
+#include <stdlib.h>
+#include <stdint.h>
+
+int main(int argc, char **argv) {
+    uint8_t x, y, z;
+    x = atoi(argv[1]);
+    y = atoi(argv[2]);
+    z = x * y;
+    return z;
+}
+$ gcc num.c ; ./a.out 30 30 ; echo $?
+132
+$ gcc num.c ; ./a.out 3 3 ; echo $?
+9
+$ python3 -c "print(30 * 30 % 2 ** 8)"
+132
+```
+
+# Size of ints
+
+- Say we have two integers of 8 bits of precision.
+- We multiple them together.
+- What is the largest number we can get, and
+- How many bits does it require?
+```{.email}
+python3 -c "x = 2 ** 8 - 1 ; x = x * x ; print(x.bit_length())"
+```
+- 16
+
+# Carrys for mults
+
+- When we are doing big multiplications:
+  - We must multiply chunks of at most half the size of our biggest integer.
+  - We must keep track of significance - their position in an imagined larger integer
+  - We must perform adds over these terms, using big addition
+
+# One Technique
+
+- I Made a pointer to a `uint32_t`
+  - `uint32_t *alias;
+- Set it equal to the location of some array of `uint64_t`
+  - `uint32_t *alias = &array;
+- Copied elements of the "alias" into 64 bit values.
+  - `uint64_t tmp = alias[5];`
+- Multiplied, tracking significance.
+
+# Division
+
+- Remember long division?
+- Do that.
+  - Align the highest digits.
+  - Divide.
+  - Keep track of significance.
+  - Calculate remainder.
+  - Loop.
+- The final remainder is the mod
+
+# Today
+
+- Reintroduce the technologies
+  - &check; `stdint`
+- Some number theory
+  - &check; Finite sets, rings
+  - &check; Arbitrary/high precision integers
+  - &check; Arithmetic operations
+  - Function types
+
+# A 4096 bit type
+
+- It's not too bad to pass around 4096 bits.
+  - An array of 64 `uint64_t`s or 128 `uint32_t`s
+- Here's an example function declaration:
+```{.C filename="bigadd"}
+uint64_t bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum);
+```
+
+# Usage
+
+- Before call this function, declare three arrays:
+```{.C }
+uint64_t in0[64], in1[64], sum[64];
+bigadd(in0,in1,sum);
+```
+
+- You can recycle the arrays, as needed.
+  - An astute student would be able to implement "in-place add"
+  - Sum overrights (either) operand
+  ```{.C }
+uint64_t in0[64], in1[64], sum[64];
+bigadd(in0,in1,in0);
+```
+
+# Usage
+
+- Remember this is banned:
+
+```{C}
+uint64_t *whatever(uint64_t *in0, uint64_t *in1) {
+    uint64_t sum[64];
+    /* much code */
+    return sum;
+}
+```
+- My `uint64_t` value returned the carry value (it was nice to keep track of)
+
+# FAQ
+
+- Isn't there a way to return the value from the function, rather write a value to the memory location at a provided argument.
+  - Yes.
+  - This form of coding we use here is *memory-safe*
+  - It was endorsed by the White House from 26 Feb 24 to 19 Jan 25
+  - [Read more](https://web.archive.org/web/20250118013136/https://www.whitehouse.gov/oncd/briefing-room/2024/02/26/press-release-technical-report/)
+
+# FAQ
+
+- How do we deal with integers that aren't of known length.
+  - Ask me after the midterm.
+  - [Read more](https://gmplib.org/)
+  - [Read more](https://man7.org/linux/man-pages/man3/free.3.html)
+
+# Today
+
+- Reintroduce the technologies
+  - &check; `stdint`
+- Some number theory
+  - &check; Finite sets, rings
+  - &check; Arbitrary/high precision integers
+  - &check; Arithmetic operations
+  - &check; Function types
+
+# Stinger
+
+```{.C}
+/* print the big value as a string */
+void seebig(uint64_t *a) {
+    size_t i;
+    for (i = S-1; i < S ; i--) {
+        printf("%016lx ", a[i]); 
+        if ((i % 8 == 0 && i)) {
+            printf("\n");
+        }       
+    }
+    printf("\n\n");
+    return;
+}
+```

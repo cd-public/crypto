@@ -1,0 +1,443 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: Printb
+subtitle: "Lab 0x1"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Think about C variables as bits
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- for      | - bits     |
+|- C types  | - bytes    |
+|- booleans | - operators   |
+
+- In addition to large amounts of contextual and background material, there are three main exercises for this lab:
+  - Script
+  - Printb
+  - it/ool
+
+:::
+
+
+# Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls="podman">Show</a>
+
+::: {#podman .collapse .multi-collapse}
+
+# Setup
+
+- For this lab, I used the following Containerfile
+  - Same as lecture but I added `python3`
+
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc vim python3 -y
+```
+- I built via the following:
+```email
+podman build -t printb .
+```
+- I conducted the full lab within a single container's `vim` instance.
+```email
+podman run -it printb vim printb.c
+```
+- I conducted all work within this `vim` window and it's `:term`
+
+:::
+
+# PyBool&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bool" role="button" aria-expanded="false" aria-controls = "bool">Show</a>
+
+::: {#bool .collapse .multi-collapse}
+
+## ==
+
+- To begin, we recall Enigma:
+  - Unlike Python booleans, C has no boolean type.
+    - Rather it has truthiness, akin to Python if statements with numerical conditions.
+    - The numerical value zero is false.
+    - All other numerical values are true.
+- The simplest way for me to understand bools is via *equality testing*
+  - First, Python
+
+
+#### Verify install
+
+- Before anything else, I verify I have an install of Python3.
+```bash
+python3 --version
+```
+- I found I had 3.12.3 - not great, not terrible.
+
+#### Python `-c`
+
+- We can evaluate a single Python expression - a single line of code - via `-c`
+```bash
+python3 -c "print(1 == 1)"
+```
+- As expected, this prints `True` - capital "T", lowercase "rue".
+  - We've seen this before.
+
+
+#### Format print
+
+- However, this isn't exactly true-to-form
+- Python `print` is not a format print by default.
+- For equivalence, we must use a format print.
+- We can naively use a format without specifying a type...
+
+```bash
+python3 -c 'print(f"{1==1}")' 
+```
+- This still gives `True`, but also has no C equivalent!
+  - We have to provide some letter to determine *how a value is printed*
+  
+### 2 `%b` | ! 2 `%b`
+
+#### Java
+
+- There is a language called Java, technically.
+  - &lt;loud grumbling&gt;
+- It has a format print, and uses `%b` for booleans, I hear.
+  - Credit [Stack Overflow](https://stackoverflow.com/a/24819035)
+- You can test if you want:
+  - Yoink a Java container.
+  ```bash
+  podman run -it openjdk
+  ```
+  - It will drop you into something called jshell
+  - We can do a quick Java printf
+  ```java
+  System.out.printf("1 == 1 is %b\n",1 == 1);
+  ```
+  - I got this output, which I don't understand at all
+  ```bash
+1 == 1 is true
+$1 ==> java.io.PrintStream@34c45dca
+```
+  - It does say "true" though, that's fun!
+  - Apparently you can use the following to leave jshell
+  ```java
+  /ex
+  ```
+  - I cleaned the Java off my system with
+  ```bash
+  podman system prune
+  ```
+  - I made sure it was gone with
+  ```bash
+  podman images
+  ```
+
+#### Pythonic `b`
+
+- After that digression, let's try `b` in Python
+```bash
+python3 -c 'print(f"{(1==1):b}")' 
+```
+- It prints, of all things:
+```python
+1
+```
+- Well, that's interesting.
+  - If you want some fun first
+  ```bash
+  python3 -c 'print(f"{2:b} or not {2:b}")'
+  ```
+
+:::
+
+# Script&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#cbool" role="button" aria-expanded="false" aria-controls = "cbool">Show</a>
+
+::: {#cbool .collapse .multi-collapse}
+
+### Scripted Testing of Programming/Computing
+*Or, "Computer Science"*
+
+#### C truthiness
+
+- Python is written in C and correspondingly lacks a way to print something as a boolean.
+  - Unlike C, Python has a boolean class, but C has no classes, and...
+  - Therefore C has no booleans (or strings or etc.)
+- C has a somewhat complicated relationship with booleans we will explore, but
+  - In the meantime, stick to `==`
+- To decide how to `printf` and `==`, we consult the C89 specification:
+  - Look at [4.9.6](http://port70.net/%7Ensz/c/c89/c89-draft.html#4.9.6)
+
+<blockquote style="max-height:10em;overflow-y: scroll;">
+ d Matches an optionally signed decimal integer, whose format is the same as expected for the subject sequence of the strtol function with the value 10 for the base argument. The corresponding argument shall be a pointer to integer.
+
+i Matches an optionally signed integer, whose format is the same as expected for the subject sequence of the strtol function with the value 0 for the base argument. The corresponding argument shall be a pointer to integer.
+
+o Matches an optionally signed octal integer, whose format is the same as expected for the subject sequence of the strtoul function with the value 8 for the base argument. The corresponding argument shall be a pointer to unsigned integer.
+
+u Matches an optionally signed decimal integer, whose format is the same as expected for the subject sequence of the strtoul function with the value 10 for the base argument. The corresponding argument shall be a pointer to unsigned integer.
+
+x Matches an optionally signed hexadecimal integer, whose format is the same as expected for the subject sequence of the strtoul function with the value 16 for the base argument. The corresponding argument shall be a pointer to unsigned integer.
+
+e,f,g Matches an optionally signed floating-point number, whose format is the same as expected for the subject string of the strtod function. The corresponding argument shall be a pointer to floating.
+
+s Matches a sequence of non-white-space characters. The corresponding argument shall be a pointer to the initial character of an array large enough to accept the sequence and a terminating null character, which will be added automatically.
+
+[ Matches a nonempty sequence of characters from a set of expected characters (the scanset ). The corresponding argument shall be a pointer to the initial character of an array large enough to accept the sequence and a terminating null character, which will be added automatically. The conversion specifier includes all subsequent characters in the format string, up to and including the matching right bracket ( ] ). The characters between the brackets (the scanlist ) comprise the scanset, unless the character after the left bracket is a circumflex ( ^ ), in which case the scanset contains all characters that do not appear in the scanlist between the circumflex and the right bracket. As a special case, if the conversion specifier begins with [] or [^] , the right bracket character is in the scanlist and the next right bracket character is the matching right bracket that ends the specification. If a - character is in the scanlist and is not the first, nor the second where the first character is a ^ , nor the last character, the behavior is implementation-defined.
+
+c Matches a sequence of characters of the number specified by the field width (1 if no field width is present in the directive). The corresponding argument shall be a pointer to the initial character of an array large enough to accept the sequence. No null character is added.
+
+p Matches an implementation-defined set of sequences, which should be the same as the set of sequences that may be produced by the %p conversion of the fprintf function. The corresponding argument shall be a pointer to a pointer to void . The interpretation of the input item is implementation-defined; however, for any input item other than a value converted earlier during the same program execution, the behavior of the %p conversion is undefined.
+
+n No input is consumed. The corresponding argument shall be a pointer to integer into which is to be written the number of characters read from the input stream so far by this call to the fscanf function. Execution of a %n directive does not increment the assignment count returned at the completion of execution of the fscanf function. 
+</blockquote>
+- In brief
+
+| % suffix | Meaning |
+| ---------|---------|
+| d        | decimal (base 10) |
+| i        | integer |
+| o        | octal (base 8) |
+| u        | unsigned (positive) |
+| x        | hexadecimal (base 16) |
+| e,f,g    | float |
+| s        | string |
+| c        | character (ascii/utf-8) |
+| p        | pointer (more latter) |
+| n        | nothing |
+| %        | literal % |
+
+- Many of these are meant for scanning, not printing, so they are weird (i, n)
+- Even briefer:
+```python
+codes = ['d','i','o','u','x','e','f','g','s','c','p','n']
+```
+- Wait a minute. I know how to:
+  - Write a loop in Python
+  - Make a string in Python
+  - Write a string to a file in Python
+  - Run commands in Python
+    - Including `podman` commands
+- I know how to:
+  
+### Major Exercise: Script  
+- Write a script t test all format codes in C89 to print `1 == 1` and think about the results.
+- Spoiler alert: I did not see anything that said "True".
+
+:::
+
+# Binary&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#binary" role="button" aria-expanded="false" aria-controls = "binary">Show</a>
+
+::: {#binary .collapse .multi-collapse}
+
+### ObX
+
+- Python classes *obscure* the internal data represention of the device.
+- The C program language *clarifies* the representation so we can work with it more directly.
+- One detail revealed is *binary* versus *booleans*
+  - The binary number 0b0 is regarded as the PyBoolean value False
+  - The binary number 0b1 is regarded as the PyBoolean value True
+  - The next binary number is 0b01, how to think of this?
+    - That could be a numerical value
+      - Which would be the truthy value True, or
+    - That could be an array of booleans
+      - 0b01[0] == False and 0b01[1] == True, perhaps
+- Treating numerical values as boolean arrays is a core insight of (some) cryptographic algorithms.
+  - It touches on the broader learning goal of "pointers"
+  - This is partially revealed in Python, versus Java, with the `b` format code
+  
+```bash
+python3 -c "[print(f'{i:04b}') for i in range(10)]"
+```
+
+### A `%b` C format code
+
+- The C programming recently gained a `%b` format code
+  - It lacked one until C23 - just last year
+  - C23 is not widely adopted...
+    - The C language toolchain is a massive software endeavour
+    - Changes to the ecosystem can take decades
+    - Think: How often does a new operating system code out.
+      - Not like, Windows 11... like *Windows*
+  - Some compilers, like `gcc`, kinda support `%b` usage
+    - I just ran some code in a few, and it sort worked.
+    - Here is an odd feature of C:
+      - Just because it isn't C, doesn't mean `gcc` can't handle it
+      - These are usually called "gnu extensions" or "non-standard features"
+- You can use `%b` in whatever version of `gcc` I had in my container...
+  - Try both of these:
+```bash
+gcc printb.c
+gcc printb.c -pedantic
+```
+
+#### Minor Exercise
+
+- Using `%b`, write a C program that compiles to an executable which, when run, produces the following output:
+```email
+0000
+0001
+0010
+0011
+0100
+0101
+0110
+0111
+1000
+1001
+1010
+```
+- It may be helpful to work with Python first.
+
+:::
+
+# Printb&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#printb" role="button" aria-expanded="false" aria-controls = "printb">Show</a>
+
+::: {#printb .collapse .multi-collapse}
+
+### Major Exercise: Printb
+*This code base will see use on the new homework, Macros*
+
+- It is a fairly simply matter to produce a pedantic-compliant `printb` function, which prints a numerical value in binary with:
+    - C math, 
+    - printf statements, and 
+    - for loops.
+      - Or perhaps while loops
+- Do so. For now, target the `char` type, or another type of your choice.
+
+#### Extensions
+
+- Advanced students may wish to consider:
+  - While loops
+  - Bit shift operators like `>>`
+  - Bitwise operators like `&`
+  - The `atoi` function for testing
+  - Standarizing a left pad via any number of methods
+  - Macros, to be char-nonspecific
+
+
+#### Reference implementation
+
+- The reference implementation, which is not pedantic-compliant, is
+
+```{.C filename="printb_not_quite.c"}
+#include <stdio.h>
+
+int printb(char n) {
+        printf("%b", n);
+        return 0;
+}
+```
+<!-- #define printb(x) for (int ind = 8 * sizeof(x); ind ; ind--) { printf("%d", (x >> ind) & 1); } -->
+
+:::
+
+
+# it/ool&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bitool" role="button" aria-expanded="false" aria-controls = "bitool">Show</a>
+
+::: {#bitool .collapse .multi-collapse}
+
+### "B" + .. ? "it" : "ool"
+*This title is combination of Pythonic and C, don't look at it too closely.*
+
+- Python:
+  - Has bools
+  - Doesn't have bits, or binary, really
+    - But also not *not* really, binary is everywhere
+  - But decimal is clear the expected representation in Python.
+- C
+  - Is unopinionated on bases between 8, 10, 16
+  - Has strong unofficial support for binary
+  - Has no booleans.
+- This unsurprising leads to differences in boolean algebra.
+  - My take: C values a boolean arrays
+- Here are some C operators, with number of arguments.
+  - There are 10, but most of this lab is about the first 8
+
+<table style="width:100%">
+  <thead>
+    <tr>
+      <th style="width:33%">Operator</th>
+      <th style="width:33%"><a href="https://en.wikipedia.org/wiki/Arity">Arity</a></th>
+      <th style="width:33%">Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&amp;</td>
+      <td>2</td>
+      <td><code>x &amp; y</code></td>
+    </tr>
+    <tr>
+      <td>|</td>
+      <td>2</td>
+      <td><code>x |  y</code></td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>2</td>
+      <td><code>x ^  y</code></td>
+    </tr>
+    <tr>
+      <td>~</td>
+      <td>1</td>
+      <td><code>    ~y</code></td>
+    </tr>
+    <tr>
+      <td>&amp;&amp;</td>
+      <td>2</td>
+      <td><code>x &amp;&amp; y</code></td>
+    </tr>
+    <tr>
+      <td>||</td>
+      <td>2</td>
+      <td><code>x || y</code></td>
+    </tr>
+    <tr>
+      <td>!=</td>
+      <td>2</td>
+      <td><code>x != y</code></td>
+    </tr>
+    <tr>
+      <td>!</td>
+      <td>1</td>
+      <td><code>    !y</code></td>
+    </tr>
+    <tr>
+      <td>&gt;&gt;</td>
+      <td>2</td>
+      <td><code>x &gt;&gt; y</code></td>
+    </tr>
+    <tr>
+      <td>&lt;&lt;</td>
+      <td>2</td>
+      <td><code>x &lt;&lt; y</code></td>
+    </tr>
+  </tbody>
+</table>
+
+
+### Major Exercise: it/ool  
+*These results will see use on the new homework, Macros*
+
+- Determine the logical, or other, operation to which each operator corresponds, and
+- Determine whether it is acting on bits-as-booleans or bits-as-boolean-arrays
+
+:::

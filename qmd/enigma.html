@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Enigma</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9884a2177d2957eae00b06e372949a78.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6143deb5822414b99d6193ead6da13dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Enigma</h1>
+            <p class="subtitle lead">HW 0x0: Due Th, Jan 23</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+<section id="enigma-show" class="level1">
+<h1>Enigma&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#enigma" role="button" aria-expanded="false" aria-controls="enigma">Show</a></h1>
+<div id="enigma" class="collapse multi-collapse">
+<section id="goal-learn-c-io-and-strings" class="level3">
+<h3 class="anchored" data-anchor-id="goal-learn-c-io-and-strings">Goal: Learn C I/O and strings</h3>
+<ul>
+<li>My responsibility
+<ul>
+<li>I will provide a reference solution in Python (solved)</li>
+<li>I will provide an autograder Containerfile (tester)</li>
+</ul></li>
+<li>Your responsibility
+<ul>
+<li>You will create a solution in C as an “enigma.c” file</li>
+<li>You will create a <a href="https://gist.github.com/">Gist</a> with an “enigma.c”</li>
+<li>You will email me, from your credentialed school email, the url of your Gist, it will look something like:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>https://gist.github.com/cd-public/a840e95e71ac7309a53ab0bb1282ba40</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li>What follows is reference material to prepare you to implement “enigma.c”
+<ul>
+<li>Enigma, Solved, Visual, and Rotors form a description of the requirements</li>
+<li>Tester documents the autograder</li>
+<li>Other headings cover the technical details that support the implementation.</li>
+</ul></li>
+</ul>
+</section>
+<section id="topic-areas" class="level3">
+<h3 class="anchored" data-anchor-id="topic-areas">Topic Areas</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Review:</th>
+<th>Newish:</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>- <code>podman</code></td>
+<td>- <code>curl</code></td>
+</tr>
+<tr class="even">
+<td>- <code>vim</code></td>
+<td>- stdio</td>
+</tr>
+<tr class="odd">
+<td>- <code>gcc</code></td>
+<td>- ciphers</td>
+</tr>
+<tr class="even">
+<td>- <code>git</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="motivation" class="level3">
+<h3 class="anchored" data-anchor-id="motivation">Motivation</h3>
+<ul>
+<li>Enigma was a historically significant technology
+<ul>
+<li>It was a Nazi encryption device, using ciphers</li>
+<li>It was broken by Turing, gay icon and one of the first and greatest computer scientists</li>
+</ul></li>
+<li>At Willamette, Enigma is an (in)famous CS 151 Intro to Programming assignment
+<ul>
+<li>Basically it is the first assignment that requires nested <em>for loop</em>s</li>
+</ul></li>
+<li>In this course, Enigma will demonstrate the obscurity/clarity divide
+<ul>
+<li>In Python, letters and numbers are different things</li>
+<li>In C, there are no letters or really numbers, just bits and bytes</li>
+<li>This makes Enigma in C <strong>easier</strong>, despite being a “harder” language.</li>
+</ul></li>
+</ul>
+</section>
+<section id="reference-materials" class="level3">
+<h3 class="anchored" data-anchor-id="reference-materials">Reference Materials</h3>
+<ul>
+<li>You can review the Python assignment if you wish:
+<ul>
+<li>Write-ups:
+<ul>
+<li><a href="https://people.willamette.edu/~esroberts/roberts-enigma/Milestones/">Prof.&nbsp;Roberts</a></li>
+<li><a href="https://jrembold.github.io/Website_Backup/class_files/cs151/Projects/Project_Enigma.html">Prof.&nbsp;Rembold</a></li>
+<li><a href="https://cd-public.github.io/courses/old/cs1f24/hws/p4.html">Prof.&nbsp;Calvin</a></li>
+</ul></li>
+<li>Slides
+<ul>
+<li><a href="https://jrembold.github.io/Website_Backup/class_files/cs151/Slides/slides/Ch10_Enigma.html#/say-it-secret">Prof.&nbsp;Rembold</a></li>
+<li><a href="https://cd-public.github.io/courses/old/cs1f24/slides/wcd1_enigma.html">Prof.&nbsp;Calvin</a></li>
+</ul></li>
+<li><a href="https://github.com/rembold-cs151-master/Project_Enigma">Assignment Repository</a></li>
+</ul></li>
+<li>I also provide
+<ul>
+<li>“Solved”: A Python implementation of the machine</li>
+<li>“Visual”: A text visualizer of the Engima machine’s ciphers</li>
+<li>“Rotors”: A text visualizer of the full Enigma machine</li>
+</ul></li>
+</ul>
+</section>
+</div>
+</section>
+<section id="solved-show" class="level1">
+<h1>Solved&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#solved" role="button" aria-expanded="false" aria-controls="solved">Show</a></h1>
+<div id="solved" class="collapse multi-collapse">
+<ul>
+<li>Here is a reference solution, with a few tests, in Python.
+<ul>
+<li><a href="https://gist.github.com/cd-public/a840e95e71ac7309a53ab0bb1282ba40">Gist</a></li>
+</ul></li>
+<li>I regard this code as considerably easier to read, test, and understand than most plaintext descriptions.</li>
+<li>I will also do a visual representation.</li>
+<li>The ciphers are sometimes called “rotors” because historically they were implemented as a rotating… cipher.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python3</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># constants                       # constant</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> [                            <span class="co"># rotors</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"BDFHJLCPRTXVZNYEIWGAKMUSQO"</span>, <span class="co"># fast</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"AJDKSIRUXBLHWTMCQGZNPYFVOE"</span>, <span class="co"># medium</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"EKMFLGDQVZNTOWYHXUSPAIBRCJ"</span>, <span class="co"># slow</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"IXUHFEZDAOMTKQJWNSRLCYPBVG"</span>  <span class="co"># reflect</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>A  <span class="op">=</span> <span class="bu">ord</span>(<span class="st">'A'</span>)                     <span class="co"># value of 'A'</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>NC <span class="op">=</span> <span class="bu">len</span>(rs[<span class="dv">0</span>])                   <span class="co"># number of characters</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># apply a cipher/rotor `r` to a letter `c`</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>rapply <span class="op">=</span> <span class="kw">lambda</span> c, r : r[<span class="bu">ord</span>(c) <span class="op">-</span> A]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># invert a cipher/rotor `r`</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create a list of letters with their index</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># [(r[i],i) for i in range(NC)]</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sort the list</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># for p in sorted</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># convert indexes to back to letters in the alphabet</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># chr(p[1]+A)</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>invert <span class="op">=</span> <span class="kw">lambda</span> r : [<span class="bu">chr</span>(p[<span class="dv">1</span>]<span class="op">+</span>A) <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">sorted</span>([(r[i],i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(NC)])]</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># extend the rotor set to include inverted ciphers</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># In reversed order, as well</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fas med slo ref slo med fas</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>rs <span class="op">+=</span> [invert(r) <span class="cf">for</span> r <span class="kw">in</span> rs[<span class="dv">2</span>::<span class="op">-</span><span class="dv">1</span>]]</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># encrypt letter `c` with rotors in default* positions</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>rotors <span class="op">=</span> <span class="kw">lambda</span> c : [c <span class="op">:=</span> rapply(c,r) <span class="cf">for</span> r <span class="kw">in</span> rs][<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># default position a,b,c -&gt; r,f,o, respectively</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span>([</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    rotors(<span class="st">'A'</span>),</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    rotors(<span class="st">'B'</span>),</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    rotors(<span class="st">'C'</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>] <span class="op">==</span> [<span class="st">'R'</span>,<span class="st">'F'</span>,<span class="st">'O'</span>])</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co"># shift letter `c` forward `n` letters in alphabet</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>nshift <span class="op">=</span> <span class="kw">lambda</span> c, n : <span class="bu">chr</span>((<span class="bu">ord</span>(c) <span class="op">-</span> A <span class="op">+</span> n) <span class="op">%</span> NC <span class="op">+</span> A)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># allow rotor rotations</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fast spins every letter</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># medi spins every time fast loops back NC-&gt;0</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># slow ""               medi ""</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>shifts <span class="op">=</span> <span class="kw">lambda</span> l, n : [</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    l <span class="op">%</span> NC, l <span class="op">//</span> NC <span class="op">%</span> NC, l <span class="op">//</span> (NC<span class="op">*</span>NC) <span class="op">%</span> NC,</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    l <span class="op">//</span> (NC<span class="op">*</span>NC) <span class="op">%</span> NC, l <span class="op">//</span> NC <span class="op">%</span> NC, l <span class="op">%</span> NC</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>][n]</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co"># combine shift apply? don't know what to call</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>shiply <span class="op">=</span> <span class="kw">lambda</span> c, n, r : nshift(rapply(nshift(c,n),r),<span class="op">-</span>n)</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co"># or if you prefer</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>shiply <span class="op">=</span> <span class="kw">lambda</span> c, n, r : <span class="bu">chr</span>((<span class="bu">ord</span>(r[(<span class="bu">ord</span>(c)<span class="op">-</span>A<span class="op">+</span>n)<span class="op">%</span>NC])<span class="op">-</span>A<span class="op">-</span>n)<span class="op">%</span>NC<span class="op">+</span>A)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co"># single letter enigma, with number of previous letters `l`</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>letter <span class="op">=</span> <span class="kw">lambda</span> c, l : [c <span class="op">:=</span> shiply(c,shifts(l,i),rs[i]) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(rs))][<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co"># phrase</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="co"># enigma starts with an single rotation before first encryption.</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>enigma <span class="op">=</span> <span class="kw">lambda</span> s : <span class="st">""</span>.join([letter(s[i],i<span class="op">+</span><span class="dv">1</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(s))])</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="co"># test</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span>([</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    enigma(<span class="st">"AAA"</span>),</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    enigma(<span class="st">"ABC"</span>),</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    enigma(<span class="st">"ZLC"</span>)</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>] <span class="op">==</span> [<span class="st">"ZLC"</span>,<span class="st">"ZRA"</span>,<span class="st">"AAA"</span>])</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> sys</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(enigma(sys.argv[<span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Here is an example of how it is used to print “HELLOWORLD”:</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>python3 enigma.py MNBOASVTTB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visual-show" class="level1">
+<h1>Visual&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#visual" role="button" aria-expanded="false" aria-controls="visual">Show</a></h1>
+<div id="visual" class="collapse multi-collapse">
+<section id="single-cipher" class="level4">
+<h4 class="anchored" data-anchor-id="single-cipher">Single Cipher</h4>
+<ul>
+<li>Visualize a cipher as mapping a A-Z to A-Z.
+<ul>
+<li>Say, ‘E’ becomes ‘J’</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a> _____|______________________</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>[     |                      ]  </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      J</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="iterative-cipher" class="level4">
+<h4 class="anchored" data-anchor-id="iterative-cipher">Iterative Cipher</h4>
+<ul>
+<li>We can apply ciphers iteratively.
+<ul>
+<li>So the output ‘J’ of the first cipher is input to the next cipher.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode email larger code-with-copy"><code class="sourceCode email"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a> ____________________________</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>[     |                      ]  </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher[0]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      J&gt;&gt;&gt;&gt;J               </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a> __________|_________________</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>[          |                 ]  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # cipher[1]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>           B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="all-ciphers" class="level4">
+<h4 class="anchored" data-anchor-id="all-ciphers">All Ciphers</h4>
+<ul>
+<li>Enigma ciphers/rotors are named:
+<ul>
+<li>Fast</li>
+<li>Medium</li>
+<li>Slow</li>
+<li>Reflect, which has special properties</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> _____|______________________</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>[     |                      ]  </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      J&gt;&gt;&gt;&gt;J               </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a> __________|_________________</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>[          |                 ]  </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>   B&lt;&lt;&lt;&lt;&lt;&lt;&lt;B</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a> __|_________________________</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>[  |                         ]</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a> ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>   K&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;K</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a> ___________|________________</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>[           |                ]</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>            M</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="reflector" class="level5">
+<h5 class="anchored" data-anchor-id="reflector"><em>Reflector</em></h5>
+<ul>
+<li>We note that with the reflector:
+<ul>
+<li>If we take the <em>alphabet</em> and find a corresponding letter in the <em>cipher</em>, or</li>
+<li>If we take the <em>cipher</em> and find a corresponding letter in the <em>alphabet</em></li>
+<li>We get the same letter…</li>
+</ul></li>
+<li>This is…
+<ul>
+<li>The special property of the reflector, and</li>
+<li>How we will re-use the fast, medium, and slow ciphers.</li>
+</ul></li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb7"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>            K</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> ___________|________________</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>[           |                ]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            M</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb8"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>              K</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> _____________|______________</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>[             |              ]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>              M</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="decryption" class="level4">
+<h4 class="anchored" data-anchor-id="decryption">Decryption</h4>
+<ul>
+<li>After the reflect cipher, values are <em>decrypted</em>
+<ul>
+<li>A letter’s place in the <em>cipher</em>, not alphabet, is found</li>
+<li>This location is used to determine the letter in the <em>alphabet</em></li>
+<li>Essentially, a change from mapping the alphabet to a cipher, and vice versa.</li>
+</ul></li>
+<li>‘H’ comes out of the reflector
+<ul>
+<li>‘H’ is is index 7 letter of the alphabet</li>
+<li>So in the next cipher, we’ll look up the index 7 letter of the <em>cipher</em></li>
+<li>It is now more helpful to think of an index than a letter - that is what changes here.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>            K</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a> ___________|________________</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>[           |                ]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    M&lt;&lt;&lt;&lt;&lt;&lt;&lt;M</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a> ___|________________________</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>[   |                        ]</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    C</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="inversion" class="level4">
+<h4 class="anchored" data-anchor-id="inversion">Inversion</h4>
+<ul>
+<li>We can separately calculate what cipher would correspond to the “inverted” slow cipher.
+<ul>
+<li>We take all the slow-&gt;alphabet pairs</li>
+<li>We alphabetize the pairs by the first letter</li>
+<li>The output is no longer alphabetized, as is a new cipher.</li>
+</ul></li>
+<li>It is left to the student as a design decision whether do
+<ul>
+<li>“Decrypt” via a provided cipher, or</li>
+<li>“Invert” a provided cipher, and apply the inverted cipher.</li>
+</ul></li>
+<li>Students should consider the complexity of both methods.</li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb10"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>    M</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> ___|________________________</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>[   |                        ]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    C</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb11"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>              M</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a> _____________|______________</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>[             |              ]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>[ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>              C</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="iterating-back" class="level4">
+<h4 class="anchored" data-anchor-id="iterating-back">Iterating Back</h4>
+<ul>
+<li>The next cipher is “medium” and its index 7 letter is ‘U’
+<ul>
+<li>‘U’ is the index 20 letter of the alphabet.</li>
+</ul></li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb12"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>    M</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a> ___|________________________</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>[   |                        ]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    C&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;C</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a> ________________|____________</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>[                |           ]  </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                 P</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb13"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>              M</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a> _____________|______________</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>[             |              ]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>[ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    C&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;C</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a> ___|________________________</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>[   |                        ]  </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>[ AJPCZWRLFBDKOTYUQGENHXMIVS ] # medium^-1</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    P            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="end-to-end" class="level4">
+<h4 class="anchored" data-anchor-id="end-to-end">End-to-end</h4>
+<ul>
+<li>The entire end-to-end cipher application can be visualized as follows…</li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb14"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a> _____|______________________</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>[     |                      ]  </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      J&gt;&gt;&gt;&gt;J               </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a> __________|_________________</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>[          |                 ]  </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>   B&lt;&lt;&lt;&lt;&lt;&lt;&lt;B</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a> __|_________________________</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>[  |                         ]</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a> ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>   K&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;K</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a> ___________|________________</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>[           |                ]</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    M&lt;&lt;&lt;&lt;&lt;&lt;&lt;M</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a> ___|________________________</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>[   |                        ]</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a> ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    C&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;C</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a> ________________|____________</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>[                |           ]  </span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>         P&lt;&lt;&lt;&lt;&lt;&lt;&lt;P</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a> ________|___________________</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>[        |                   ]  </span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>         H</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb15"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a> _____|______________________</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>[     |                      ]  </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      J&gt;&gt;&gt;&gt;J               </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a> __________|_________________</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>[          |                 ]  </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>   B&lt;&lt;&lt;&lt;&lt;&lt;&lt;B</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a> __|_________________________</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>[  |                         ]</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a> ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>   K&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;K</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a> ___________|________________</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>[           |                ]</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>            M&gt;M</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a> _____________|______________</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>[             |              ]</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>[ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    C&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;C</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a> ___|________________________</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>[   |                        ]  </span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>[ AJPCZWRLFBDKOTYUQGENHXMIVS ] # medium^-1</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a> ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    P&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;P    </span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a> ________________|___________</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>[                |           ]  </span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>[ TAGBPCSDQEUFVNZHYIXJWLRKOM ] # fast^-1</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>                 H</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p><em>For the remainder of the write-up, I will assume without loss of generality the usage of inverted ciphers.</em></p>
+</section>
+</div>
+</section>
+<section id="rotors-show" class="level1">
+<h1>Rotors&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#rotors" role="button" aria-expanded="false" aria-controls="rotors">Show</a></h1>
+<div id="rotors" class="collapse multi-collapse">
+<section id="single-rotor" class="level4">
+<h4 class="anchored" data-anchor-id="single-rotor">Single Rotor</h4>
+<ul>
+<li>Visualize a rotor as mapping a A-Z to A-Z.
+<ul>
+<li>Say, ‘E’ becomes ‘J’</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a> _____|______________________</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>[     |                      ]  </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      J</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="rotation" class="level4">
+<h4 class="anchored" data-anchor-id="rotation">Rotation</h4>
+<ul>
+<li>We call these things rotors because they rotate:
+<ul>
+<li>The mapping from e.g.&nbsp;index <em>i</em> of the input to index <em>j</em> of the output is unalterated
+<ul>
+<li>For example, ‘E’ is index 5 and maps to ‘J’ at index 10, both of the alphabet</li>
+</ul></li>
+<li>However, we can change the rotors as follows:
+<ul>
+<li>The input index is shifted forward by some shift value <em>n</em></li>
+<li>This input index is mapped to an output index</li>
+<li>This output index is shifted backward by the same <em>n</em></li>
+</ul></li>
+</ul></li>
+<li>Let’s visualize with <em>n</em> = 3</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>      |&gt;&gt;&gt;</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>      EFGH</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      &gt;&gt;&gt;|</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a> ________|___________________</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>[        |                   ]  </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>         P</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>      &lt;&lt;&lt;|</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>      MNOP </span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      |&lt;&lt;&lt;</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>      M</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="as-ciphers" class="level4">
+<h4 class="anchored" data-anchor-id="as-ciphers">As ciphers</h4>
+<ul>
+<li>It is worth noting this identical to generating ciphers that start an the index <em>n</em> letter of the alphabet and wrap around from Z to A.</li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb18"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>      |</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>      |&gt;&gt;&gt;</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>      EFGH</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>      &gt;&gt;&gt;|</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>         |</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>         |</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a> ________|___________________</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>[        |                   ]  </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>         P</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>         |</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>      &lt;&lt;&lt;|</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>      MNOP </span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>      |&lt;&lt;&lt;</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>      |</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>      M</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb19"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>      E</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a> _____|______________________</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>[     |                      ]  </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>[ DEFGHIJKLMNOPQRSTUVWXYZABC ] # forward(3)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>      H&gt;&gt;H</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a> ________|___________________</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>[        |                   ]  </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>         P&gt;&gt;&gt;&gt;&gt;&gt;&gt;P</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a> ________________|___________</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>[                |           ]  </span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>[ XYZABCDEFGHIJKLMNOPQRSTUVW ] # forward(-3)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                 M</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p><em>For the remainder of the write-up, I will assume without loss of generality that rotations can be understood without considering them to be ciphers.</em></p>
+</section>
+<section id="for-enigma" class="level4">
+<h4 class="anchored" data-anchor-id="for-enigma">For Enigma</h4>
+<ul>
+<li>The Enigma machine triggers rotor rotations every time a letter is encrypted.</li>
+<li>They rotate as follows
+<ul>
+<li><strong>Before</strong> a letter is encryped, the fast rotor rotates forward once.
+<ul>
+<li>So <strong>before the first encryption</strong>,
+<ul>
+<li>(<em>n</em> = 0 : A-&gt;A) becomes (<em>n</em> = 1 : A-&gt;B) before the fast rotor.</li>
+</ul></li>
+<li>To understand this, the rotation must be applied at two points:</li>
+</ul></li>
+<li>If the fast rotor “loops back” from a rotation from (<em>n</em> = 25 : A-&gt;Z) to a non-rotation of (<em>n</em> = 26 = 0 : A-&gt;A), then
+<ul>
+<li>The medium rotor advances once, from e.g.&nbsp;(<em>n</em> = 0 : A-&gt;A) to (<em>n</em> = 1 : A-&gt;B)</li>
+</ul></li>
+<li>When medium loops back, slow advances once.</li>
+<li>There are no rotations related to the reflector.</li>
+</ul></li>
+<li>Imagine we have typed 29 letters:
+<ul>
+<li>the fast rotor has progressed 29 times and progresses once more before encryption.
+<ul>
+<li>So shift by <em>n</em> = 30, or <em>n</em> = 30-26 = 4.</li>
+</ul></li>
+<li>the medium rotor progresed 1 time,</li>
+<li>and slow rotor progressed not at all.</li>
+</ul></li>
+<li>Steps labelled “adjust” are not computational
+<ul>
+<li>I change horizontal alignment of letters to align the rotors.</li>
+<li>This is a visual change only, as it was in “Visual” above.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb20"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>     X</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>     |</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>=====|===========================================</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>=    X                                          =</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>=    |&gt;&gt;&gt;&gt;                                      =</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>=    XYZAB                           # rotate   =</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>=    &gt;&gt;&gt;&gt;|                                      =</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>=        B                                      =</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>=      __|_________________________             =</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet = </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>=     [  |                         ]            = # fast</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>=     [ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast     =</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>=      ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾             =</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>=        D                                      =</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>=    &lt;&lt;&lt;&lt;|                                      =</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>=    ZABCD                           # rotate   =</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>=    |&lt;&lt;&lt;&lt;                                      =</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>=    Z                                          =</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>=====|===========================================</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>     |</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>     Z&gt;Z                             # adjust</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>       |</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>=======|=========================================</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>=      Z                                        =</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>=      |&gt;                                       =</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>=      ZA                            # rotate   =</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>=      &gt;|                                       =</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>=       A                                       =</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>=      _|__________________________             =</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>=     [ |                          ]            = # medium</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>=     [ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium   =</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>=      ‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾             =</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>=       A                                       =</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>=      &lt;|                                       =</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>=      ZA                            # rotate   =</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>=      |&lt;                                       =</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>=      Z                                        =</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>=======|=========================================</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>       |</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>       Z&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Z   # adjust</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>                                 |</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>=================================|===============</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>=                                Z              =</span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>=                                |              =</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>=                                Z   # rotate   =</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>=                                |              =</span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>=                                Z              =</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>=      __________________________|_             =</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>=     [                          | ]            = # slow</span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>=     [ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow     =</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾             =</span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>=                                J              =</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>=                                |              =</span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>=                                J   # rotate   =</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>=                                |              =</span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>=                                J              =</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>=================================|===============</span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>                                 |</span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>                 J&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;J   # adjust</span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>       __________|_________________</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>      [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet</span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>      [          |                 ]              # reflect</span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a>      [ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect</span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>       ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾</span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a>                 O&gt;&gt;&gt;&gt;O              # adjust</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a>                      |</span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a>======================|==========================</span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a>=                     O                         =</span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a>=                     |                         =</span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a>=                     O              # rotate   =</span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a>=                     |                         =</span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a>=                     O                         =</span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a>=      _______________|____________             =</span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a>=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =</span>
+<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a>=     [               |            ]            = # slow</span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a>=     [ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1  =</span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a>=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾             =</span>
+<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a>=                     M                         =</span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a>=                     |                         =</span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a>=                     M              # rotate   =</span>
+<span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a>=                     |                         =</span>
+<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a>=                     M                         =</span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a>======================|==========================</span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a>                      |</span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a>                    M&lt;M              # adjust</span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a>                    |</span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a>====================|=============================</span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a>=                   M                           =</span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a>=                   |&gt;                          =</span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>=                   MN               # rotate   =</span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a>=                   &gt;|                          =</span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a>=                    N                          =</span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a>=      ______________|_____________             =</span>
+<span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a>=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =</span>
+<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a>=     [ |            |             ]            = # medium</span>
+<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a>=     [ AJPCZWRLFBDKOTYUQGENHXMIVS ] # medium^-1=</span>
+<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a>=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾             =</span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a>=                    T                          =</span>
+<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a>=                   &lt;|                          =</span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a>=                   ST               # rotate   =</span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a>=                   |&lt;                          =</span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>=                   S                           =</span>
+<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a>====================|============================</span>
+<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a>                    |</span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a>                    S&gt;&gt;&gt;&gt;&gt;S          # adjust</span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a>                          |</span>
+<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a>==========================|======================</span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a>=                         |                     =</span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a>=                         S                     =</span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a>=                         |&gt;&gt;&gt;&gt;      # rotate   =</span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a>=                         STUVW                 =</span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>=                         &gt;&gt;&gt;&gt;|                 =</span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a>=      _______________________|____             =</span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a>=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet = </span>
+<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a>=     [                       |    ]            = # fast</span>
+<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a>=     [ TAGBPCSDQEUFVNZHYIXJWLRKOM ] # fast^-1  =</span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a>=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾             =</span>
+<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a>=                             R                 =</span>
+<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a>=                         &lt;&lt;&lt;&lt;|                 =</span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a>=                         NOPQR       # rotate  =</span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a>=                         |&lt;&lt;&lt;&lt;                 =</span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a>=                         N                     =</span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a>==========================|======================</span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a>                          |</span>
+<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a>                          N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</div>
+</section>
+<section id="char-show" class="level1">
+<h1>char *&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#string" role="button" aria-expanded="false" aria-controls="string">Show</a></h1>
+<div id="string" class="collapse multi-collapse">
+<section id="hello-world" class="level4">
+<h4 class="anchored" data-anchor-id="hello-world">Hello, world!</h4>
+<ul>
+<li>I start “enigma.c” with “hello.c” from <a href="../dem/alpine.html">Alpine</a>
+<ul>
+<li>This file will successfully create an executable, not correctly encrypt or decrypt.</li>
+<li>Try it out with the autograder container.</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>enigma.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb21" data-filename="enigma.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"hello, world</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="op">;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="no-strings-attached" class="level4">
+<h4 class="anchored" data-anchor-id="no-strings-attached">No strings attached</h4>
+<ul>
+<li>In C there are no strings.
+<ul>
+<li>There are instead things called <code>char *</code></li>
+<li>Say “character star”</li>
+<li>We attach the * to the variable name
+<ul>
+<li>We’ll revisit this later - it will make sense.</li>
+</ul></li>
+<li>That is, an array, or buffer, of characters
+<ul>
+<li>Not quite a list - closer to a NumPy array.</li>
+</ul></li>
+</ul></li>
+<li>It matters what things are called.
+<ul>
+<li>In C we must say what kind of thing a variable is when we “declare” the variable.</li>
+<li>Later we use the variable, without specifying the kind of thing</li>
+<li>But we cannot change its kind.</li>
+<li>C variable declaration is like how Python function declaration, with <code>def</code></li>
+</ul></li>
+<li>We will use format print and variable declarations to introduce <code>char *</code>
+<ul>
+<li>We note that Python <code>print</code> appends a newline and C <code>printf</code> does not.
+<ul>
+<li>I specify an non-newline terminator in Python for equivalence.</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>test.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb22" data-filename="test.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:d}</span><span class="ss">"</span>, end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># we can reassign x and change its type</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="st">"hello world"</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:s}</span><span class="ss">"</span>, end<span class="op">=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>test.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb23" data-filename="test.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> n <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> n<span class="op">)</span> <span class="op">;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">/* we have to make a new variable of novel type */</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>m <span class="op">=</span> <span class="st">"hello world"</span><span class="op">;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> m<span class="op">)</span> <span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<ul>
+<li>Both have the same output:
+<ul>
+<li>The numerical value “1” and the string value “hello world” on the same line.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>1hello world</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>You can update “hello.c” to use a format print.
+<ul>
+<li>This will form the basis of output in this assignment.</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>enigma.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb25" data-filename="enigma.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">"hello, world"</span><span class="op">;</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s\n</span><span class="st">"</span><span class="op">,</span> str<span class="op">);</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="op">;</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="constants" class="level4">
+<h4 class="anchored" data-anchor-id="constants">Constants</h4>
+<ul>
+<li>The C language has a form of support for constants
+<ul>
+<li>These are values that are fixed when the executable is created.</li>
+<li>They may not be reassigned by any line of code.</li>
+</ul></li>
+<li>The <code>#define</code> “pre-processor directive” is used to create constants.
+<ul>
+<li><code>#define</code> is like <code>#include</code> which is somewhat like <code>import</code></li>
+<li>It defines new values, which are not variables, for use in the .c file</li>
+<li>The pre-processor reads .c files before the executable is created.</li>
+</ul></li>
+<li>We can also use <code>#define</code> for strings, such as the rotor strings.
+<ul>
+<li>By convention, constants are named in all caps, like <code>ROTORS</code></li>
+<li>I used a single string of all rotors concatenated.</li>
+<li>You may do whatever works for you.</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>enigma.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb26" data-filename="enigma.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STR </span><span class="st">"hello, world"</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s\n</span><span class="st">"</span><span class="op">,</span> STR<span class="op">);</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="op">;</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>An astute learner will note that constants need not be computed within an executable.</li>
+<li>It is not uncommon to compute constants in a different file, or even in a different language.
+<ul>
+<li>My <code>ROTORS</code> constant was computed in Python.</li>
+<li>I used Python file operations to save this computation to “enigma.c”</li>
+<li>Via <code>vim</code> I used the “yank” and “paste” features to move it to the top of “enigma.c”.</li>
+</ul></li>
+</ul>
+</section>
+<section id="just-a-little-bit" class="level4">
+<h4 class="anchored" data-anchor-id="just-a-little-bit">Just a little bit</h4>
+<ul>
+<li>In C, characters aren’t printing characters.
+<ul>
+<li>They are “just bits” - a collection of ones and zeroes, or a number.</li>
+<li>We attach the * to the variable name
+<ul>
+<li>We’ll revisit this latter - it will make sense.</li>
+</ul></li>
+<li>This differs from Python, which uses strings of length one.
+<ul>
+<li>This is sketchy, sometimes.</li>
+<li>Strings are a non-numeric.</li>
+</ul></li>
+</ul></li>
+<li>If we want to use a numerical value as a printing character, we use a format print.</li>
+<li><strong>C characters use single quotes, and C strings use double quotes.</strong></li>
+</ul>
+<div class="columns">
+<div class="column">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>test.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb27" data-filename="test.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="bu">ord</span>(<span class="st">'A'</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:d}</span><span class="ss">, </span><span class="sc">{</span>x<span class="sc">:x}</span><span class="ss">, </span><span class="sc">{</span>x<span class="sc">:c}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>test.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb28" data-filename="test.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* We do not use anything like ord() */</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%x</span><span class="st">, </span><span class="sc">%c\n</span><span class="st">"</span><span class="op">,</span> <span class="ch">'A'</span><span class="op">,</span><span class="ch">'A'</span><span class="op">,</span><span class="ch">'A'</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<ul>
+<li>Both have the same output:
+<ul>
+<li>The decimal (base 10), hexadecimal (base 16), and unicode/ascii <em>representations</em> of the same <em>value</em>.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb29"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>65, 41, A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>An astute learner will note that this insight is sufficient to implement a rotor.</li>
+</ul>
+</section>
+</div>
+</section>
+<section id="c-loop-show" class="level1">
+<h1>C loop <a class="btn btn-primary" data-bs-toggle="collapse" href="#loop" role="button" aria-expanded="false" aria-controls="loop">Show</a></h1>
+<div id="loop" class="collapse multi-collapse">
+<section id="building-character" class="level3">
+<h3 class="anchored" data-anchor-id="building-character">Building Character</h3>
+<ul>
+<li>The core complication of the Enigma machine was that it was an <em>iterative</em> cipher.</li>
+<li>Let’s practice iteration by iterating over a char *</li>
+<li>We note:
+<ul>
+<li>In C there is no string, list, tuple, generator, dictionary, or set type.</li>
+<li>In Python, <em>for loop</em>s require one of these types.</li>
+<li>Henceforth we refer to the C <em>for loop</em> as a “<em>for loop</em>” and the Python <em>for loop</em> as a “<em>for each loop</em>”.</li>
+</ul></li>
+<li>A <em>for loop</em> is composed of three components:
+<ul>
+<li>Initiate</li>
+<li>Terminate</li>
+<li>Iterate</li>
+</ul></li>
+<li>Syntactically, they are structured follows:</li>
+</ul>
+<div class="sourceCode" id="cb30"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> 𝘪𝘯𝘪𝘵𝘪𝘢𝘵𝘦<span class="op">;</span> 𝘵𝘦𝘳𝘮𝘪𝘯𝘢𝘵𝘦<span class="op">;</span> 𝘪𝘵𝘦𝘳𝘢𝘵𝘦<span class="op">)</span> <span class="op">{</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    𝘤𝘰𝘥𝘦 𝘣𝘭𝘰𝘤𝘬</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Print 0 through 9</li>
+</ul>
+<div class="sourceCode" id="cb31"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>We now explore each component.</li>
+<li>An astute learner will note that this insight is sufficient to implement the entire enigma machine.
+<ul>
+<li>Remaining headings provide guidance on common pitfalls.</li>
+<li>If you can do enigma now, skip to “C args”</li>
+</ul></li>
+</ul>
+<section id="iterate" class="level4">
+<h4 class="anchored" data-anchor-id="iterate">Iterate</h4>
+<ul>
+<li>The last of the three <em>for loop</em> components, the iterator, is closest to the Python <em>for each loop</em>.</li>
+<li>The iterator statement is run each time the loop completes, after the internal code block is run.</li>
+<li>Any statement may be placed in this position.</li>
+<li>The most common is <code>i++</code>, a special shorthand for incrementation.
+<ul>
+<li>It is logically equivalent to Python <code>i += 1</code>.</li>
+</ul></li>
+<li><strong>Example:</strong> Find the length of the first word in a string with an iterator only:
+<ul>
+<li>Increase a string index by one within the iterator.</li>
+<li>Include an if statement in the <em>for loop</em> code block.</li>
+<li>Use a return statement in the if statement code block.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb32"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">"hello world"</span><span class="op">;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> <span class="op">;</span> <span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>str<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">' '</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                printf<span class="op">(</span><span class="st">"</span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="terminate" class="level4">
+<h4 class="anchored" data-anchor-id="terminate">Terminate</h4>
+<ul>
+<li>Unlike Python strings, C character arrays have no length.</li>
+<li>Rather, they end with a special character.
+<ul>
+<li>This character is called the <em>null terminator</em></li>
+<li>It is non-printing (not visible).</li>
+<li>It is denoted explicitly via <code>'\0'</code>
+<ul>
+<li>Single quotes to denote a character.</li>
+<li>A backslash “escape” character to denote a special character.</li>
+<li>A zero to denote it is “null”, “zero”, or “nothing”</li>
+</ul></li>
+<li>It is numerically equal to zero.</li>
+</ul></li>
+<li>Unlike Python booleans, C has no boolean type.
+<ul>
+<li>Rather, it has truthiness, akin to Python <em>if</em> statements with numerical conditions.</li>
+<li>The numerical value zero is false.</li>
+<li>All other numerical values are true.</li>
+</ul></li>
+<li>The termination statement causes the loop to end when it is equal to zero.</li>
+<li><strong>Example:</strong> Find the length of the first word in a string with a terminator only:
+<ul>
+<li>Check if a character is the null terminator in the termination statement.</li>
+<li>Include an incrementation in the <em>for loop</em> code block.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb33"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">"hello world"</span><span class="op">;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> <span class="op">;</span> str<span class="op">[</span>i<span class="op">]</span> <span class="op">;</span> <span class="op">)</span> <span class="op">{</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        i<span class="op">++;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This is also a good example of how sometimes the C <em>for loop</em> may have no code block.
+<ul>
+<li>Here is a logically equivalent way to measure the length of a char * serving as a string.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb34"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">"hello world"</span><span class="op">;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> <span class="op">;</span> str<span class="op">[</span>i<span class="op">]</span> <span class="op">;</span> i<span class="op">++</span> <span class="op">)</span> <span class="op">{</span> <span class="op">}</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This is also a good chance to test what order the terminator and iterator are checked.
+<ul>
+<li>The terminator is checked before the iterator.</li>
+<li>The iterator does not if the terminator is true.</li>
+</ul></li>
+<li>This matters a lot in this case, where the length calculated would be off by one.
+<ul>
+<li>12 instead of 11</li>
+<li>The value of the iteration variable <code>i</code> is increased the same time the terminator is checked.</li>
+<li>So the null terminator is at index 11 but this C code would print the numerical value 12.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb35"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">"hello world"</span><span class="op">;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> <span class="op">;</span> str<span class="op">[</span>i<span class="op">++]</span> <span class="op">;</span> <span class="op">)</span> <span class="op">{</span> <span class="op">}</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="initiate" class="level4">
+<h4 class="anchored" data-anchor-id="initiate">Initiate</h4>
+<ul>
+<li>The initiator allows setting a variable to a certain value before beginning a loop.</li>
+<li>I mostly use it when I have more than one loop, and want to use <code>i</code> for both.</li>
+<li>Here is the above example, with an iniatiator.</li>
+</ul>
+<div class="sourceCode" id="cb36"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">"hello world"</span><span class="op">;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> str<span class="op">[</span>i<span class="op">++]</span> <span class="op">;</span> <span class="op">)</span> <span class="op">{</span> <span class="op">}</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>The following is permissable in all modern forms of C, but was not an initial feature of the language.
+<ul>
+<li>As a rule, I try not to declare variables in the initializer so my code works on older devices.</li>
+<li>It also makes writing a C compiler easier, if you ever plan to do that.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb37"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">"hello world"</span><span class="op">;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span> <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> str<span class="op">[</span>i<span class="op">++]</span> <span class="op">;</span> <span class="op">)</span> <span class="op">{</span> <span class="op">}</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+</div>
+</section>
+<section id="arrays-show" class="level1">
+<h1>Arrays <a class="btn btn-primary" data-bs-toggle="collapse" href="#arrays" role="button" aria-expanded="false" aria-controls="arrays">Show</a></h1>
+<div id="arrays" class="collapse multi-collapse">
+<section id="collections" class="level3">
+<h3 class="anchored" data-anchor-id="collections">Collections</h3>
+<ul>
+<li><p>C lacks any collection type (list, set, tuple, string)</p></li>
+<li><p><code>*</code> notation is used instead</p>
+<ul>
+<li><code>*</code> denotes the location of a some value</li>
+<li>The type of this value gives its size</li>
+<li>Successive values are at successive locations</li>
+<li>These are memory addresses.</li>
+</ul></li>
+<li><p>[] notation may also be used</p>
+<ul>
+<li>We simply include the length within brackets.</li>
+</ul></li>
+<li><p>We don’t worry about any of that for now.</p></li>
+<li><p>You will likely want to use a collection on Enigma:</p>
+<ul>
+<li>Rotor rotations</li>
+<li>Rotors themselves</li>
+<li>I don’t know, for fun.</li>
+</ul></li>
+<li><p>C array notation is very similar to Python set notation, but maintains order</p>
+<ul>
+<li>You are responsible for keeping track of the length.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb38"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> carray<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="ch">'a'</span><span class="op">,</span> <span class="ch">'e'</span><span class="op">,</span> <span class="ch">'i'</span><span class="op">,</span> <span class="ch">'o'</span><span class="op">,</span> <span class="ch">'u'</span><span class="op">};</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> iarray<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">16</span><span class="op">,</span> <span class="dv">32</span><span class="op">};</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%c</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> carray<span class="op">[</span>i<span class="op">],</span> iarray<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="character-arrays" class="level4">
+<h4 class="anchored" data-anchor-id="character-arrays">Character arrays</h4>
+<ul>
+<li>Unlike Python, where a list of characters and a string of characters differ, in C, an array of characters and a “string” of characters are identical.</li>
+</ul>
+<div class="sourceCode" id="cb39"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> carray<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="ch">'a'</span><span class="op">,</span> <span class="ch">'e'</span><span class="op">,</span> <span class="ch">'i'</span><span class="op">,</span> <span class="ch">'o'</span><span class="op">,</span> <span class="ch">'u'</span><span class="op">};</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> string<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="st">"abcde"</span><span class="op">;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%c</span><span class="st"> </span><span class="sc">%c\n</span><span class="st">"</span><span class="op">,</span> carray<span class="op">[</span>i<span class="op">],</span> string<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>C strings are implicitly null terminated, so there is a minor difference, but that is immaterial here.
+<ul>
+<li>How would you check if a string is null terminated?</li>
+</ul></li>
+</ul>
+</section>
+</section>
+</div>
+</section>
+<section id="c-math-show" class="level1">
+<h1>C math <a class="btn btn-primary" data-bs-toggle="collapse" href="#math" role="button" aria-expanded="false" aria-controls="math">Show</a></h1>
+<div id="math" class="collapse multi-collapse">
+<section id="integer-division" class="level3">
+<h3 class="anchored" data-anchor-id="integer-division">Integer Division</h3>
+<ul>
+<li>In C, there are numerous integer data types, including <em>int</em> and <em>char</em></li>
+<li>All use integer division by default.</li>
+<li>Test as follows:</li>
+</ul>
+<div class="sourceCode" id="cb40"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> / </span><span class="sc">%d</span><span class="st"> -&gt; </span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">,</span> <span class="dv">2</span><span class="op">,</span> i <span class="op">/</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>The results are clear:</li>
+</ul>
+<div class="sourceCode" id="cb41"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>0 / 2 -&gt; 0</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>1 / 2 -&gt; 0</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>2 / 2 -&gt; 1</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>3 / 2 -&gt; 1</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>4 / 2 -&gt; 2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="modulo" class="level3">
+<h3 class="anchored" data-anchor-id="modulo">Modulo</h3>
+<ul>
+<li>Both C and Python have a % operator
+<ul>
+<li>In Python it is the “more mathematically correct” modulo operation</li>
+<li>In C it is the less common remainder operation.</li>
+</ul></li>
+<li>The differences were non-obvious and led to a pernicious bug in my enigma.c</li>
+</ul>
+<section id="python" class="level4">
+<h4 class="anchored" data-anchor-id="python">Python %</h4>
+<ul>
+<li>First, test Python</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>modulo.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb42" data-filename="modulo.py"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>[<span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>i<span class="sc">:2d}</span><span class="ss"> % 3 -&gt; </span><span class="sc">{</span>i<span class="op">%</span><span class="dv">3</span><span class="sc">:d}</span><span class="ss">"</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>We see the predictable result.</li>
+</ul>
+<div class="sourceCode" id="cb43"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>-5 % 3 -&gt; 1</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>-4 % 3 -&gt; 2</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>-3 % 3 -&gt; 0</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>-2 % 3 -&gt; 1</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>-1 % 3 -&gt; 2</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a> 0 % 3 -&gt; 0</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a> 1 % 3 -&gt; 1</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a> 2 % 3 -&gt; 2</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a> 3 % 3 -&gt; 0</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a> 4 % 3 -&gt; 1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="c" class="level4">
+<h4 class="anchored" data-anchor-id="c">C %</h4>
+<ul>
+<li>Now, test C</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>remainder.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb44" data-filename="remainder.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="op">-</span><span class="dv">5</span><span class="op">;</span> i <span class="op">!=</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                printf<span class="op">(</span><span class="st">"</span><span class="sc">%2d</span><span class="st"> </span><span class="sc">%%</span><span class="st"> </span><span class="sc">%d</span><span class="st"> -&gt; </span><span class="sc">%2d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">,</span> <span class="dv">3</span><span class="op">,</span> i <span class="op">%</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>We see the predictable result.</li>
+</ul>
+<div class="sourceCode" id="cb45"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>-5 % 3 -&gt; -2</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>-4 % 3 -&gt; -1</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>-3 % 3 -&gt;  0</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>-2 % 3 -&gt; -2</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>-1 % 3 -&gt; -1</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a> 0 % 3 -&gt;  0</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a> 1 % 3 -&gt;  1</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a> 2 % 3 -&gt;  2</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a> 3 % 3 -&gt;  0</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a> 4 % 3 -&gt;  1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Unlike Python, C % may generate negative results.</li>
+<li>There are a number of ways to deal with that.</li>
+</ul>
+</section>
+<section id="pythonic-in-c" class="level4">
+<h4 class="anchored" data-anchor-id="pythonic-in-c">Pythonic % in C</h4>
+<ul>
+<li>With thanks to <a href="https://stackoverflow.com/a/1907585">Stack Overflow</a></li>
+</ul>
+<div class="sourceCode" id="cb46"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%2d</span><span class="st"> Py</span><span class="sc">%%</span><span class="st"> </span><span class="sc">%d</span><span class="st"> -&gt; </span><span class="sc">%d\n</span><span class="st">"</span><span class="op">,</span> i<span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="op">((</span>i <span class="op">%</span> <span class="dv">3</span><span class="op">)</span> <span class="op">+</span> <span class="dv">3</span><span class="op">)</span> <span class="op">%</span> <span class="dv">3</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This gives necessarily positive values.</li>
+</ul>
+<div class="sourceCode" id="cb47"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>-5 Py% 3 -&gt; 1</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>-4 Py% 3 -&gt; 2</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>-3 Py% 3 -&gt; 0</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>-2 Py% 3 -&gt; 1</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>-1 Py% 3 -&gt; 2</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a> 0 Py% 3 -&gt; 0</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a> 1 Py% 3 -&gt; 1</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a> 2 Py% 3 -&gt; 2</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a> 3 Py% 3 -&gt; 0</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a> 4 Py% 3 -&gt; 1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+</div>
+</section>
+<section id="c-args-show" class="level1">
+<h1>C args <a class="btn btn-primary" data-bs-toggle="collapse" href="#args" role="button" aria-expanded="false" aria-controls="args">Show</a></h1>
+<div id="args" class="collapse multi-collapse">
+<section id="arguments" class="level3">
+<h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
+<ul>
+<li>The reference Python contains the following snippet:</li>
+</ul>
+<div class="sourceCode" id="cb48"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> sys</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(enigma(sys.argv[<span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This is roughly equivalent to printing the return result of the enigma function within a function called main.</li>
+<li>This is close to C, but we haven’t introduced a way to use command line arguments.</li>
+<li>Let’s look at a minimal Python example.</li>
+</ul>
+<section id="pyecho" class="level4">
+<h4 class="anchored" data-anchor-id="pyecho">PyEcho</h4>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>pyecho.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb49" data-filename="pyecho.py"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.argv[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>We use as follows:</li>
+</ul>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> pyecho.py <span class="st">"hello world"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>We can construct the same within C.</li>
+</ul>
+</section>
+<section id="cecho" class="level4">
+<h4 class="anchored" data-anchor-id="cecho">CEcho</h4>
+<ul>
+<li>The Python <code>sys</code> module contains many features present by default in a systems programming language.</li>
+<li>One such is <code>argv</code>, a vector (in the mathematical sense) of arguments.
+<ul>
+<li>These are command line arguments.</li>
+<li>In Python a list of strings</li>
+<li>In C an array of char *</li>
+<li>The zeroth argument is the name of the Python script or C executable</li>
+</ul></li>
+<li>There is additionally something called <code>argc</code>, an integer count of arguments.
+<ul>
+<li>In C this is needed to know the length of the vector</li>
+<li>In Python it is redundant, but potentially useful</li>
+</ul></li>
+<li>We have thus far written main with no arguments, so we also introduce how to write functions with arguments.
+<ul>
+<li>C function arguments are identical to Python function arguments</li>
+<li>As with other variables, C function argument variables must be declared with a type</li>
+<li>Using functions will make writing C much easier.</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>cecho.c</strong></pre>
+</div>
+<div class="sourceCode" id="cb51" data-filename="cecho.c"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%s\n</span><span class="st">"</span><span class="op">,</span> argv<span class="op">[</span><span class="dv">1</span><span class="op">]);</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>You may wish to compile then try the following:</li>
+</ul>
+<div class="sourceCode" id="cb52"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>gcc cecho.c -o cecho</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>No arguments, which gives a segmentation fault, a type of error when you try to read something that doesn’t exist</li>
+</ul>
+<div class="sourceCode" id="cb53"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>./cecho</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>One argument, which is printed.</li>
+</ul>
+<div class="sourceCode" id="cb54"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>./cecho hello</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Two arguments, of which one is printed.</li>
+</ul>
+<div class="sourceCode" id="cb55"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>./cecho hello world</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Two words as a single argument using quotes.</li>
+</ul>
+<div class="sourceCode" id="cb56"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>./cecho "hello world"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>You may note that Python has all the same features.</li>
+</ul>
+</section>
+</section>
+</div>
+</section>
+<section id="tester-show" class="level1">
+<h1>Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls="tester">Show</a></h1>
+<div id="tester" class="collapse multi-collapse">
+<section id="podman" class="level4">
+<h4 class="anchored" data-anchor-id="podman">Podman</h4>
+<ul>
+<li>I am providing the following Containerfile, which will serve as a minimal autograder
+<ul>
+<li>It sets up an Alpine container.</li>
+<li>It downloads a Python script to test.</li>
+<li>It copies in “enigma.c” from your system.</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Containerfile</strong></pre>
+</div>
+<div class="sourceCode" id="cb57" data-filename="Containerfile"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>FROM alpine</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>RUN apk add gcc libc-dev python3 curl</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>RUN curl https://raw.githubusercontent.com/cd-c89/crypto/main/enigma/tester.py -o tester.py</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>COPY enigma.c .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="usage" class="level4">
+<h4 class="anchored" data-anchor-id="usage">Usage</h4>
+<ul>
+<li>I built my container via:</li>
+</ul>
+<div class="sourceCode" id="cb58"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>podman build -t tester .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I tested my code via:</li>
+</ul>
+<div class="sourceCode" id="cb59"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>podman run tester python3 tester.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>If the above script returns “Perfect!” you are done.
+<ul>
+<li>Create a <a href="https://gist.github.com/">Gist</a> with an “enigma.c”.</li>
+<li>Email me the url of your Gist, it will look something like, from your official school email:</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb60"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>https://gist.github.com/cd-public/a840e95e71ac7309a53ab0bb1282ba40</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I will review the most recent version prior to the due date.</li>
+</ul>
+</section>
+<section id="vim-trick" class="level4">
+<h4 class="anchored" data-anchor-id="vim-trick">Vim trick:</h4>
+<ul>
+<li>You will probably want to work in a container with <code>vim</code> and also test your code in the same container.
+<ul>
+<li>It is possible to create a second command line tab that is also within the container.
+<ul>
+<li>Consult <code>podman</code> documentation - many ways to do this.</li>
+</ul></li>
+<li>I recommend using <code>vim</code> built-in <code>:term</code> command, which splits the screen into a vim editor and a vim terminal.</li>
+<li>You can move between windows using ctrl+w - if it doesn’t work, Google it.</li>
+</ul></li>
+</ul>
+</section>
+<section id="podman-trick" class="level4">
+<h4 class="anchored" data-anchor-id="podman-trick">Podman trick:</h4>
+<ul>
+<li>You will probably want to create one container then work in that container until you finish.</li>
+<li><code>podman run</code> will create a new container each time, which is not what you probably want.</li>
+<li>The following recycles the previous container, mostly.
+<ul>
+<li>Read more: <a href="https://stackoverflow.com/a/37886136">Stack Overflow</a></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb61"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>podman start -a -i `podman ps -q -l`</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

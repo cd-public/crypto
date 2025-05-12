@@ -1,0 +1,124 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+---
+title: list_t
+subtitle: "HW 0xA: Due Th, 17 Apr"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Implement a data structure.
+
+
+- This is the first of two "data structures" assignments, implementing the "chain" of blockchain.
+- The data stored by the structure is simply a `void *` which could be:
+  - A pointer to a block, or
+  - For the test, a numerical value cast to `void *`
+- It is split over 3 files:
+  - `tester.c` which is an example of how some client could use `list_t`
+  - `list_t.h` which the public API you will implement, as with `4096_t`
+    - Change only the `typedef` line.
+  - `list_t.c` which you may implement in any way you like.
+  - Additionally, a Makefile is provided.
+
+:::
+
+# Option&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#option" role="button" aria-expanded="false" aria-controls = "option">Show</a>
+
+::: {#option .collapse .multi-collapse}
+
+## Option 0x0: Linked List ("LISP list")
+
+- One obvious way to implement `list_t` is as a linked list.
+  - A list is a `void **` of length 2.
+  - The first element is the data element.
+  - The second element is a pointer to another list or `NULL` in the case of no other elements.
+  - Every add/remove requires a corresponding malloc/free.
+
+```{.c filename="list_t.h"}
+typedef void **list_t;
+```
+
+## Option 0x1: A null-terminated vector ("C vector")
+
+- One obvious way to implement `list_t is as a null-terminated array, buffer, or vector.
+  - A list is a `void **` of unspecified length, one greater than the number of elements.
+  - Every `void *` is some data element, except,
+  - Some final terminating element is `NULL`
+  - Either:
+    - The entire structure is malloced/freed for any change or,
+    - Somehow mallocs and frees occur only occasionally.
+      - Most obviously by manually calculating size and only resizing when increasing past some power of two in size.
+
+```{.c filename="list_t.h"}
+typedef void **list_t;
+```
+
+## Option 0x2: A length-prefixed vector ("Pascal vector")
+
+- One obvious way to implement `list_t is as a length-prefixed array, buffer, or vector.
+  - A list is a `void **` of specified length, one greater than the number of elements.
+  - The first element is a `size_t` cast to a `void *` representing the length.
+    - Recall, `void *` and `size_t` must be the same size, as they both describe the size of the computer's memory.
+    - You may manage "off-by-one" in any way you like here.
+  - Every successive element is a data element.
+  - Either:
+    - The entire structure is malloced/freed for any change or,
+    - Somehow mallocs and frees occur only occasionally.
+      - Most obviously by manually calculating size and only resizing when increasing past some power of two in size.
+
+```{.c filename="list_t.h"}
+typedef void **list_t;
+```
+
+## Other options
+
+- An astute student may realize that:
+  - It is trivial to both length-prefix and null-terminate
+  - It is trivial for an element of a linked list to be a vector of some length, say 16.
+- An astute student may wish to implement a doubly-linked list or a binary tree that exposes a list interface.
+- Advanced students should implement an XOR list, which is left as an exercise to the interested student.
+  - Advanced students should consider how `valgrind` would regard an XOR list.
+
+:::
+
+# Header&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#header" role="button" aria-expanded="false" aria-controls = "header">Show</a>
+
+::: {#header .collapse .multi-collapse}
+
+## Novel Header
+
+- Alongside the tester, the expected behavior of the `list_t` type is defined by the comments and function type specified in `list_t.h`.
+
+<iframe width="100%" height="500em" src="https://cd-public.github.io/calvinism/?uri=https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/list_t/list_t.h"></iframe>
+
+
+:::
+
+# Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls = "tester">Show</a>
+
+::: {#tester .collapse .multi-collapse}
+
+## Novel Tester
+
+- Versus other testers this term, I wanted to provide a more concrete file that actually used the list_t, performed operations, and issued outputs as print statements.
+- I hope that tester is self-documenting, but would love to hear your questions!
+
+<iframe width="100%" height="500em" src="https://cd-public.github.io/calvinism/?uri=https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/list_t/tester.c"></iframe>
+
+
+:::

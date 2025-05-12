@@ -1,0 +1,1428 @@
+---
+title: Stream
+theme: dark
+author: Prof. Calvin
+subtitle: "Week 0x9 I"
+institute: Crypto
+format: 
+    revealjs: 
+        code-fold: true
+        theme: dark
+        mainfont: monospace
+        slide-number: true
+        show-slide-number: all
+        width: 1050
+        height: 700
+        footer: "[Home](../index.html)"
+
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render
+    code-fold: false
+---
+
+# Announcements
+
+- **Welcome** to CS 540
+  - A quick digression on patterns & antipatterns
+  - C relevant
+  - Then data structures
+- **Action Items**:
+  - BigRSA due this week.
+  - Final released
+
+# Final
+
+- The final is a write-up with supporting code.
+- The "MS CS" extensions for the next 4 weeks are 3 technical papers and 1 blog.
+- I have "tech debt" on the `genrsa` and `linker` VoDs, which will help you if you get stuck on the final, but right now I could only do them poorly, rather than well.
+- Let's review [`BTCinC`](btcinc.html) and the readings.
+  
+# Today
+
+- Antipatterns
+
+> An anti-pattern in software engineering, project management, and business processes is a common response to a recurring problem that is usually ineffective and risks being highly counterproductive.
+
+# Today
+
+- Duplication
+- Deficient encapsulation v. Broken modularization
+- Magic Numbers
+- Overthinking
+- Big Ball of Mud v. God Object
+- Data clump
+
+# Duplication
+
+- And *streaming*
+    - Today's lecture inspire by the idea of *streaming data*
+    - Huge paradigm change in exascale data application, built the modern cloud.
+- Let's look at two examples.
+
+# Duplicate
+
+- Say we are working on Base85 and have the following function:
+```{.c}
+void print_in_base85(uint32_t word);
+```
+- We know:
+    - Base85 prints exactly 5 characters of printable ascii/utf-8 for exactly every 4 bytes / 32 bits of data
+    - We know that every single 32-bit word is independent.
+
+# Base85
+
+- It is perhaps impossible but certainly "wrong" to perform base85 encoding without this function.
+- So no matter what, we will have this function in some loop over some data.
+```{.c}
+do {
+    print_in_base85(word);
+} while ( conditional )
+```
+
+# Design Decision
+
+- We have to decide how to populate `word`.
+    - We need 32 bits
+    - We need to read it from a file.
+
+::::{columns}
+
+:::{.column width=50%}
+
+```{.c}
+FILE *fp = fopen("file.txt", "r");
+uint32_t word, conditional;
+do {
+    print_in_base85(word);
+} while ( conditional )
+```
+
+:::
+
+:::{.column width=50%}
+
+```{.c}
+FILE *fp = fopen("file.txt", "r");
+uint32_t word, conditional;
+do {
+    print_in_base85(word);
+} while ( conditional );
+```
+
+:::
+
+::::
+
+# Do we?
+
+- Copy (duplicate) all data then read, or...
+- Read 32 bits at a time
+
+::::{columns}
+
+:::{.column width=50%}
+```{.c}
+FILE *fp = fopen("file.txt", "r")
+uint32_t words[∞], conditional, i = 0;
+fread(words, ∞, 1, *fp);
+do {
+    print_in_base85(words[i++]);
+} while ( conditional );
+```
+
+:::
+
+:::{.column width=50%}
+
+```{.c}
+FILE *fp = fopen("file.txt", "r");
+uint32_t word, conditional;
+do {
+    fread(word, 4, 1, fp);
+    print_in_base85(word);
+} while ( conditional );
+```
+
+:::
+
+::::
+
+# Stream!
+
+
+
+::::{columns}
+
+:::{.column width=50%}
+
+- We never need local copies if we have independence!
+- SHA256 - 512 bytes
+- Base64 - 3 bytes
+- Base85 - 4 bytes
+- RSA - Fewer bytes than $n = pq$
+
+:::
+
+:::{.column width=50%}
+
+```{.c}
+FILE *fp = fopen("file.txt", "r");
+uint32_t word, conditional;
+do {
+    fread(word, 4, 1, fp);
+    print_in_base85(word);
+} while ( conditional );
+```
+
+:::
+
+::::
+
+# Example
+
+- From my research
+    - Wrote a Python script the handles some hardware design data.
+    - I use an existing tool in Java that handles the same data.
+    - I implemented by tool with *streaming*
+
+# Timing
+
+```{.email}
+$ time python3 rtlkon.py testbench.vcd >/dev/null
+
+real    0m0.323s
+user    0m0.285s
+sys     0m0.030s
+$ time java daikon.Daikon testbench.decls testbench.dtrace >/dev/null
+
+real    0m4.358s
+user    0m14.128s
+sys     0m0.413s
+$ wc testbench.decls testbench.dtrace
+    2219     4434    39059 testbench.decls
+ 2936134  2931732 17474090 testbench.dtrace
+ 2938353  2936166 17513149 total
+```
+
+# Stream
+
+- Python 3, the world's slowest language, writes 15.5 MB in .323 seconds
+- Java, the other slowest language, reads 15.5 MB in 14.128 seconds.
+    - Python at 48x speed
+- Both tools fully simulate the processor as an automata, use local storage, etc.
+
+# Visualize
+
+- I think of streaming as follows.
+- We image we want to make some "File B" from some "File A"
+
+
+```{dot}
+//| fig-width: 500px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=box
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="File A"];
+    file2 [label="File B"];
+
+    file1 -> file2;
+    }
+}
+```
+
+# Visualize
+
+- Imagine SHA hashing Pride and Prejudice
+    - You did this.
+
+
+```{dot}
+//| fig-width: 500px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=box
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="P&P"];
+    file2 [label="SHA"];
+
+    file1 -> file2;
+    }
+}
+```
+
+# Visualize
+
+- Imagine Base64 encoding an .svg.
+    - You can do this, quarto does this.
+
+```{dot}
+//| fig-width: 500px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=box
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="SVG"];
+    file2 [label="B64"];
+
+    file1 -> file2;
+    }
+}
+```
+
+# Streaming
+
+
+- A file contains of $n$ words of $b$ bits.
+
+```{dot}
+//| fig-width: 500px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="0x0 | 0x4 | 0x8 | 0xc"];
+    file2 [label="??? | ??? | ??? | ???"];
+
+    file1 -> file2;
+    }
+}
+```
+
+
+# Streaming
+
+
+- An executable maps files-to-files
+    - base64 is a bijection - remember those?
+
+```{dot}
+//| fig-width: 800px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="0x0 | 0x4 | 0x8 | 0xc"];
+    ELF [label="base64", shape=rarrow]
+    file2 [label="??? | ??? | ??? | ???"];
+
+    file1 -> ELF
+    ELF -> file2;
+    }
+}
+```
+
+## 
+
+<table>
+
+  <tbody>
+    <tr>
+<td>
+**Bijective**
+
+```{dot filename="Finite Automata"}
+//| fig-width: 300px
+//| fig-height: 200px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=circle,
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+  subgraph cluster_X {
+  rankdir=TB;
+      color = "#ffffff";
+      fontcolor = "#ffffff"
+      style=rounded
+      label = "A";
+      "1";
+      "2";
+      "3";
+      "4";
+  }
+
+  subgraph cluster_Y {
+  rankdir=TB;
+      color = "#ffffff";
+      style=rounded
+      fontcolor = "#ffffff"
+      label = "B";
+      "w";
+      "x";
+      "y";
+      "z";
+  }
+
+  "1" -> "w";
+  "2" -> "x";
+  "3" -> "y";
+  "4" -> "z";
+}
+```
+
+</td>
+<td>
+**Injective**
+
+```{dot filename="Finite Automata"}
+//| fig-width: 300px
+//| fig-height: 200px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=circle,
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+  subgraph cluster_X {
+  rankdir=TB;
+      color = "#ffffff";
+      fontcolor = "#ffffff"
+      style=rounded
+      label = "A";
+      "1";
+      "2";
+      "3";
+  }
+
+  subgraph cluster_Y {
+  rankdir=TB;
+      color = "#ffffff";
+      style=rounded
+      fontcolor = "#ffffff"
+      label = "B";
+      "w";
+      "x";
+      "y";
+      "z";
+  }
+
+  "1" -> "w";
+  "2" -> "x";
+  "3" -> "z";
+}
+```
+</td>
+</tr>
+    <tr>
+<td>
+**Surjective**
+
+```{dot filename="Finite Automata"}
+//| fig-width: 300px
+//| fig-height: 200px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=circle,
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+  subgraph cluster_X {
+  rankdir=TB;
+      color = "#ffffff";
+      fontcolor = "#ffffff"
+      style=rounded
+      label = "A";
+      "1";
+      "2";
+      "3";
+      "4";
+  }
+
+  subgraph cluster_Y {
+  rankdir=TB;
+      color = "#ffffff";
+      style=rounded
+      fontcolor = "#ffffff"
+      label = "B";
+      "w";
+      "x";
+      "y";
+  }
+
+  "1" -> "w";
+  "2" -> "x";
+  "3" -> "y";
+  "4" -> "y";
+}
+```
+
+</td>
+<td>
+Neither
+
+```{dot filename="Finite Automata"}
+//| fig-width: 300px
+//| fig-height: 200px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=circle,
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+  subgraph cluster_X {
+  rankdir=TB;
+      color = "#ffffff";
+      fontcolor = "#ffffff"
+      style=rounded
+      label = "A";
+      "1";
+      "2";
+      "3";
+      "4";
+  }
+
+  subgraph cluster_Y {
+  rankdir=TB;
+      color = "#ffffff";
+      style=rounded
+      fontcolor = "#ffffff"
+      label = "B";
+      "w";
+      "x";
+      "y";
+      "z";
+  }
+
+  "1" -> "w";
+  "2" -> "x";
+  "3" -> "z";
+  "4" -> "z";
+}
+```
+
+</td>
+</tr>
+</tbody>
+</table>
+
+# Base64
+
+- Base64
+    - Bijects numbers in $\mathbb{Z}/n\mathbb{Z}:n = 2^{32}$
+    - To strings of length 5 over these symbols `[A-Za-z0-9+/]`
+- Base64 encoding of a file
+    - Bijects files, we can think of as in binary, to
+    - Strings of arbitrary length over `[A-Za-z0-9+/]`
+
+# Streaming
+
+```{dot}
+//| fig-width: 800px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="<a>0x0 | ??? | ??? | ???"];
+    ELF [label="base64", shape=rarrow]
+    file2 [label="<b>??? | ??? | ??? | ???"];
+
+    file1:a -> ELF
+    ELF -> file2:b;
+    
+}
+```
+
+# Streaming
+
+```{dot}
+//| fig-width: 800px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="???| <a>0x4 | ??? | ???"];
+    ELF [label="base64", shape=rarrow]
+    file2 [label="???| <b>0x5 | ??? | ???"];
+
+    file1:a -> ELF
+    ELF -> file2:b;
+    
+}
+```
+
+
+# Streaming
+
+```{dot}
+//| fig-width: 800px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="???| ??? | <a>0x8 | ???"];
+    ELF [label="base64", shape=rarrow]
+    file2 [label="??? | ??? |<b>0xA | ???"];
+
+    file1:a -> ELF
+    ELF -> file2:b;
+    
+}
+```
+
+
+
+# Streaming
+
+```{dot}
+//| fig-width: 800px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="???| ??? | ???| <a>0xC "];
+    ELF [label="base64", shape=rarrow]
+    file2 [label="??? | ??? | ???|<b>0xF "];
+
+    file1:a -> ELF
+    ELF -> file2:b;
+    
+}
+```
+
+# Pattern
+
+- This is the pattern
+
+```{dot}
+//| fig-width: 800px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="...| <a>0xX |..."];
+    ELF [label="base64", shape=rarrow]
+    file2 [label="...|<b>0xY |... "];
+
+    file1:a -> ELF
+    ELF -> file2:b;
+    
+}
+```
+
+# Anti-Pattern
+
+- This is the anti-pattern of duplication
+
+```{dot}
+//| fig-width: 1000px
+//| echo: false
+digraph finite_automata {
+  rankdir=LR;
+  bgcolor="#191919";
+
+  node [
+      fontcolor = "#ffffff",
+      color = "#ffffff",
+      shape=record
+  ]
+
+  edge [
+      color = "#ffffff",
+      fontcolor = "#ffffff"
+  ]
+
+    file1 [label="...| <a>0xX |..."];
+    fio [label="fread", shape=rarrow]
+    file15 [label="buf[∞]"];
+    ELF [label="base64", shape=rarrow]
+    file2 [label="...|<b>0xY |... "];
+
+    file1 -> fio
+    fio -> file15
+    file15 -> ELF
+    ELF -> file2:b;
+    
+}
+```
+
+# Big Deal
+
+- Unnecessary duplication is a big deal in database / lakehouse.
+
+![](https://miro.medium.com/v2/0*-qVE8s5PCVcv_E7c.png){fig-align="center"}
+
+# Big Deal
+
+- Unnecessary duplication is what prevented prime generation in my 4096_t.
+
+```{.C}
+uint64_t bigdiv(uint64_t *num, uint64_t *den, uint64_t *quo, uint64_t *rem) {
+    uint64_t i = getmsb(num), j = getmsb(den), n, d, tmq[S], tmr[S];
+```
+
+- That is `(4 + 2) * 64 * 64 = 24576` = 25 kilobytes for `5/2`
+
+# Today
+
+- &check; Duplication
+- Deficient encapsulation v. Broken modularization
+- Magic Numbers
+- Overthinking
+- Big Ball of Mud v. God Object
+- Data clump
+
+# On 4096_t
+
+- I needed the following on BigRSA
+```{.C}
+uint64_t bignul(uint64_t *a) {
+    size_t i;
+    for  (i = 0 ; i < S && !a[i]; i++) { }
+    return i != S;
+}
+```
+- I needed it on both `bigkey` and `bigrsa`
+- I didn't inclode it in 4096_t
+    - I duplicated the code but...
+
+# Header files
+
+- This header file implements the 4096_t... dare I say... API?
+
+```{.C}
+void seebig(uint64_t *a); 
+uint64_t bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum); 
+uint64_t bigsub(uint64_t *min, uint64_t *sub, uint64_t *dif); 
+uint64_t bigmul(uint64_t *in0, uint64_t *in1, uint64_t *out); 
+uint64_t bigdiv(uint64_t *num, uint64_t *den, uint64_t *quo, uint64_t *rem); 
+uint64_t bigquo(uint64_t *num, uint64_t *den, uint64_t *quo);
+uint64_t bigrem(uint64_t *num, uint64_t *den, uint64_t *rem);
+```
+
+- I shouldn't mess with this! It's already "released"!
+
+# Options
+
+- Implement `bignul` at the point-of-us, in both `bigrsa` and `bigkey`
+    - Broken modularization (big function outside of 4096_t)
+    - Duplication (in both files)
+- Add `bignul` back into `4096_t.h`
+    - Broken modularization
+        - E.g., the tests on 4096_t don't test bignul
+
+# Takeaways
+
+- When we design libraries, software, APIs, test scripts...
+- Make sure we are preserving modularization and enscapsulation
+    - Shouldn't have bigops scattered to the four winds
+
+# Another example
+
+- This function:
+```{.c}
+void print_in_base85(uint32_t word);
+```
+- Breaks here:
+```{.c}
+FILE *fp = fopen("file.txt", "r");
+uint32_t word, conditional;
+do {
+    fread(word, 4, 1, fp);
+    print_in_base85(word);
+} while ( conditional );
+```
+- What is `conditional`?
+
+# Return type
+
+- This function:
+```{.c}
+/* returns # of words read */
+size_t print_in_base85(uint32_t word)
+```
+- Uses its return value:
+```{.c}
+FILE *fp = fopen("file.txt", "r");
+uint32_t word;
+size_t cond;
+do {
+    fread(word, 4, 1, fp);
+    cond = print_in_base85(word);
+} while ( 4 == cond );
+```
+- To *encapsulate* checking end of a file
+
+# Bad
+
+- These are both bad
+
+::::{columns}
+
+:::{.column width=50%}
+```{.c}
+void print_in_base85(uint32_t word)
+```
+```{.c}
+size_t fp = fopen("file.txt", "r");
+uint32_t word;
+do {
+    fread(word, 4, 1, fp);
+    print_in_base85(word)
+} while ( ??? )
+```
+
+:::
+
+:::{.column width=50%}
+
+```{.c}
+size_t print_in_base85(uint32_t word)
+```
+```{.c}
+size_t s, fp = fopen("file.txt", "r");
+uint32_t word;
+do {
+    fread(word, 4, 1, fp);
+    s = print_in_base85(word)
+} while ( 4 == s )
+```
+
+:::
+
+::::
+
+# Another example
+
+- `biggmp.c`, a libgmp implementation of 4096_t I am now providing for usage on `bigrsa`, could contain much repeated code.
+
+# Add and Sub
+
+- GMP works by:
+    - Declaring an `mpz_t` variable.
+    - Initializing with `mpz_init`
+    - Loading in data with `mpz_import`
+    - Performing some operation
+    - Extracting to a buffer or 4096_t with `mpz_export`
+    - Calling `mpz_clear` or slowing using up all your memory.
+
+# See it
+
+- Here's add with light edits:
+
+::::{columns}
+
+:::{.column width=50%}
+```{.email}
+
+Declaring an `mpz_t` variable.
+Initializing with `mpz_init`
+Loading in data with `mpz_import`
+    (Twice)
+Performing some operation
+Extracting to a buffer or 4096_t with `mpz_export`
+Calling `mpz_clear` or slowing using up all your memory.
+
+
+```
+
+:::
+
+:::{.column width=50%}
+
+```{.c}
+void bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum) {
+    mpz_t m0, m1;
+    mpz_inits(m0, m1, NULL);
+    mpz_import(m0, S, -1, sizeof(uint64_t), 0, 0, a);
+    mpz_import(m1, S, -1, sizeof(uint64_t), 0, 0, b);
+    mpz_add(m0,m0,m1);
+    mpz_export(c, NULL, -1, sizeof(uint64_t), 0, 0, m0);
+    mpz_clears(m0, m1, NULL);
+}
+```
+
+:::
+
+::::
+
+# Both
+
+- Only one line differs!
+    - 8 repeated lines!
+    - Would have to fix any bug in $n$ places!
+
+::::{columns}
+
+:::{.column width=50%}
+```{.C}
+void bigsub(uint64_t *in0, uint64_t *in1, uint64_t *dif) {
+    mpz_t m0, m1;
+    mpz_inits(m0, m1, NULL);
+    mpz_import(m0, S, -1, sizeof(uint64_t), 0, 0, a);
+    mpz_import(m1, S, -1, sizeof(uint64_t), 0, 0, b);
+    mpz_sub(m0,m0,m1);
+    mpz_export(c, NULL, -1, sizeof(uint64_t), 0, 0, m0);
+    mpz_clears(m0, m1, NULL);
+}
+```
+
+:::
+
+:::{.column width=50%}
+
+```{.c}
+void bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum) {
+    mpz_t m0, m1;
+    mpz_inits(m0, m1, NULL);
+    mpz_import(m0, S, -1, sizeof(uint64_t), 0, 0, a);
+    mpz_import(m1, S, -1, sizeof(uint64_t), 0, 0, b);
+    mpz_add(m0,m0,m1);
+    mpz_export(c, NULL, -1, sizeof(uint64_t), 0, 0, m0);
+    mpz_clears(m0, m1, NULL);
+}
+```
+
+:::
+
+::::
+
+
+# Bug
+
+- This doesn't work because `sum` is used unitialized
+    - Requires 2 edits, easy to miss one
+
+::::{columns}
+
+:::{.column width=50%}
+```{.C}
+void bigsub(uint64_t *in0, uint64_t *in1, uint64_t *dif) {
+    mpz_t m0, m1;
+    memset(dif, 0, BYTES);
+    mpz_inits(m0, m1, NULL);
+    mpz_import(m0, S, -1, sizeof(uint64_t), 0, 0, a);
+    mpz_import(m1, S, -1, sizeof(uint64_t), 0, 0, b);
+    mpz_sub(m0,m0,m1);
+    mpz_export(c, NULL, -1, sizeof(uint64_t), 0, 0, m0);
+    mpz_clears(m0, m1, NULL);
+}
+```
+
+:::
+
+:::{.column width=50%}
+
+```{.c}
+void bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum) {
+    mpz_t m0, m1;
+    memset(sum, 0, BYTES);
+    mpz_inits(m0, m1, NULL);
+    mpz_import(m0, S, -1, sizeof(uint64_t), 0, 0, a);
+    mpz_import(m1, S, -1, sizeof(uint64_t), 0, 0, b);
+    mpz_add(m0,m0,m1);
+    mpz_export(c, NULL, -1, sizeof(uint64_t), 0, 0, m0);
+    mpz_clears(m0, m1, NULL);
+}
+```
+
+:::
+
+::::
+
+# Better
+
+- Write some function that does all the setup and teardown
+- Pass that function the operation as an argument
+
+```{.c}
+void apply(uint64_t *in0, uint64_t *in1, uint64_t *out, function) {
+    mpz_t m0, m1;
+    memset(sum, 0, BYTES);
+    mpz_inits(m0, m1, NULL);
+    mpz_import(m0, S, -1, sizeof(uint64_t), 0, 0, a);
+    mpz_import(m1, S, -1, sizeof(uint64_t), 0, 0, b);
+    function(m0,m0,m1);
+    mpz_export(c, NULL, -1, sizeof(uint64_t), 0, 0, m0);
+    mpz_clears(m0, m1, NULL);
+}
+```
+
+# Code reuse!
+
+```{.c}
+uint64_t bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum) {
+    apply(in0, in1, sum, mpz_add);
+    return 0;
+}
+
+uint64_t bigsub(uint64_t *min, uint64_t *sub, uint64_t *dif) {
+    apply(min, sub, dif, mpz_sub);
+    return 0;
+}
+
+uint64_t bigmul(uint64_t *in0, uint64_t *in1, uint64_t *out) {
+    apply(in0, in1, out, mpz_mul);
+    return 0;
+}
+```
+
+# In practice
+
+- We declare a function which accepts a function as an argument by giving the functions type, and a local variable name.
+- We call a function which "" by using the function name.
+- `mpz_add` returns void and accepts 3 `mpz_t` arguments.
+    - Two are `const` which is out-of-scope for now
+```{.C}
+void (f)(mpz_t, const mpz_t, const mpz_t)
+```
+
+# Declare it:
+
+```{.c}
+void apply(void (f)(mpz_t, const mpz_t, const mpz_t), uint64_t *in0, uint64_t *in1, uint64_t *out) {
+    mpz_t m0, m1;
+    /* much text */
+    return;
+}
+```
+
+# Call it:
+
+- This code is correct, just use name.
+
+```{.c}
+uint64_t bigmul(uint64_t *in0, uint64_t *in1, uint64_t *out) {
+    apply(in0, in1, out, mpz_mul);
+    return 0;
+}
+```
+
+# Higher Order
+
+- Oh by the way, this **encapsulates** libgmp.
+- This encapsulation method is the function programming concept of higher order functions.
+- They are great.
+- Not fully supported in C 😭
+    - We can't *return* functions, just pass as args
+- Oh by the way, this **encapsulates** libgmp.
+
+# Today
+
+- &check; Duplication
+- &check; Deficient encapsulation v. Broken modularization
+- Magic Numbers
+- Overthinking
+- Big Ball of Mud v. God Object
+- Data clump
+
+# 
+
+![](https://upload.wikimedia.org/wikipedia/en/6/62/I_Am_Number_Four_Poster.jpg){fig-align="center"}
+
+# Who or what is "4"?
+
+```{.c}
+size_t s, fp = fopen("file.txt", "r")
+uint32_t word;
+do {
+    fread(word, 4, 1, fp);
+    s = print_in_base85(word)
+} while ( 4 == s )
+```
+
+# Sizeof
+
+```{.c}
+size_t s, fp = fopen("file.txt", "r")
+uint32_t word;
+do {
+    fread(word, sizeof(uint32_t), 1, fp);
+    s = print_in_base85(word)
+} while ( sizeof(uint32_t) == s )
+```
+
+# Define
+
+- Add a define:
+
+```{.c}
+#define WORD_SIZE sizeof(uint32_t)
+```
+
+- By convention, as we know, all caps.
+
+```{.c}
+size_t s, fp = fopen("file.txt", "r")
+uint32_t word;
+do {
+    fread(word, WORD_SIZE, 1, fp);
+    s = print_in_base85(word)
+} while ( WORD_SIZE == s )
+```
+
+# 4096_t
+
+- I used defines to allow 4096_t to be changed to 8192 with a change to a single line of code
+- *But this only works if you use the defines everywhere*
+
+```{.C filename="4096_t.h"}
+#define S (size_t)(4096 / 64)
+#define BYTES S * sizeof(uint64_t)
+```
+
+- Imagine a `???_t` and then just using different header files with different `S` values.
+
+# Today
+
+- &check; Duplication
+- &check; Deficient encapsulation v. Broken modularization
+- &check; Magic Numbers
+- Overthinking
+- Big Ball of Mud v. God Object
+- Data clump
+
+# Overthinking
+
+- It's just bits.
+
+```{.c filename="uint32.c"}
+#include <stdio.h>
+
+#include <stdio.h>
+
+void show(char *buf) {
+
+        int *alias = (int *)buf;
+        printf("%%s -> %s\n", buf);
+        printf("%%d -> %d\n", (int)*alias);
+        printf("%%u -> %u\n", (unsigned)*alias);
+        printf("%%x -> %x\n", (unsigned)*alias);
+        printf("As array: [%d, %d, %d, %d]\n", buf[0], buf[1], buf[2], buf[3]);
+        printf("As array: [%x, %x, %x, %x]\n", buf[0], buf[1], buf[2], buf[3]);
+}
+
+void main() {
+        char buf[4] = "hi!";
+        int *alias = (int *)buf;
+        printf("\n\"hi!\" n ways:\n");
+        show(buf)
+        printf("\nadd 10 to *alias\n");
+        *alias += 10;
+        show(buf);
+}
+```
+
+# Not Numbers
+
+```{.C}
+printf("%%s -> %s\n", buf);
+printf("%%d -> %d\n", (int)*alias);
+printf("%%u -> %u\n", (unsigned)*alias);
+printf("%%x -> %x\n", (unsigned)*alias);
+printf("As array: [%d, %d, %d, %d]\n", buf[0], buf[1], buf[2], buf[3]);
+printf("As array: [%x, %x, %x, %x]\n", buf[0], buf[1], buf[2], buf[3]);
+```
+
+```{.email}
+%s -> hi!
+%d -> 2189672
+%u -> 2189672
+%x -> 216968
+As array: [104, 105, 33, 0]
+As array: [68, 69, 21, 0]
+```
+
+
+# Not Letters
+
+```{.C}
+show(buf)
+*alias += 10;
+show(buf);
+```
+
+::::{columns}
+
+:::{.column width=50%}
+```{.email}
+"hi!" n ways:
+%s -> hi!
+%d -> 2189672
+%u -> 2189672
+%x -> 216968
+As array: [104, 105, 33, 0]
+As array: [68, 69, 21, 0]
+```
+
+:::
+
+:::{.column width=50%}
+
+```{.email}
+add 10 to *alias
+%s -> ri!
+%d -> 2189682
+%u -> 2189682
+%x -> 216972
+As array: [114, 105, 33, 0]
+As array: [72, 69, 21, 0]
+```
+
+:::
+
+::::
+
+# Just bits
+
+- We, the coder, give them meaning.
+- What does magic number `6650210` mean?
+
+```{.C}
+*alias = 6650210; /* New */
+show(buf);
+```
+
+```{.email}
+%s -> bye
+%d -> 6650210
+%u -> 6650210
+%x -> 657962
+As array: [98, 121, 101, 0]
+As array: [62, 79, 65, 0]
+```
+
+
+# Today
+
+- &check; Duplication
+- &check; Deficient encapsulation v. Broken modularization
+- &check; Magic Numbers
+- &check; Overthinking
+- Big Ball of Mud v. God Object
+- Data clump
+
+# Languages
+
+- Not all patterns and antipatterns exist in all languages.
+
+> [Peter Norvig demonstrates that 16 out of the 23 patterns in the Design Patterns book (which is primarily focused on C++) are simplified or eliminated (via direct language support) in Lisp](https://www.norvig.com/design-patterns/)
+
+# C good
+
+- God Objects cannot be made in C, an imperative language.
+- But, we should make sure we use header files. (No "God .c")
+- Famously, the C preprocess (remember `Macros`) starts to look an awful lot like a LISP implementation in more sophisticated projects.
+
+# C LISP
+
+- I can't read this, but we all know what `CAT` means
+
+```{.C}
+#define _E(...) __VA_ARGS__
+#define _N(...)
+#define _e(x) x
+#define _n(x)
+#define _CAT(x,y) x##y
+#define CAT(x,y) _CAT(x,y)
+#define _e_sem(x) x(
+#define _bsem )
+```
+
+# Today
+
+- &check; Duplication
+- &check; Deficient encapsulation v. Broken modularization
+- &check; Magic Numbers
+- &check; Overthinking
+- &check; Big Ball of Mud v. God Object
+- Data clump
+
+# Mandatory
+
+- C contains a language-mandatory data clump anti-pattern
+- This is a data clump - two values that only make sense together.
+```{.C}
+int main(int argc, char **argv)
+```
+
+# Null termination
+
+- In practice, you can null terminate vectors just like strings
+    - libgmp does this
+- Null terminated strings are just a special case of null-terminated vectors.
+```{.C filename="biggmp.c"}    
+mpz_t m0, m1;
+mpz_inits(m0, m1, NULL);
+/* various activities */
+mpz_clears(m0, m1, NULL);
+```
+- Avoids duplication, like 2x `mpz_init` calls
+
+# Today
+
+- &check; Duplication
+- &check; Deficient encapsulation v. Broken modularization
+- &check; Magic Numbers
+- &check; Overthinking
+- &check; Big Ball of Mud v. God Object
+- &check; Data clump
+
+# Previews
+
+- `struct`
+    - C language data structures
+- `malloc`
+    - Dynamically sized C types
+
+# Or...
+
+- Riff on P strings?

@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a4a11d514c7d463668e07712114998e6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.30">
+
+  <meta name="author" content="Prof.&nbsp;Calvin">
+  <title>Fermat</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-0f071606cd187ea9c4f27a73aca9ddf7.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Fermat</h1>
+  <p class="subtitle">Week 0x6</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Prof.&nbsp;Calvin 
+</div>
+        <p class="quarto-title-affiliation">
+            Crypto
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="announcements" class="title-slide slide level1 center">
+<h1>Announcements</h1>
+<ul>
+<li><strong>Welcome</strong> to variously CS 276/CS 540
+<ul>
+<li>We introduce RSA, and</li>
+<li>Why it makes sense, courtesy Fermat</li>
+</ul></li>
+<li><strong>Action Items</strong>:
+<ul>
+<li>4096_t due this week</li>
+<li>RSAinC due next week</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="today" class="title-slide slide level1 center">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>Public Key Cryptography</li>
+<li>Fermat’s little theorem</li>
+<li>RSA</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="public-key-cryptography" class="title-slide slide level1 center">
+<h1>Public Key Cryptography</h1>
+
+</section>
+
+<section id="motivating-example" class="title-slide slide level1 center">
+<h1>Motivating Example</h1>
+<ul>
+<li>Canonical Example is Snowden x Greenwald 2013
+<ul>
+<li>Snowden wished to communicate a secret to Greenwald</li>
+<li>Snowden and Greenwald had never met</li>
+<li>Snowden could not transmit the secret in plain text</li>
+</ul></li>
+<li>Vs enigma, no prior agreement on how to encrypt/decrypt</li>
+</ul>
+</section>
+
+<section id="reads-cryptobook" class="title-slide slide level1 center">
+<h1>Reads <a href="https://toc.cryptobook.us/book.pdf">Cryptobook</a></h1>
+<blockquote>
+<p>A key exchange protocol <span class="math inline">\(P\)</span> is a pair of probabilistic machines <span class="math inline">\((A, B)\)</span> that take turns in sending messages to each other. At the end of the protocol, when both machines terminate, they both obtain the same value <span class="math inline">\(k\)</span>. A protocol transcript <span class="math inline">\(T_P\)</span> is the sequence of messages exchanged between the parties in one exe- cution of the protocol.</p>
+</blockquote>
+</section>
+
+<section id="reads-cryptobook-1" class="title-slide slide level1 center">
+<h1>Reads <a href="https://toc.cryptobook.us/book.pdf">Cryptobook</a></h1>
+<blockquote>
+<p>Since <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are probabilistic machines, we obtain a different transcript every time we run the protocol. Formally, the transcript <span class="math inline">\(T_P\)</span> of protocol <span class="math inline">\(P\)</span> is a random variable, which is a function of the random bits generated by <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. The eavesdropping adversary <span class="math inline">\(E\)</span> sees the entire transcript <span class="math inline">\(T_P\)</span> and its goal is to figure out the secret <span class="math inline">\(k\)</span>.</p>
+</blockquote>
+</section>
+
+<section id="set-the-stage" class="title-slide slide level1 center">
+<h1>Set the Stage</h1>
+<ul>
+<li>Snowden has e.g.&nbsp;files on a harddrive
+<ul>
+<li>The files contain keywords that cannot be safely transmitted over US-based internet connections.</li>
+<li>Snowden is based in Hawai’i with no access to non-US-based connections.</li>
+<li>Snowden needs to encrypt the files in such as a way that <em>only</em> a trusted destination may read them.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="first-contact" class="title-slide slide level1 center">
+<h1>First Contact</h1>
+<ul>
+<li>Snowden contacts Greenwald to agree to use a secure messaging protocol
+<ul>
+<li>Use of such protocols is relatively non-suspicious, used for banking etc.</li>
+<li>It was enough to raise alarms for Snowden, but not quickly enough to stop him.</li>
+</ul></li>
+<li>Greenwald agrees to a recommended protocol</li>
+</ul>
+</section>
+
+<section id="initialization" class="title-slide slide level1 center">
+<h1>Initialization</h1>
+<ul>
+<li>Greenwald generates a combination of numerical values on a local computing device.
+<ul>
+<li>One of these is the public-key, which Greenwalk may circulate broadly.</li>
+</ul></li>
+<li>We see an example of such a technology on the next slide.</li>
+</ul>
+</section>
+
+<section id="securedrop" class="title-slide slide level1 center">
+<h1>SecureDrop</h1>
+<ul>
+<li>Embed doesn’t work for what are likely obvious reasons:</li>
+<li><a href="https://theintercept.com/source/">Link</a></li>
+</ul>
+<iframe id="source" title="source" width="70%" height="70%" src="https://theintercept.com/source/">
+</iframe>
+</section>
+
+<section id="safety-note" class="title-slide slide level1 center">
+<h1>Safety Note</h1>
+<ul>
+<li>Probably dropping to <em>The Intercept</em> is not recommended.</li>
+<li>Reality Winner is currently incarcerated due to a leak fumbled by <em>The Intercept</em></li>
+<li><a href="https://www.google.com/search?client=firefox-b-1-d&amp;q=reality+winner">Read more</a></li>
+</ul>
+</section>
+
+<section id="step-2" class="title-slide slide level1 center">
+<h1>Step 2</h1>
+<ul>
+<li>Greenwald &amp; co. hold in reserve a <em>private-key</em></li>
+<li>They defend it like lives depend on it, as they did for Winner and Snowden.</li>
+<li>So: not stored in plaintext on a hard-drive</li>
+<li>So: if on a hard-drive, hard-drive is in a secure site from e.g.&nbsp;federal law enforcement.</li>
+</ul>
+</section>
+
+<section id="step-3" class="title-slide slide level1 center">
+<h1>Step 3</h1>
+<ul>
+<li>Snowden, and hopefully enough others to avoid suspicion, use the public key to encrypt their payload.</li>
+<li>In addition to e.g.&nbsp;top secret documents, concerned community members could send in less-secret materials such as analysis of policing data with which they would rather not be affiliated.</li>
+<li>Journalists sift through the inputs.</li>
+</ul>
+</section>
+
+<section id="its-that-simple" class="title-slide slide level1 center">
+<h1>It’s that simple</h1>
+<ul>
+<li>Okay but like how do we do that:
+<ul>
+<li>Any eaves-dropping adversary can see the public key.</li>
+<li>One-to-one communication of a key is already dangerous</li>
+<li>All this encryption/decryption needs to be managable by e.g.&nbsp;non-computing specialized journalists.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="today-1" class="title-slide slide level1 center">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>✓ Public Key Cryptography</li>
+<li>Fermat’s little theorem</li>
+<li>RSA</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="fermats-little-theorem" class="title-slide slide level1 center">
+<h1>Fermat’s Little Theorem</h1>
+
+</section>
+
+<section id="numbers" class="title-slide slide level1 center">
+<h1>Numbers</h1>
+<ul>
+<li>We have already learned from SHA and others, that if ‘its in’ a computer we can say it’s a number.</li>
+<li>We have already learned, from 4096_t and others, that numbers of arbitrarily large sizes can undertake operations in a computer.</li>
+<li>We find a numerical operation that scrambles bits given a public key that is reversible only with a private key.</li>
+</ul>
+</section>
+
+<section id="theorem" class="title-slide slide level1 center">
+<h1>Theorem</h1>
+<p><span class="math display">\[
+\exists e, d, p, q \in \mathbb{N} : \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(m\)</span> : message, such as top secret documents or your credit card number.</li>
+<li><span class="math inline">\(e\)</span> : encryptor, the public key, that Greenwald or bandcamp post pubicly</li>
+<li><span class="math inline">\(d\)</span> : decryptor, the private key, that Greenwald stores in a bombproof safe or a dubiously secure AWS instance.</li>
+</ul>
+</section>
+
+<section id="strategy" class="title-slide slide level1 center">
+<h1>Strategy</h1>
+<ul>
+<li>We show Fermat’s little theorem.</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+\forall a \in \mathbb{N}, p \in \mathbb{P} : \gcd(p,a) = 1 \implies a^{p-1} \equiv 1 \pmod{p} \\
+\end{align}
+\]</span></p>
+<ul>
+<li>That is, there’s a prime you can raise a number to in order to get <code>1</code> mod that prime.</li>
+</ul>
+</section>
+
+<section id="proof" class="title-slide slide level1 center">
+<h1>Proof</h1>
+<ul>
+<li>This is called “combinatorics”
+<ul>
+<li>Look, I thought it was gonna be a CS class too.</li>
+</ul></li>
+<li>We go live to a proof I never learned but love, “counting necklaces”
+<ul>
+<li>Wikipedia is my legal guardian.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="necklaces" class="title-slide slide level1 center">
+<h1>Necklaces</h1>
+<ul>
+<li>Simplest known proof.</li>
+<li>Combinatorial proof.</li>
+<li>Adapted from <a href="https://en.wikipedia.org/wiki/Solomon_W._Golomb">Golomb</a>’s proof.
+<ul>
+<li>Golomb is an electrical engineer who allegedly invented Tetris</li>
+<li>A lot of people allegedly did that though.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="simplification" class="title-slide slide level1 center">
+<h1>Simplification</h1>
+<ul>
+<li>Assume: <span class="math display">\[
+0 \leq a \leq p - 1
+\]</span></li>
+<li>Consequence of modular arithmetic. <span class="math display">\[
+a^p \pmod{p} \lt p.
+\]</span></li>
+</ul>
+</section>
+
+<section id="simplification-1" class="title-slide slide level1 center">
+<h1>Simplification</h1>
+<ul>
+<li>We note the following expressions are logicially equivalent.</li>
+</ul>
+<p><span class="math display">\[
+a^{p-1} \equiv 1 \pmod{p}
+\]</span></p>
+<ul>
+<li>Multiply by <span class="math inline">\(a\)</span></li>
+</ul>
+<p><span class="math display">\[
+a^p \equiv a \pmod{p}
+\]</span></p>
+</section>
+
+<section id="strings" class="title-slide slide level1 center">
+<h1>Strings</h1>
+<ul>
+<li>Consider strings/necklaces of length <span class="math inline">\(p\)</span>.</li>
+<li>Alphabet with <span class="math inline">\(a\)</span> symbols.
+<ul>
+<li>Jeweler with <span class="math inline">\(a\)</span> gemstones</li>
+</ul></li>
+<li>Total number of strings is <span class="math inline">\(a^p\)</span>.</li>
+<li>Take <span class="math inline">\(p = 5, a = 2\)</span> say “amethyst” and “beryl”</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a>necklaces <span class="op">=</span> [</span>
+<span id="cb1-2"><a></a>    <span class="st">"AAAAA"</span>, <span class="st">"AAAAB"</span>, <span class="st">"AAABA"</span>, <span class="st">"AAABB"</span>, <span class="st">"AABAA"</span>, <span class="st">"AABAB"</span>, <span class="st">"AABBA"</span>, <span class="st">"AABBB"</span>,</span>
+<span id="cb1-3"><a></a>    <span class="st">"ABAAA"</span>, <span class="st">"ABAAB"</span>, <span class="st">"ABABA"</span>, <span class="st">"ABABB"</span>, <span class="st">"ABBAA"</span>, <span class="st">"ABBAB"</span>, <span class="st">"ABBBA"</span>, <span class="st">"ABBBB"</span>,</span>
+<span id="cb1-4"><a></a>    <span class="st">"BAAAA"</span>, <span class="st">"BAAAB"</span>, <span class="st">"BAABA"</span>, <span class="st">"BAABB"</span>, <span class="st">"BABAA"</span>, <span class="st">"BABAB"</span>, <span class="st">"BABBA"</span>, <span class="st">"BABBB"</span>,</span>
+<span id="cb1-5"><a></a>    <span class="st">"BBAAA"</span>, <span class="st">"BBAAB"</span>, <span class="st">"BBABA"</span>, <span class="st">"BBABB"</span>, <span class="st">"BBBAA"</span>, <span class="st">"BBBAB"</span>, <span class="st">"BBBBA"</span>, <span class="st">"BBBBB"</span></span>
+<span id="cb1-6"><a></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+
+<section id="necklaces-1" class="title-slide slide level1 center">
+<h1>Necklaces</h1>
+<ul>
+<li>Strings as necklaces.</li>
+<li>Regard rotationally related necklaces as friends.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="kw">def</span> friends(n, m):</span>
+<span id="cb2-2"><a></a>  <span class="cf">return</span> <span class="bu">any</span>([n <span class="op">==</span> m[i:] <span class="op">+</span> m[:i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(m))])</span>
+<span id="cb2-3"><a></a></span>
+<span id="cb2-4"><a></a><span class="cf">assert</span>(friends(<span class="st">"AAABB"</span>, <span class="st">"BBAAA"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+
+<section id="friends-5gether" class="title-slide slide level1 center">
+<h1>Friends 5gether</h1>
+<ul>
+<li>Get it? Not 2gether?</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>friends <span class="op">=</span> [</span>
+<span id="cb3-2"><a></a>    [<span class="st">"AAAAB"</span>, <span class="st">"AAABA"</span>, <span class="st">"AABAA"</span>, <span class="st">"ABAAA"</span>, <span class="st">"BAAAA"</span>],</span>
+<span id="cb3-3"><a></a>    [<span class="st">"AAABB"</span>, <span class="st">"AABBA"</span>, <span class="st">"ABBAA"</span>, <span class="st">"BBAAA"</span>, <span class="st">"BAAAB"</span>],</span>
+<span id="cb3-4"><a></a>    [<span class="st">"AABAB"</span>, <span class="st">"ABABA"</span>, <span class="st">"BABAA"</span>, <span class="st">"ABAAB"</span>, <span class="st">"BAABA"</span>],</span>
+<span id="cb3-5"><a></a>    [<span class="st">"AABBB"</span>, <span class="st">"ABBBA"</span>, <span class="st">"BBBAA"</span>, <span class="st">"BBAAB"</span>, <span class="st">"BAABB"</span>],</span>
+<span id="cb3-6"><a></a>    [<span class="st">"ABABB"</span>, <span class="st">"BABBA"</span>, <span class="st">"ABBAB"</span>, <span class="st">"BBABA"</span>, <span class="st">"BABAB"</span>],</span>
+<span id="cb3-7"><a></a>    [<span class="st">"ABBBB"</span>, <span class="st">"BBBBA"</span>, <span class="st">"BBBAB"</span>, <span class="st">"BBABB"</span>, <span class="st">"BABBB"</span>],</span>
+<span id="cb3-8"><a></a>    [<span class="st">"AAAAA"</span>],</span>
+<span id="cb3-9"><a></a>    [<span class="st">"BBBBB"</span>]</span>
+<span id="cb3-10"><a></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+
+<section id="aside" class="title-slide slide level1 center">
+<h1>Aside</h1>
+<ul>
+<li>We note this suffices as a proof that:</li>
+</ul>
+<p><span class="math display">\[
+2^5 = 32 \equiv 2 \pmod{5}
+\]</span></p>
+</section>
+
+<section id="counting-friends" class="title-slide slide level1 center">
+<h1>Counting Friends</h1>
+<ul>
+<li>We note:
+<ul>
+<li>There are exactly the same number of unique rotations as the length of the necklace
+<ul>
+<li>After that we repeat.</li>
+<li>So… <span class="math inline">\(p \equiv 0 \pmod{p}\)</span> and <span class="math inline">\(p\)</span> is length.</li>
+</ul></li>
+<li>Unless there is only one symbol, then exactly one rotation.
+<ul>
+<li>There are exactly <span class="math inline">\(a\)</span> unique symbols, so</li>
+<li>Exactly <span class="math inline">\(a\)</span> strings of this form.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+
+<section id="strategy-1" class="title-slide slide level1 center">
+<h1>Strategy</h1>
+<ul>
+<li>We show Fermat’s little theorem.</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+\forall a \in \mathbb{N}, p \in \mathbb{P} : \gcd(p,a) = 1 \implies a^{p-1} \equiv 1 \pmod{p} \\
+\end{align}
+\]</span></p>
+<ul>
+<li>Proof</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>nofriends <span class="op">=</span> [</span>
+<span id="cb4-2"><a></a>    [<span class="st">"AAAAA"</span>],</span>
+<span id="cb4-3"><a></a>    [<span class="st">"BBBBB"</span>]</span>
+<span id="cb4-4"><a></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+
+<section id="today-2" class="title-slide slide level1 center">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>✓ Public Key Cryptography</li>
+<li>✓ Fermat’s little theorem</li>
+<li>RSA</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="new-goal" class="title-slide slide level1 center">
+<h1>New Goal</h1>
+<ul>
+<li>We want: <span class="math display">\[
+a^p \equiv a \pmod{p} \implies
+\]</span> <span class="math display">\[
+\exists e, d, p, q \in \mathbb{N} : \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}
+\]</span></li>
+<li>We can restrict <span class="math inline">\(e,d,p,q\)</span> <span class="math display">\[
+\exists e, d\in \mathbb{N},  p, q \in \mathbb{P}: \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}
+\]</span></li>
+</ul>
+</section>
+
+<section id="insight" class="title-slide slide level1 center">
+<h1>Insight</h1>
+<ul>
+<li>We use something called the “Carmichael function” denoted, confusingly, as <span class="math inline">\(\lambda\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\lambda(n) = \text{min}(\{m : \forall a : gcd(a,n) = 1 : a^m \equiv 1 \pmod{n}\})
+\]</span></p>
+<ul>
+<li>Say, <span class="math inline">\(\lambda(n)\)</span> is the smallest number that coprimes to <span class="math inline">\(n\)</span> are equivalent to zero mod <span class="math inline">\(n\)</span>.</li>
+<li>Easy for prime <span class="math inline">\(p\)</span>, its <span class="math inline">\(\lambda(p) = p - 1\)</span>.
+<ul>
+<li>Just try <code>5</code>, it’s not too bad.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="rsa" class="title-slide slide level1 center">
+<h1>RSA</h1>
+<ol type="1">
+<li>Choose two big primes <span class="math inline">\(p\)</span>, <span class="math inline">\(q\)</span></li>
+<li>Find <span class="math inline">\(n = pq\)</span></li>
+<li>Find <span class="math inline">\(\lambda(n)\)</span></li>
+<li>Find <span class="math inline">\(e : e \lt \lambda(n) \land \gcd(e, \lambda (n)) = 1\)</span></li>
+<li>Find <span class="math inline">\(d : d \equiv e^{-1} \pmod{\lambda (n)}\)</span></li>
+</ol>
+</section>
+
+<section id="p-q" class="title-slide slide level1 center">
+<h1>1. <span class="math inline">\(p\)</span>, <span class="math inline">\(q\)</span></h1>
+<ul>
+<li>Do <code>4096_t</code> and use, probably, 6k+1 or a performance optimization.</li>
+</ul>
+<div id="b041dc0b" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a><span class="co"># this will still be slow with big numbers</span></span>
+<span id="cb5-2"><a></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb5-3"><a></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb5-4"><a></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb5-5"><a></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb5-6"><a></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb5-7"><a></a>    <span class="cf">return</span> candidate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>LibGMP provides <code>gmp_nextprime</code></li>
+</ul>
+</section>
+
+<section id="n" class="title-slide slide level1 center">
+<h1>2. <span class="math inline">\(n\)</span></h1>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource C number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a></a>n <span class="op">=</span> p <span class="op">*</span> q<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+
+<section id="lambdan" class="title-slide slide level1 center">
+<h1>3. <span class="math inline">\(\lambda(n)\)</span></h1>
+<ul>
+<li>This one is kept secret by the way.</li>
+<li>It so happens: <span class="math display">\[
+\forall p,q \in \mathbb{P} : \lambda(pq) = \text{lcm}(p-1, q-1)
+\]</span></li>
+<li>There’s fast ways to this, but anything goes this week.</li>
+</ul>
+</section>
+
+<section id="aside-lcm" class="title-slide slide level1 center">
+<h1>Aside: lcm</h1>
+<ul>
+<li>GitHub Copilot provides:</li>
+</ul>
+<div id="62a92a5d" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a><span class="kw">def</span> gcd(a, b):</span>
+<span id="cb7-2"><a></a>    <span class="co">"""Calculate the Greatest Common Divisor of a and b."""</span></span>
+<span id="cb7-3"><a></a>    <span class="cf">while</span> b:</span>
+<span id="cb7-4"><a></a>        a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb7-5"><a></a>    <span class="cf">return</span> a</span>
+<span id="cb7-6"><a></a></span>
+<span id="cb7-7"><a></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb7-8"><a></a>    <span class="co">"""Calculate the Least Common Multiple of a and b."""</span></span>
+<span id="cb7-9"><a></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="e" class="title-slide slide level1 center">
+<h1>4. <span class="math inline">\(e\)</span></h1>
+<ul>
+<li>Find <span class="math inline">\(e : e \lt \lambda(n) \land \gcd(e, \lambda (n)) = 1\)</span></li>
+<li>You know what is comprime with whatever <span class="math inline">\(\lambda (n)\)</span> is?</li>
+<li>A prime number.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource C number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a></a>e <span class="op">=</span> <span class="dv">65537</span><span class="op">;</span> <span class="co">// 2 ^ 16 + 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+
+<section id="aside-hamming-weight" class="title-slide slide level1 center">
+<h1>Aside: Hamming weight</h1>
+<ol type="1">
+<li>What is <code>65537</code> in binary?</li>
+<li>Is multiplying hard?</li>
+<li>Is bit-shifting hard?</li>
+<li>Can we combine bit-shifts to multiple?</li>
+<li>If we did that, what numbers would be easiest to multiply by?</li>
+</ol>
+</section>
+
+<section id="d" class="title-slide slide level1 center">
+<h1>5. <span class="math inline">\(d\)</span></h1>
+<ul>
+<li>This one is very secret!</li>
+<li>Find <span class="math inline">\(d : d \equiv e^{-1} \pmod{\lambda (n)}\)</span></li>
+<li>There’s a good way to do this, or…</li>
+<li>Find <span class="math inline">\(de \equiv 1 \pmod{\lambda (n)}\)</span>
+<ul>
+<li>Just start at <span class="math inline">\(d = 1\)</span> and go up until you find it.</li>
+<li>It’ll be less than <span class="math inline">\(\lambda (n)\)</span></li>
+</ul></li>
+</ul>
+</section>
+
+<section id="today-3" class="title-slide slide level1 center">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>✓ Public Key Cryptography</li>
+<li>✓ Fermat’s little theorem</li>
+<li>✓ RSA</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="using-rsa" class="title-slide slide level1 center">
+<h1>Using RSA</h1>
+
+</section>
+
+<section id="lets-make-a-secret" class="title-slide slide level1 center">
+<h1>Let’s make a secret</h1>
+<div id="0990b382" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="prime-checker" class="title-slide slide level1 center">
+<h1>Prime checker</h1>
+<div id="427beee3" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">all</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>)<span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb10-2"><a></a>is_prime(<span class="dv">60</span>), is_prime(<span class="dv">61</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>(False, True)</code></pre>
+</div>
+</div>
+</section>
+
+<section id="two-primes" class="title-slide slide level1 center">
+<h1>Two primes</h1>
+<div id="adf71b23" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">10</span>)</span>
+<span id="cb12-2"><a></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">15</span>)</span>
+<span id="cb12-3"><a></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb12-4"><a></a>n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>5917</code></pre>
+</div>
+</div>
+</section>
+
+<section id="confusingly-named" class="title-slide slide level1 center">
+<h1>Confusingly Named</h1>
+<div id="8db05eb1" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="public-key" class="title-slide slide level1 center">
+<h1>Public Key</h1>
+<div id="d6af31e5" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>e <span class="op">=</span> <span class="dv">65537</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="d-decryptor" class="title-slide slide level1 center">
+<h1><span class="math inline">\(d\)</span> (decryptor)</h1>
+<div id="075db7a8" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a><span class="kw">def</span> find_d():</span>
+<span id="cb16-2"><a></a>  d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb16-3"><a></a>  <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb16-4"><a></a>    d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-5"><a></a>  <span class="cf">return</span> d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="the-process" class="title-slide slide level1 center">
+<h1>The Process</h1>
+<ul>
+<li>Encrypt our message.</li>
+</ul>
+<div id="4bdb248a" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb17-2"><a></a>c <span class="op">=</span> m <span class="op">**</span> e</span>
+<span id="cb17-3"><a></a>m, c, c <span class="op">%</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg ansi-bold">ValueError</span>                                Traceback (most recent call last)
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\core\formatters.py:711</span>, in <span class="ansi-cyan-fg">PlainTextFormatter.__call__</span><span class="ansi-blue-fg ansi-bold">(self, obj)</span>
+<span class="ansi-green-fg">    704</span> stream <span style="color:rgb(98,98,98)">=</span> StringIO()
+<span class="ansi-green-fg">    705</span> printer <span style="color:rgb(98,98,98)">=</span> pretty<span style="color:rgb(98,98,98)">.</span>RepresentationPrinter(stream, <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>verbose,
+<span class="ansi-green-fg">    706</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>max_width, <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>newline,
+<span class="ansi-green-fg">    707</span>     max_seq_length<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>max_seq_length,
+<span class="ansi-green-fg">    708</span>     singleton_pprinters<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>singleton_printers,
+<span class="ansi-green-fg">    709</span>     type_pprinters<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>type_printers,
+<span class="ansi-green-fg">    710</span>     deferred_pprinters<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>deferred_printers)
+<span class="ansi-green-fg ansi-bold">--&gt; 711</span> <span class="ansi-yellow-bg">printer</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">pretty</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    712</span> printer<span style="color:rgb(98,98,98)">.</span>flush()
+<span class="ansi-green-fg">    713</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> stream<span style="color:rgb(98,98,98)">.</span>getvalue()
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:394</span>, in <span class="ansi-cyan-fg">RepresentationPrinter.pretty</span><span class="ansi-blue-fg ansi-bold">(self, obj)</span>
+<span class="ansi-green-fg">    391</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> _get_mro(obj_class):
+<span class="ansi-green-fg">    392</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>type_pprinters:
+<span class="ansi-green-fg">    393</span>         <span style="font-style:italic;color:rgb(95,135,135)"># printer registered in self.type_pprinters</span>
+<span class="ansi-green-fg ansi-bold">--&gt; 394</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">type_pprinters</span><span class="ansi-yellow-bg">[</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">cls</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">cycle</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    395</span>     <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">    396</span>         <span style="font-style:italic;color:rgb(95,135,135)"># deferred printer</span>
+<span class="ansi-green-fg">    397</span>         printer <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_in_deferred_types(<span style="color:rgb(0,135,0)">cls</span>)
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:649</span>, in <span class="ansi-cyan-fg">_seq_pprinter_factory.&lt;locals&gt;.inner</span><span class="ansi-blue-fg ansi-bold">(obj, p, cycle)</span>
+<span class="ansi-green-fg">    647</span>         p<span style="color:rgb(98,98,98)">.</span>text(<span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">,</span><span style="color:rgb(175,0,0)">'</span>)
+<span class="ansi-green-fg">    648</span>         p<span style="color:rgb(98,98,98)">.</span>breakable()
+<span class="ansi-green-fg ansi-bold">--&gt; 649</span>     <span class="ansi-yellow-bg">p</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">pretty</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    650</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(obj) <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(98,98,98)">1</span> <span style="font-weight:bold;color:rgb(175,0,255)">and</span> <span style="color:rgb(0,135,0)">isinstance</span>(obj, <span style="color:rgb(0,135,0)">tuple</span>):
+<span class="ansi-green-fg">    651</span>     <span style="font-style:italic;color:rgb(95,135,135)"># Special case for 1-item tuples.</span>
+<span class="ansi-green-fg">    652</span>     p<span style="color:rgb(98,98,98)">.</span>text(<span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">,</span><span style="color:rgb(175,0,0)">'</span>)
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:394</span>, in <span class="ansi-cyan-fg">RepresentationPrinter.pretty</span><span class="ansi-blue-fg ansi-bold">(self, obj)</span>
+<span class="ansi-green-fg">    391</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> _get_mro(obj_class):
+<span class="ansi-green-fg">    392</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>type_pprinters:
+<span class="ansi-green-fg">    393</span>         <span style="font-style:italic;color:rgb(95,135,135)"># printer registered in self.type_pprinters</span>
+<span class="ansi-green-fg ansi-bold">--&gt; 394</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">type_pprinters</span><span class="ansi-yellow-bg">[</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">cls</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">cycle</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    395</span>     <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">    396</span>         <span style="font-style:italic;color:rgb(95,135,135)"># deferred printer</span>
+<span class="ansi-green-fg">    397</span>         printer <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_in_deferred_types(<span style="color:rgb(0,135,0)">cls</span>)
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:787</span>, in <span class="ansi-cyan-fg">_repr_pprint</span><span class="ansi-blue-fg ansi-bold">(obj, p, cycle)</span>
+<span class="ansi-green-fg">    785</span> <span style="font-style:italic;color:rgb(175,0,0)">"""A pprint that just redirects to the normal repr function."""</span>
+<span class="ansi-green-fg">    786</span> <span style="font-style:italic;color:rgb(95,135,135)"># Find newlines and replace them with p.break_()</span>
+<span class="ansi-green-fg ansi-bold">--&gt; 787</span> output <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">repr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    788</span> lines <span style="color:rgb(98,98,98)">=</span> output<span style="color:rgb(98,98,98)">.</span>splitlines()
+<span class="ansi-green-fg">    789</span> <span style="font-weight:bold;color:rgb(0,135,0)">with</span> p<span style="color:rgb(98,98,98)">.</span>group():
+
+<span class="ansi-red-fg ansi-bold">ValueError</span>: Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit</pre>
+</div>
+</div>
+</div>
+</section>
+
+<section id="too-big" class="title-slide slide level1 center">
+<h1>Too Big</h1>
+<ul>
+<li>Haha Python can’t handle big numbers.</li>
+<li>Not to worry, we’re working in modular arithmetic.</li>
+</ul>
+<div id="ee450c9a" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb18-2"><a></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb18-3"><a></a>      <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb18-4"><a></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb18-5"><a></a>      <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb18-6"><a></a>  <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb18-7"><a></a>      <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb18-8"><a></a>  <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+<section id="encrypt" class="title-slide slide level1 center">
+<h1>Encrypt</h1>
+<ul>
+<li>Encrypt our message.</li>
+</ul>
+<div id="b3431d20" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb19-2"><a></a>c <span class="op">=</span> modexp(m, e, n)</span>
+<span id="cb19-3"><a></a>m, c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>(67, 5887)</code></pre>
+</div>
+</div>
+</section>
+
+<section id="decrypt" class="title-slide slide level1 center">
+<h1>Decrypt</h1>
+<ul>
+<li>Decrypt our message.</li>
+</ul>
+<div id="f7072ad5" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb21-2"><a></a>new_m, m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>(67, 67)</code></pre>
+</div>
+</div>
+</section>
+
+<section id="is-it-good" class="title-slide slide level1 center">
+<h1>Is it good?</h1>
+<div id="21e2c5f7" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a><span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>'C'</code></pre>
+</div>
+</div>
+</section>
+
+<section id="all" class="title-slide slide level1 center">
+<h1>All</h1>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb25-2"><a></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">any</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb25-3"><a></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb25-4"><a></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb25-5"><a></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb25-6"><a></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb25-7"><a></a>    <span class="cf">return</span> candidate</span>
+<span id="cb25-8"><a></a></span>
+<span id="cb25-9"><a></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb25-10"><a></a>    <span class="kw">def</span> gcd(a, b):</span>
+<span id="cb25-11"><a></a>        <span class="cf">while</span> b:</span>
+<span id="cb25-12"><a></a>            a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb25-13"><a></a>        <span class="cf">return</span> a</span>
+<span id="cb25-14"><a></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span>
+<span id="cb25-15"><a></a></span>
+<span id="cb25-16"><a></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span>
+<span id="cb25-17"><a></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb25-18"><a></a></span>
+<span id="cb25-19"><a></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">10</span>)</span>
+<span id="cb25-20"><a></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">15</span>)</span>
+<span id="cb25-21"><a></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb25-22"><a></a></span>
+<span id="cb25-23"><a></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb25-24"><a></a></span>
+<span id="cb25-25"><a></a>e <span class="op">=</span> <span class="dv">65537</span> <span class="co"># encryptor</span></span>
+<span id="cb25-26"><a></a></span>
+<span id="cb25-27"><a></a><span class="kw">def</span> find_d():</span>
+<span id="cb25-28"><a></a>    d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb25-29"><a></a>    <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb25-30"><a></a>        d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb25-31"><a></a>    <span class="cf">return</span> d</span>
+<span id="cb25-32"><a></a></span>
+<span id="cb25-33"><a></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb25-34"><a></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb25-35"><a></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb25-36"><a></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb25-37"><a></a>        <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb25-38"><a></a>    <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb25-39"><a></a>        <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb25-40"><a></a>    <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb25-41"><a></a></span>
+<span id="cb25-42"><a></a>c <span class="op">=</span> modexp(m, e, n) <span class="co"># ciphertext</span></span>
+<span id="cb25-43"><a></a></span>
+<span id="cb25-44"><a></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb25-45"><a></a></span>
+<span id="cb25-46"><a></a><span class="bu">print</span>(<span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p><a href="../index.html">Home</a></p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

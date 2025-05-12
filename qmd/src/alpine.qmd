@@ -1,0 +1,1111 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: Alpine
+subtitle: "Lab 0x0"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: A containerized C development environment
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- `podman` | - Alpine   |
+|- `vim`    | - Images   |
+|- `gcc`    | - Copies   |
+|- `git`    |            |
+
+### Requirements
+
+- You should have Podman installed.
+- If you are on Windows, you should have WSL installed.
+  - I use it with Ubuntu but do what you like.
+
+
+<blockquote>
+
+**TODO** (windows only)
+```bash
+wsl --install -d ubuntu
+```
+</blockquote>
+
+:::
+
+# Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls = "podman">Show</a>
+
+::: {#podman .collapse .multi-collapse}
+
+- `podman` is a command, like `python`
+  - Like `python` we can provide arguments
+  - Unlike `python` we provide further commands, not just a .py file
+
+<blockquote>
+
+**TODO**
+```bash
+podman
+```
+</blockquote>
+ 
+
+```email
+C:\Users\cd-desk>podman
+Manage pods, containers and images
+
+Usage:
+  podman [options] [command]
+
+Available Commands:
+  attach      Attach to a running container
+  build       Build an image using instructions from Containerfiles
+  ```
+
+- If this doesn't work, make sure Podman Desktop is running. 
+- If that doesn't work, make sure you installed Podman Desktop with the Podman Installer. 
+- If that doesn't work, make sure you aren't a Windows users with WSL installed.
+  - Windows users may use Podman within WSL at their discretion.
+
+## Run
+
+- First thing we'll do in Podman is ` podman run`
+
+<blockquote>
+
+**TODO**
+```bash
+podman run
+```
+</blockquote>
+
+It should look something like this:
+
+
+```email
+C:\Users\cd-desk>podman run
+Error: requires at least 1 arg(s), only received 0
+```
+
+## Images
+
+- The thing we run is called an image
+- We'll use a sample image named Python
+  - You'll never guess what it does (Python)
+- Students may wish to specify "python:alpine"
+  - That is the python command in the alpine operating system.
+  - This is a 20x smaller image, so 20x faster download
+  - It is on a less common Linux OS (alpine) that may be harder to use.
+
+<blockquote>
+
+**TODO**
+```bash
+podman run python:alpine
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+C:\Users\cd-desk>podman run python:alpine
+Resolved "python" as an alias (/etc/containers/registries.conf.d/000-shortnames.conf)
+Trying to pull docker.io/library/python:latest...
+Getting image source signatures
+Copying blob sha256:abab87fa45d0b95db90eb47059d7e87f5a69281fe5d76fcdb7889ec5c310f44c
+...
+Writing manifest to image destination
+
+C:\Users\cd-desk>
+  ```
+
+## Just do `-it`
+
+- We downloaded an image and ran it as a container but...
+  - We didn't ask the container to do anything
+  - So it exits instantly
+  - Of note, we only have to download once (image) to run many times (container)
+- To work within the container `run -it` for "interactive terminal"
+
+<blockquote>
+
+**TODO**
+```bash
+podman run -it python:alpine
+```
+</blockquote>
+
+It should look something like this:
+
+
+```email
+C:\Users\cd-desk>podman run -it python
+Python 3.13.1 (main, Dec  4 2024, 20:40:27) [GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+```
+:::
+
+
+# Alpine&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#alpine" role="button" aria-expanded="false" aria-controls = "alpine">Show</a>
+
+::: {#alpine .collapse .multi-collapse}
+
+- To actually do anything useful in a container, we'd like to:
+  - Be able to setup an image once, then use it.
+  - Move files into and out of a container.
+
+## Containerfiles
+
+_This section concerns something called variously "Containerfiles" or "Dockerfiles" - commonly referred to as "Dockerfiles", though I believe this is changing over time. If you get stuck, it may be easier to look up "Dockerfiles" documentation - I've been looking at both._
+
+- Usually when I'm using a container, I need something for which I can't simply find a default image. 
+- In my case, I specifically want a container with something called a "Containerfile". 
+- Here is a minimal example:
+
+```{.email filename="Containerfile"}
+FROM alpine
+```
+
+- I use Alpine as my base image
+- It's a lightweight Linux operating system 
+- It (tends to) have everything I need.
+
+
+
+<blockquote>
+
+**TODO**
+```bash
+echo "FROM alpine" > Containerfile
+```
+</blockquote>
+
+- I would save "Containerfile" wherever I save classwork. 
+  - For me, a class-specific directory inside my home directory in the Linux filesystem 
+    - including on Windows - I work within the WSL filesystem.
+
+Ultimately for me, it looks something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~$ mkdir crypto
+user@DESKTOP-THMS2PJ:~$ cd crypto/
+user@DESKTOP-THMS2PJ:~/crypto$ echo "FROM alpine" > Containerfile
+user@DESKTOP-THMS2PJ:~/crypto$ pwd
+/home/user/crypto
+user@DESKTOP-THMS2PJ:~/crypto$ ls
+Containerfile
+```
+
+## Build
+
+- With a "Containerfile" written, we can use `podman build`.
+
+<blockquote>
+
+**TODO**
+```bash
+podman build
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman build
+Error: no context directory and no Containerfile specified
+```
+
+## Pale blue `.`
+
+- As with `podman run`, with `podman build` we must specify what image to use 
+    - But now we can use an image described by a "Containerfile"!
+- To specify, we simply give the current directory `.`.
+
+
+<blockquote>
+
+**TODO**
+```bash
+podman build .
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman build .
+STEP 1/1: FROM alpine
+Resolved "alpine" as an alias (/etc/containers/registries.conf.d/shortnames.conf)
+Trying to pull docker.io/library/alpine:latest...
+Getting image source signatures
+Copying blob 38a8310d387e done
+Copying config 4048db5d36 done
+Writing manifest to image destination
+Storing signatures
+COMMIT
+--> 4048db5d367
+4048db5d36726e313ab8f7ffccf2362a34cba69e4cdd49119713483a68641fce
+```
+
+
+## We love the `-t`
+
+- This creates a new image but we don't know what to call it
+  - The default name is that numerical value in the 2nd to last time above
+- Use the `-t` option to `podman build`, to name the image. 
+  - As far as I can tell, it stands for "tag"
+- We can then use this image by name with other commands.
+
+<blockquote>
+
+**TODO**
+```bash
+podman build -t crypto .
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman build -t crypto .
+STEP 1/1: FROM alpine
+COMMIT crypto
+--> 4048db5d367
+Successfully tagged localhost/crypto:latest
+Successfully tagged docker.io/library/alpine:latest
+4048db5d36726e313ab8f7ffccf2362a34cba69e4cdd49119713483a68641fce
+```
+
+## Run
+
+- The "crypto" image is now being maintained on your device by Podman.
+- We can use `run` as we did with any other image.
+
+<blockquote>
+
+**TODO**
+```bash
+podman run -it crypto
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman run -it crypto
+/ #
+```
+
+## vim
+
+- First, we can see if we have, say `vim`. We do not:
+
+<blockquote>
+
+**TODO**
+```bash
+vim
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+/ # vim
+/bin/sh: vim: not found
+```
+
+## apk
+
+- To add software to Alpine linux, we use `apk` - the Alpine Package Keeper.
+
+<blockquote>
+
+**TODO**
+```bash
+apk
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+/ # apk
+apk-tools 2.14.6, compiled for x86_64.
+
+usage: apk [<OPTIONS>...] COMMAND [<ARGUMENTS>...]
+
+Package installation and removal:
+  add        Add or modify constraints in WORLD and commit changes
+```
+
+## add
+
+- Generally speaking, we can use `add` with the name of a command, and `apk` will find and install that command for us:
+  - vim
+  - gcc
+  - python
+    - probably have to say python2 or python3
+  - podman
+    - can probably run within a container, I didn't check.
+
+<blockquote>
+
+**TODO**
+```bash
+apk add vim
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+/ # apk add vim
+(1/5) Installing vim-common (9.1.0707-r0)
+(2/5) Installing xxd (9.1.0707-r0)
+(3/5) Installing ncurses-terminfo-base (6.5_p20241006-r3)
+(4/5) Installing libncursesw (6.5_p20241006-r3)
+(5/5) Installing vim (9.1.0707-r0)
+Executing busybox-1.37.0-r8.trigger
+OK: 35 MiB in 20 packages
+```
+
+- To install `vim`, `apk` had to install a few other things first...
+  - Including the legendary C library `ncurses`!
+  - Used to make legendary game "Rogue"
+  - Fun!
+- But ultimately, `apk` got `vim` working
+
+## vim
+
+- Test it:
+
+<blockquote>
+
+**TODO**
+```bash
+vim
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+~               VIM - Vi IMproved
+~                  version 9.1
+~            by Bram Moolenaar et al.
+~   Vim is open source and freely distributable
+~
+~          Become a registered Vim user!
+~  type  :help register<Enter>   for information
+~
+~  type  :q<Enter>              to exit
+~  type  :help<Enter>  or  <F1> for on-line help
+~  type  :help version9<Enter>  for version info
+```
+
+## Quick `:q`
+
+- That is `vim` running in `podman` in a "crypto" folder in my home folder.
+- Let's get back to home, following back up:
+  - ~ (Linux home)
+    - ~/crypto (folder name)
+      - `podman run -it crypto` (crypto image run by podman executable)
+        - `vim` (vim executable run by crypto image)
+- We first leave `vim`
+        
+<blockquote>
+
+**TODO**
+```bash
+:q
+```
+</blockquote>
+
+It should look something like this, with whatever previous commands you used before `vim` present:
+
+```email
+/ # vim
+/bin/sh: vim: not found
+/ # apk add vim
+(1/5) Installing vim-common (9.1.0707-r0)
+(2/5) Installing xxd (9.1.0707-r0)
+(3/5) Installing ncurses-terminfo-base (6.5_p20241006-r3)
+(4/5) Installing libncursesw (6.5_p20241006-r3)
+(5/5) Installing vim (9.1.0707-r0)
+Executing busybox-1.37.0-r8.trigger
+OK: 35 MiB in 20 packages
+/ # vim
+/ #
+```
+
+## Exit
+
+- That is `vim` running in `podman` in a "crypto" folder in my home folder.
+- Let's get back to home, following back up:
+  - ~ (Linux home)
+    - ~/crypto (folder name)
+      - `podman run -it crypto` (crypto image run by podman executable)
+- We then exit the container
+        
+<blockquote>
+
+**TODO**
+```bash
+exit
+```
+</blockquote>
+
+It should look something like this, with whatever previous commands you used before `vim` present:
+
+```email
+/ # vim
+/ # exit
+user@DESKTOP-THMS2PJ:~/crypto$
+```
+
+
+## Exit
+
+- We entered a container via `run` and installed `vim`.
+- In theory this means we can
+  - `run`, again, then
+  - use `vim` without installing with `apk`
+- Test it
+        
+<blockquote>
+
+**TODO**
+```bash
+podman run -it crypto
+```
+
+```bash
+vim
+```
+</blockquote>
+
+It should look like this::
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman run -it crypto
+/ # vim
+/bin/sh: vim: not found
+```
+
+- We installed `vim` to a container.
+- We ran an image
+- An image is an instance of the container
+  - Nothing done in a container persists post-exit
+  - If we want to use `vim` immediately, we need to add it **to the image**
+- We'll exit the container then solve this problem.
+
+<blockquote>
+
+**TODO**
+```bash
+exit
+```
+
+</blockquote>
+
+:::
+
+
+# Images <a class="btn btn-primary" data-bs-toggle="collapse" href="#images" role="button" aria-expanded="false" aria-controls="images">Show</a>
+
+::: {#images .collapse .multi-collapse}
+
+- We recall:
+    - To actually do anything useful in a container, we'd like to:
+      - Be able to setup an image once, then use it.
+      - Move files into and out of a container.
+    - Reference: <a href="https://docs.docker.com/reference/dockerfile/">Dockerfile reference (dockerdocs)</a>
+- To begin, let's review our "Containerfile"
+
+```{.email filename="Containerfile"}
+FROM alpine
+```
+
+- If we wish to use e.g. `vim`, we have seen this to be insufficent.
+
+# RUN
+
+- "FROM" specifies the **base image**
+  - Our base image the Alpine Linux operating system - and nothing else
+- "RUN" specifies commands to **configure the image**
+  - We know how to use `apk` to configure containers
+  - We can do the same at image-level in the "Containerfile
+- We add our `apk` command as the argument to "RUN"
+- I made these edits using `vim` I had installed on my host machine!
+
+```{.email filename="Containerfile"}
+FROM alpine
+
+RUN apk add vim
+```
+
+# Test it
+
+- It is a simple enough matter to
+  - Verify the changes were made with `cat`
+  - Rebuild the image with `podman build`
+  - Run a container of the image image with `podman run`
+  - Test the installation via `vim`
+
+<blockquote>
+
+**TODO**
+
+  1. ```bash
+podman build -t crypto .
+```
+  2. ```bash
+podman run -it crypto
+```
+  3. ```bash
+vim file.txt
+```
+  4. ```bash
+:q
+```
+  5. ```bash
+exit
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ vim Containerfile
+user@DESKTOP-THMS2PJ:~/crypto$ cat Containerfile
+FROM alpine
+
+RUN apk add vim
+user@DESKTOP-THMS2PJ:~/crypto$ podman build -t crypto .
+STEP 1/2: FROM alpine
+STEP 2/2: RUN apk add vim
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.21/community/x86_64/APKINDEX.tar.gz
+(1/5) Installing vim-common (9.1.0707-r0)
+(2/5) Installing xxd (9.1.0707-r0)
+(3/5) Installing ncurses-terminfo-base (6.5_p20241006-r3)
+(4/5) Installing libncursesw (6.5_p20241006-r3)
+(5/5) Installing vim (9.1.0707-r0)
+Executing busybox-1.37.0-r8.trigger
+OK: 35 MiB in 20 packages
+COMMIT crypto
+--> bad3225cf91
+Successfully tagged localhost/crypto:latest
+bad3225cf9115a93a12a711f027cdeb757ade506bc977812f5e7925916e92915
+user@DESKTOP-THMS2PJ:~/crypto$ podman run -it crypto
+/ # vim
+/ # vim file.txt
+/ # cat file.txt 
+text I wrote while in vim in a container
+/ # exit
+user@DESKTOP-THMS2PJ:~/crypto$
+```
+
+- To actually do anything useful in a container, we'd like to:
+  - &check; Be able to setup an image once, then use it.
+  - Move files into and out of a container.
+
+:::
+
+
+# Copies <a class="btn btn-primary" data-bs-toggle="collapse" href="#Copies" role="button" aria-expanded="false" aria-controls="Copies">Show</a>
+
+::: {#Copies .collapse .multi-collapse}
+
+- We recall:
+    - To actually do anything useful in a container, we'd like to:
+        - &check; Be able to setup an image once, then use it.
+        - Move files into and out of a container.
+- Let's move some files - or better yet, copy them.
+
+# `cp` for Calvin, Prof.
+
+- So far, everything we've done has been with respect to an image
+    - We introduce our first **container** command - `podman cp`
+    - It is a lot like Linux `cp`, which is short for copy
+    - Actually - let's practice Linux `cp` first
+- For practice, we'll:
+    - Make a new sub-folder in our class folder
+    - Save a copy of our current "Containerfile" there
+
+<blockquote>
+
+**TODO**
+
+  1. ```bash
+mkdir backup
+```
+  2. ```bash
+cp Containerfile backup
+```
+  3. ```bash
+ls
+```
+  4. ```bash
+cat backup/Containerfile
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ mkdir backup
+user@DESKTOP-THMS2PJ:~/crypto$ cp Containerfile backup
+user@DESKTOP-THMS2PJ:~/crypto$ ls
+Containerfile  backup  hi.txt
+user@DESKTOP-THMS2PJ:~/crypto$ cat backup/Containerfile
+```
+
+- I also have installed a command called `tree` that gives a better view:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ tree
+.
+├── Containerfile
+└── backup
+    └── Containerfile
+
+1 directory, 2 files
+```
+
+# ps -a
+
+- Not public service announcement, but close.
+- `podman ps -a` lists all the containers that podman has run
+  - This is can be _n_ containers per image
+    - `ps` for processes, plural
+        - `ps` is also a Linux command (try it)
+        - Hence not `cs` even though we're talking about containers
+    - `-a` for "all"
+        - Lists active (containers are currently running) and inactive
+        - We need this because containers we exit won't show up otherwise.
+- What you see will depend on how many times you've used `podman run`
+
+<blockquote>
+
+**TODO**
+```bash
+podman ps -a
+```
+</blockquote>
+
+It should look something like this, depending on previous `run` commands:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman ps -a
+CONTAINER ID  IMAGE                    COMMAND     CREATED             STATUS                         PORTS       NAMES
+13161faf9349  localhost/crypto:latest  /bin/sh     About a minute ago  Exited (0) About a minute ago              flamboyant_feynman
+```
+
+- We mostly care about the last part - "NAMES"
+  - We need to know the name of a container to copy out of it.
+
+_It may be helpful to use_ `podman rm -a` _(again like Linux_ `rm`_) to remove all containers, and then redo the steps to save a file in a container. Then you'll only have one container to worry about! It's what I did._
+
+
+# podman cp
+
+- `podman cp` is like Linux `cp` 
+   - except we have to use:
+     - a container name, and
+     - a colon ":"
+- We can copy to or from containers
+  - Probably between containers, I didn't check.
+- Make sure you get the correct container name!
+  - Yours will **not** be flamboyant_feynman
+    - Well, maybe, but I doubt it.
+    
+<blockquote>
+
+**TODO**
+
+  1. ```bash
+podman cp flamboyant_feynman:/file.txt .
+```
+  2. ```bash
+cat file.txt
+```
+</blockquote>
+
+It should look something like this, depending on what you wrote:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman cp flamboyant_feynman:/file.txt .
+user@DESKTOP-THMS2PJ:~/crypto$ cat file.txt
+text I wrote while in vim in a container
+```
+
+- To actually do anything useful in a container, we'd like to:
+    - &check; Be able to setup an image once, then use it.
+    - &check; Move files into and out of a container.
+
+:::
+
+
+# Use it <a class="btn btn-primary" data-bs-toggle="collapse" href="#use_it" role="button" aria-expanded="false" aria-controls = "use_it">Show</a>
+
+::: {#use_it .collapse .multi-collapse}
+
+## Note
+
+- This section will be much less explicit and apply what you learned.
+  - If you get stuck, check prior sections.
+- If you get stuck, move onto the next section "Git it" to save you work and finish up latter.
+  - It contains the answer key
+  
+## Goal
+
+- We will:
+  - Set up the "crypto" image for C development
+      - Write C code
+      - Compile C code
+      - Run C code
+      - Copy the C code back the host system
+
+# Hello, World
+
+- The "K&R C" book that is an optional text for this course begins with an example "hello world" problem in C. They write:
+
+
+```{.email filename="hello.c"}
+#include <stdio.h>
+
+main()
+{
+  printf("hello, world\n");
+}
+```
+
+- They were writting in 1988
+- Standards have changed a bit
+- We now try to maintain compatibility with C++, 
+  - Which really rose into prominence with C++98 (in 1998)
+- Just recently, C23 (for 2023) removed what are called "K&R" functions
+- Basically:
+  - We have to specify the **return type** of a function.
+  - The main function must have a return type of **int**
+  - A well-formed program should return numerical zero
+
+```{.email filename="hello.c"}
+#include <stdio.h>
+
+int main()
+{
+  printf("hello, world\n");
+  return 0 ;
+}
+```
+
+- You can use either of these, but `gcc` will issue a warning for the 1988 version by default.
+
+# GCC 
+
+- Prepare GCC
+    - Update your "Containerfile" so you may use `gcc`
+    - Build the image
+    - Verify you have some gcc version.
+- You will know you have correctly set up GCC when you can do the following:
+
+<blockquote>
+
+**TODO**
+```bash
+podman run -it crypto gcc --version
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman run -it crypto gcc --version
+gcc (Alpine 14.2.0) 14.2.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```
+
+# Containerfile COPY
+
+- Containerfiles may direct containers to copy files from the host device on start-up
+- Save "hello.c" in the same directory as your Containerfile:
+```bash
+user@DESKTOP-THMS2PJ:~/crypto$ tree
+.
+├── Containerfile
+└── hello.c
+
+0 directories, 2 files
+```
+- You can check the [dockerdocs](https://docs.docker.com/reference/dockerfile/#copy) if you're stuck!
+
+# Debug a Container-related GCC error
+
+- When you run `gcc hello.c` you will get an error.
+
+<blockquote>
+
+**TODO**
+```bash
+podman run -it crypto gcc hello.c
+```
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman run -it crypto gcc hello.c
+hello.c:1:10: fatal error: stdio.h: No such file or directory
+    1 | #include <stdio.h>
+      |          ^~~~~~~~~
+compilation terminated.
+```
+
+- There are two obvious ways (to me) to solve this, both involving updates to the "Containerfile"
+  - We note: Alpine Linux is not intended for development
+  - We note: We have previously seen `apk` install C libraries.
+- You will know you have correctly set up a containerized C development environment when you see the following:
+
+<blockquote>
+
+**TODO**
+
+  1. ```bash
+podman run -it crypto
+```
+  2. ```bash
+gcc hello.c
+```
+  3. ```bash
+./a.out
+```
+
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ podman run -it crypto
+/ # gcc hello.c
+/ # ./a.out
+hello, world
+/ # exit
+```
+
+### Goal: A containerized C development environment
+
+:::
+
+
+# Git it <a class="btn btn-primary" data-bs-toggle="collapse" href="#git_it" role="button" aria-expanded="false" aria-controls = "git_it">Show</a>
+
+::: {#git_it .collapse .multi-collapse}
+
+
+- Save our work on GitHub
+    - Initialize a repository for this demo
+    - Commit our work
+- I followed [Adding locally hosted code to GitHub](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github)
+
+# Init
+
+- Only have to do this once!
+- We initialize our current directory as a git repository
+  - Basically this creates a hidden file that tracks changes
+  - The presence of this file enables all other `git` commands.
+- We use the `-b` modififier to specify the branch
+  - We specify the current branch as "main"
+  - The default branch, just like the main function in C!
+  
+<blockquote>  
+
+**TODO**
+
+```bash
+git init -b main
+```
+
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ git init -b main
+Initialized empty Git repository in /home/user/crypto/.git/
+```
+
+# Add
+
+- We add files to the git repository
+  - Files are not included by default
+  - Here I will add two by name:
+    - Containerfile
+    - hello.c
+  
+<blockquote>  
+
+**TODO**
+
+```bash
+git add Containerfile hello.c
+```
+
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ git add .
+```
+
+- We don't see anything - many git commands are silent.
+- Use `git status` at any time to learn more.
+
+
+# Commit
+
+- We add commit changes to the git repository
+  - This is like making a version
+  - Or like making a container (commit) of a repository (image)
+  - Here I will use flag `-m` to add a commit message
+    - Commit messages are mandatory
+    - If I don't specify one, git will open a vim window and I write one there
+  
+<blockquote>  
+
+**TODO**
+
+```bash
+git commit -m "First commit"
+```
+
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ git commit -m "First commit"
+[main (root-commit) 7f7fd0d] First commit
+ 2 files changed, 10 insertions(+)
+ create mode 100644 Containerfile
+ create mode 100644 hello.c
+```
+
+# Go to [GitHub.com](https://github.com/)
+
+- Only have to do this once!
+- At this point, we have to go to GitHub to prepare a repository there.
+- I'm assuming you know how to do this, but if not that's okay!
+  - Check [Creating a new repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
+
+# Remote
+
+- Only have to do this once!
+- We link our local repository to the GitHub repository
+  - Our local code is the "origin"
+    - So we "add origin"
+  - We add origin to the url of the GitHub repository we made!
+    - Mine was cd-c89/alpine.git
+    - You get to pick yours!
+  
+<blockquote>  
+
+**TODO**
+
+```bash
+git remote add origin https://github.com/
+```
+_And add your repository name..._
+
+</blockquote>
+
+It should look something like this:
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ git remote add origin https://github.com/cd-c89/alpine.git
+```
+
+# Push
+
+- We take our local version and send it to GitHub
+  - All the previous commands were basically preparing a gift to send.
+  - Now we send it.
+  - There will be logging indicative of network traffic.
+  - I don't usually specify a push from "origin" to "main"
+    - Even enough to configure this via `git push --set-upstream origin main`
+    - Git recommends this command if you try to simply `git push`
+    - Only have to set-upstream once!
+  
+<blockquote>  
+
+**TODO**
+
+```bash
+git push origin main
+```
+
+</blockquote>
+
+It should look something like this:
+
+
+```email
+user@DESKTOP-THMS2PJ:~/crypto$ git push origin main
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 20 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 391 bytes | 391.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/cd-cd89/alpine.git
+ * [new branch]      main -> main
+```
+
+# Closing thoughts
+
+- This process is longer than normal.
+- Usually I do:
+  - (Only add with new files)
+
+<blockquote>
+
+**TODO**
+
+  0. ```bash
+git add ???
+```
+  1. ```bash
+git commit -a -m "some message"
+```
+  2. ```bash
+git push
+```
+</blockquote>
+
+# FIN
+
+:::

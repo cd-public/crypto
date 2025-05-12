@@ -1,0 +1,122 @@
+---
+title: "4bytes"
+author: "Calvin"
+format: html
+---
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ddZjuwji4MY?si=8qVzI4IZbaA1-oPY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+# FAQ
+
+> Is RSA only supposed to work for things upto (4 BYTES) ??
+
+## Basis
+
+- So how does RSA work.
+- We recall:
+$$
+m^{ed} \equiv m \pmod{n}
+$$
+
+- What operation do we use to raise numerical value "m"
+    - "You can represent any message with numerical value."
+    - Well, any value that can be represented in a computer.
+    - We cannot represent the numerical value of $pi$ because it is transcendental.
+    - It has no method for finite expression in any language suitable for usage within computational arithmetic as implement by sequential and combinational logic over resistors, inductors, transitors and capacitors.
+
+- In RSAinC what did we use *instead* of the integers?
+    - We use a subset of the integer that ranges up to $2^64 - 1$ from $0$.
+- $\exists$ finite encodings of messages.
+- $\exists$ infinite many sentences in English.
+    - English is a *recursively enumerable language* [Chomsky 1967]
+- How many unique sentence can be expressed with 64 bits?
+    - We agree on some encoding, and then may express $~2^{64}$ sentences.
+
+# One Wrinkle
+
+- What do we do to the messages.
+
+1. Raise them to some power.
+2. Take them modulo some value.
+3. Reduce, reuse, recycle.
+
+- What happens when we raise a number to some power.
+    - Take $m$
+    - $m$ has some number of bits.
+        - No more than 64
+    - To raise $m$ to some power, we necesarily multiply two values together.
+    - The product of these two values, requires as many bits to express as the sum of the bits of each of factor.
+        - Say we have an $8$ bit message.
+        - Say we square this message.
+        - The square requires $8 + 8 = 16$
+
+### Intermezzo
+
+> Given a natural number $n$, we say integers $a$ and $b$ are **congruent modulo**  $n$, denoted $a \equiv b \pmod{n}$, id est, they have the same remainder when divided by $n$. The equivalence classes with respect to this relation are called **congruence classes** and denoted:
+
+$$
+[a] = \{b \in \mathbb{Z} : a \equiv b \pmod{n}\}
+$$
+
+- Fin
+
+## Under Congruence
+
+- Given some $n = p * q : p, q \in \mathbb{P}$, taking $m^{ed} \mod{n}$ is at most $n$ therefore there are at most $n$ possible messages that may be encoded under this *key*.
+
+## Separately
+
+- We are not working solely with respect to $n$.
+- We are also working within `uint64_t`
+- We cannot multiple together numbers larger than `1 << 32` under `uint64_t` without incurring an overflow.
+    - This overflow is predictable results in a loss of precise encryption.
+    
+```{.C filename="1bytes.c"}
+#include <stdio.h>
+#include <stdint.h>
+
+
+int main() {
+        uint8_t a, b;
+        a = 20;
+        b = a * a;
+        printf("{a=%d}^2 -> b=%d under uint8_t.\n", a, b);
+        a = 12;
+        b = a * a;
+        printf("{a=%d}^2 -> b=%d under uint8_t.\n", a, b);
+        return 0;
+}
+```
+
+- We see that:
+
+$$
+20^2 \equiv 12^2 \pmod{2^8}
+$$
+
+### Closing thoughts
+
+- We recall the subject name "Computer Science"
+- $\exists$ naturalistic causes for all results in computing (within reason)
+    - These are frequently multiply specifiable in:
+        - Formal mathematics, e.g. LaTeX
+        - Linguistics, a field with which I am not familiar with notational conventions
+        - Philosophy, using formal logic, using a whiteboard.
+        - Programming != Computer Science, using programming languages such as Python.
+
+```{python}
+assert(12 ** 2 % 1 << 8 == 20 ** 2 % 1 << 8)
+```
+
+- We use *finite* transitors storing electrons, which correspond to bits.
+- This corresponds to finite expressions in some language.
+- We also decode to the shortest expression which is equivalent under the modular squaring operation.
+
+### Final Thoughts
+
+- We cannot uniquely square values larger than 32 bits.
+- We cannot store more than 4 ascii/utf-8 chars in 32 bits.
+- We have a message length cap of the *lesser* of:
+    - The log base 2 of $n$, the product of primes.
+        - $\log_2{n}$, the bit length of $n$.
+    - $2^{32}$

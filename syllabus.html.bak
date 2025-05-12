@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Syllabus</title>
+		<style>
+		.page {
+			width: 9in ;
+			height: 11.5in;
+			margin: auto ;
+		}
+		.page_outer {
+			width: 8.5in;
+			height: 11in;
+			box-shadow: -.1in -.1in .25in darkgray, .1in .1in .25in gray;
+			position: relative ;
+		}
+		.page_inner{
+			margin: 1in;  
+			margin-top: .5in;  
+		}
+		th {
+			text-align: left ;
+		}
+		</style>
+		<style type="text/css" media="print">
+			.page {
+				width: 8.5in;
+				height: 11in;
+				margin: auto ;
+			}
+			.page_outer {
+				box-shadow: none;
+			}
+			a {
+				color: black;
+				text-decoration-line: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+			<div class="page_outer">
+				<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+				<div class="page_inner">
+					<h2>CS 151: Intro to Programming in Python</h2>
+					<hr>
+					<table width="100%">
+						<tr>
+							<th>Instructor</th>
+							<td><a href="mailto:ckdeutschbein@willamette.edu">Calvin Deutschbein</a> (503) 370-6486<br></td>
+							<th>Sect. 1</th>
+							<td>MWF 09:10 AM-10:10 AM, Ford 302</td>
+						</tr>
+						<tr>
+							<th>Office</th>
+							<td>Ford 306 1 PM -</td>
+							<th>Sect. 2</th>
+							<td>MWF 10:20 AM-11:20 AM, Ford 301</td>
+						</tr>
+					</table> 
+					<hr>
+					<h3>Course Description</h3>
+					<p>An introduction to computer science using Python. Introduces students to the fundamental concepts of programming and computational problem solving. Students will study and create programs that perform various tasks, including text and file manipulation, internet scraping, data structures, and testing. Topics will include general programming idioms such as variables, logic and loops as well as Python specific idioms such as list comprehension and generators. Object-oriented programming will be introduced.
+					<hr>
+					<h3>Provided Text</h3>
+					<p><i>Programming in Python</i> Eric S. Roberts </p>
+					<p>This (<a href="https://jrembold.github.io/Website_Backup/class_files/cs151/CS151-Reader-2023.pdf">open access</a>) book is provided to you as a reference, but is not required for the class.</p>
+					<hr>
+					<h3>Citation</h3>
+					<p>This course is based on the Fall '23 version of CS 151 taught by Prof. Jed Rembold.</p>
+					<hr>
+					<h3>Student Learning Objectives:</h3>
+					<p>Upon completion of the course, students should be able to:
+					<ul>
+						<li>Describe, design, implement and test structured programs to solve a problem. Problem-solving is at the heart of programming, and students must be able to a take a given problem, break it up into solvable steps, and implement each individual piece to achieve their solution.
+						<li>Explain what an algorithm is and how it relates to computer programming. Many types of problems share similar solutions. Knowing when they can be used, how to use them, and the benefits of one method over another is important. 
+						<li>Recognize and construct common programming concepts, including variables, loops, functions, I/O, and logic. The bread-and-vegan-buttery-spread of basic programming. These are the tools in a student’s toolbox from which students can pull to construct all their programs. Knowing them well leads to both increases in efficiency and creativity in how they can be used.
+						<li>Recognize the difference between various data structures like lists, dictionaries and tuples and decide the proper times to use each. Python has a variety of ways in which to store data. Choosing the correct one for a problem can eliminate many issues further on.
+				</div>
+			</div>
+		</div>
+		<div class="page">
+			<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+			<div class="page_outer">
+				<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+				<div class="page_inner">
+					<h3>Assignments and Assessment</h3>
+					<p>There will be a problem set or project due most Mondays and three exams: two midterms and final.
+					<ul>
+						<li><b>Participation</b> is awarded for attending small sections.
+						<li><b>Problem sets</b> are weekly collections of 2-3 loosely related small scale tasks, intended to take at most a few hours in total.
+						<li><b>Projects</b> are five specific comprehensive assignments to make a larger scale program and are graded holistically: a completed project earns an A.
+						<li><b>Exams</b> will be open note, open book, but without internet or a coding environment. Study guides will be provided. The primary purpose of these exams is to educate, not assess.
+					</ul>
+					<hr>
+					<h3>Grade Weights</h3>
+					<ul>
+						<li>10% Participation in Small Sections</li>
+						<ul>
+							<li>Small sections are mandatory. They help you, and your attendance helps your peers. As a result, we have a policy for attendance. Every unexcused absence after the third will result in a 5% deduction, per absence, to your final grade. If you cannot attend your section, reach out and we will place you in a section at another time.
+						</ul>
+						<li>50% Assignments</li>
+						<ul>
+							<li>20% Problem Sets
+							<li>30% Projects
+						</ul>
+						<li>20% Midterms</li>
+						<ul>
+							<li>10% Midterm 1: Friday, Week 06 (October 4)
+							<li>10% Midterm 2: Friday, Week 11 (November 8)
+						</ul>
+						<li>20% Final Exam</li>
+						<ul>
+							<li>09:10 AM Section: 11 Dec, 8:00AM - 11:00AM (Wednesday)
+							<li>10:20 AM Section: 12 Dec, 8:00AM - 11:00AM (Thursday)
+						</ul>
+					</ul>
+					<p>I reserve the right to replace low scores in any category with higher scores on latter, cumulative assignments in the students' favor.
+					<hr>
+					<h3>Grade Distribution</h3>
+					<p>Note that I use a grading distribution that is somewhat relaxed from norms relating multiples of ten to letters. I reserve the right to curve grades in the students' favor.
+					<table style="text-align:center" width="100%">
+						<tr>
+							<td style="outline:solid"  width="25%">
+							<td style="outline:solid"  width="25%">(+)
+							<td style="outline:solid"  width="25%">(&nbsp;)
+							<td style="outline:solid"  width="25%">(-)
+						</tr>
+						<tr>
+							<td style="outline:solid" ><b>A</b></td>
+							<td style="outline:solid" ></td>
+							<td style="outline:solid"  >>90</td>
+							<td style="outline:solid" >>87</td>
+						</tr>   
+						<tr>    
+							<td style="outline:solid" ><b>B</b></td>
+							<td style="outline:solid" >>84</td>
+							<td style="outline:solid" >>80</td>
+							<td style="outline:solid" >>77</td>
+						</tr> 
+						<tr>  
+							<td style="outline:solid" ><b>C</b></td>
+							<td style="outline:solid" >>73</td>
+							<td style="outline:solid" >>70</td>
+							<td style="outline:solid" >>67</td>
+						</tr>  
+						<tr>   
+							<td style="outline:solid" ><b>D</b></td>
+							<td style="outline:solid" >>63</td>
+							<td style="outline:solid" >>60</td>
+							<td style="outline:solid" >>50</td>
+						</tr>
+						<tr>
+							<td style="outline:solid" ><b>F</b></td>
+							<td style="outline:solid" ></td>
+							<td style="outline:solid" ><50</td>
+							<td style="outline:solid" ></td>
+						</tr>
+					</table> 
+					
+				</div>
+			</div>
+		</div>
+		<div class="page">
+			<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+			<div class="page_outer">
+				<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+				<div class="page_inner">
+					<h3>Late Work Policy</h3>
+					<p><b>Late problem sets</b> are not accepted. To allow for a missed deadline, I will replace your lowest problem set score with your highest problem set score.
+					<p><b>Late projects</b> drop one "grade" per day, such as from A to A-. To allow for a missed deadline, I will replace your lowest project score with your highest project score.
+					<p>If I get behind on grading, I reserve the right to extend deadlines in the students' favor.
+					<hr>
+					<h3>On Academic Honesty</h3>
+					<p>Write your assignments yourself and cite what resources you used.
+					<h4>Online Resources Policy</h4>
+					<p>Use of online resources -  such as Stack Overflow, W3Schools, Wikipedia, GeeksforGeeks, Github, Reddit, YouTube, and TikTok - is permitted on assignments in this course. You are required to site the resource used by hyperlink as a courtesy to your graders and so that we may best support your learning.
+					<p>While many students gravitate toward AI tools, I find human-written and human-edited resources are of vastly higher quality, especially for this course. I believe they may feel less accessible then generative AI, but the highest quality AI tools are trained on these resources, and engaging with them directly provides students with the best possible information.
+					<h4>Collaboration Policy</h4>
+					<p>Collaboration with peers is permitted on assignments in this course. You are required to cite your peers using your peers' preferred name as a courtesy to your graders and so that we may best support your learning. Section leaders, QUAD Center tutors, and other advanced students are excellent resources, as are your classmates.
+					<p>You are responsible for ensuring that peers are comfortable working with you via enthusiastic consent. Simply put, enthusiastic consent means looking for the presence of a “yes” rather than the absence of a “no.”
+					<h4>AI Policy</h4>
+					<p>AI usage is permitted on assignments in this course. You are required to cite the model and prompt used as a courtesy to your graders and so that we may best support your learning. The easiest way to do so is by providing a link to the transcript in a code comment.
+				</div>
+			</div>
+		</div>
+		<div class="page">
+			<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+			<div class="page_outer">
+				<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+				<div class="page_inner">
+					<h2>College Policies</h2>
+					<p>The following material is adapted from “Information for Syllabus” recommended language on syllabus prepartion provided to instructors in the College of Arts & Sciences and represents the views of the instructor's employer other than minor edits for clarity and sensativity.
+					<hr>
+					<h3>Time Commitment</h3>
+					<p>Willamette’s Credit Hour Policy holds that for every hour of class time there is an expectation of 2-3 hours’ work outside of class. Thus, for this class you should anticipate spending 6-9 hours outside of class engaged in course-related activities. Examples include reading course materials, preparing for discussion, preparing and writing papers and exams.
+					<hr>
+					<h3>Academic Integrity</h3>
+					<p>Students of Willamette University are members of a community that values excellence and integrity in every aspect of life. As such, we expect all community members to live up to the highest standards of personal, ethical, and moral conduct. Students are expected not to engage in any type of academic or intellectually dishonest practice and encouraged to display honesty, trust, fairness, respect, and responsibility in all they do. Plagiarism and cheating are especially offensive to the integrity of courses in which they occur and against the College community as a whole. These acts involve intellectual dishonesty, deception, and fraud, which inhibit the honest exchange of ideas. Plagiarism and cheating may be grounds for failure in the course and/or dismissal from the College. <a href="https://my.willamette.edu/sites/policies/page/63">Read more</a>.
+					<hr>
+					<h3>Classroom Conduct</h3>
+					<p>As an educational institution, the College of Arts & Sciences  is committed to supporting the ideals and standards that help create a constructive and healthy learning community. That requires, among other things, encouraging positive classroom behaviors, discouraging disruptive classroom behaviors, and setting clear standards for both of those things.
+					<p>Constructive classroom behaviors are those that support learners and teachers in an environment that promotes trust, respect, and collaborative learning.
+					<p>Disruptive classroom behaviors are those that undermine or interfere with the abilities to learn and to teach. Clear examples of disruptive behaviors include, but are not limited to: interrupting others or persistently speaking out of turn; distracting the class from the subject matter or discussion at hand; making unauthorized recordings or photos of a class meeting or discussion (except as permitted as part of an Accessible Education Services-mandated accommodations); and in extreme cases, any physical threat, physical, psychological, sexual harassment, ridicule, or abusive act towards a student, staff member, or instructor in a classroom or related setting.
+				</div>
+			</div>
+		</div>
+		<div class="page">
+			<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+			<div class="page_outer">
+				<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+				<div class="page_inner">
+					<h3>DACA/Undocumented Student Advocate</h3>
+					<p>Willamette is committed to supporting our DACA/Undocumented students in a variety of ways. This year, Emilio Solano, Assistant Provost for Institutional Equity and Community Engagement,  is the contact person for all DACA/undocumented students. Emilio can provide those students with a number of external and internal resources that are available. His contact information is <a href="mailto:easolano@willamette.edu">easolano@willamette.edu</a>, Office: 302 UC, Phone: 503-370-6027.
+					<hr>
+					<h3>Commitment to Positive Sexual Ethics</h3>
+					<p>Willamette is a community committed to fostering safe, productive learning environments, and we value ethical sexual behaviors and standards. Title IX and our school policy prohibit discrimination on the basis of sex, which regards sexual misconduct — including discrimination, harassment, domestic and dating violence, sexual assault, and stalking. We encourage affected students to talk to someone about their experiences and get the support they need.
+					<blockquote style="font-weight:bold">Please be aware that as a mandatory reporter I am required to report any instances you disclose to Willamette’s Title IX Coordinator.</blockquote>
+					<p> If you would rather share information with a confidential employee who does not have this responsibility, please contact our confidential advocate at confidential-advocate@willamette.edu. Confidential support also can be found with SARAs and at the GRAC (503-851-4245); and at WUTalk - a 24-hour telephone crisis counseling support line (503-375-5353). If you are in immediate danger, please call campus safety at 503-370-6911.
+					<hr>
+					<h3>Trans Inclusion and Gender Justice</h3>
+					<p>I am always appreciative of the opportunity to address you by your preferred/affirming name, pronouns, and any other gender or identity markers. Please advise me of this at any point in the semester so that I may may best respect you at all times.
+					<p>If I ever misgender or misidentify you in any way, I would greatly appreciate that you let me know, in whatever manner makes you comfortable, so that I can correct my error and work to repair any harm I have caused you.
+					<hr>
+					<h3>Religious Practices</h3>
+					<p>I am always appreciative of the opportunity to work with you to achieve the best possible accommodation for your religious practice. Please let me about course conflicts with holy days or any other religious practice so we can work together to achieve an ideal outcome.
+				</div>
+			</div>
+		</div>
+		<div class="page">
+			<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+			<div class="page_outer">
+				<div style="height:.25in;"> <!-- Vertical space adjuster for box shadow --></div>
+				<div class="page_inner">
+					<h3>Diversity and Disability Statement</h3>
+					<p>Willamette University values diversity and inclusion; we are committed to a climate of mutual respect and full participation. My goal is to create a learning environment that is usable, equitable, inclusive and welcoming. If there are aspects of the instruction or design of this course that result in barriers to your inclusion or accurate assessment or achievement, please notify me as soon as possible. Students with disabilities are also encouraged to contact the Accessible Education Services office in Smullin 155 at 503-370-6737 or <a href="accessible-info@willamette.edu">accessible-info@willamette.edu</a> to discuss a range of options to removing barriers in the course, including accommodations.
+					<hr>
+					<h3>SOAR Center Offerings: Food, Clothing, and School Materials</h3>
+					<p>The Students Organizing for Access to Resources (SOAR) Center provides free, confidential, and equitable access to food, toiletries, professional clothing, textbooks and scholarly resources for all WU and WU-affiliated students. The SOAR Center is located on the Putnam University Center’s third floor. The space houses the Bearcat Pantry, Clothing Share, and First-Generation Book Drive and is maintained by committed students and advisors. Please check www.willamette.edu/go/soar for current hours of operation and email <a href="soar-center@willamette.edu">soar-center@willamette.edu</a> for any questions or concerns.
+					<hr>
+					<h3>Handle with Care Policy</h3>
+					<p>If you have a day that you are able to be in class but feel that you cannot participate and engage as you usually do, all you need to tell me at the start of class is “handle with care.” You can do this via an email, a direct message via zoom, a note left on my desk, or a quick, private verbal exchange at the start of class. 
+					<p>What asking to be handled with care means for class: You will not be called on (I do not call on people that are not volunteering as a general rule, but I want to remind you of that fact). You will not be asked to turn on your camera if we are meeting via Zoom. You will not be asked to provide any information or context. I do not need to know why you need to be handled with care, but here are some examples of why you might ask to be handled with care:
+					<ul>
+						<li>Illness
+						<li>Stress/Anxiety
+						<li>Things happening at home within your community
+						<li>Things happening with your partner/break up
+						<li>Things happening within your school family/Willamette community
+					</ul>
+					<p>If we are completing small group work and a student requests engagement from a group member and gets the response “handle with care,” all group members must respect that request and may not ask any follow up questions.
+					<p>I have this policy because I know that it can sometimes be hard to be in class but it may be even more stressful to miss class. Also, sometimes class can be a welcome distraction when you have negative things going on so you want to go to class but are worried about holding it together if participating/engaging.
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

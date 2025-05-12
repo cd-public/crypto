@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>KeyGen</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9884a2177d2957eae00b06e372949a78.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6143deb5822414b99d6193ead6da13dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">KeyGen</h1>
+            <p class="subtitle lead">Lab 0x6</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+<section id="review-show" class="level1">
+<h1>Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a></h1>
+<div id="review" class="collapse multi-collapse">
+<section id="goal-public-key-encryption" class="level3">
+<h3 class="anchored" data-anchor-id="goal-public-key-encryption">Goal: Public Key Encryption</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Review:</th>
+<th>Newish:</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>- RSA</td>
+<td>- base64</td>
+</tr>
+<tr class="even">
+<td>- FileIO</td>
+<td>- hexdump</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>-OpenSSL</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>In the lab you should’ve finished key generation.</li>
+<li>For this assignment we will:
+<ul>
+<li>Write keys to files</li>
+<li>Encrpyt and decrypt based those keys.</li>
+</ul></li>
+<li>We will motivate with command line affairs.
+<ul>
+<li>I will use a wide range of command line utilities without documenting their installation.</li>
+<li>This is left as an exercise to the student.</li>
+</ul></li>
+</ul>
+</section>
+</div>
+</section>
+<section id="genrsa-show" class="level1">
+<h1>genrsa&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#genrsa" role="button" aria-expanded="false" aria-controls="genrsa">Show</a></h1>
+<div id="genrsa" class="collapse multi-collapse">
+<ul>
+<li>Our motivating example for RSA is from the <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">GitHub docs</a></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ssh-keygen -t rsa -b 4096 -C "your_email@example.com"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>I found <code>ssh-keygen</code> difficult to work with, which is a good and bad thing.
+<ul>
+<li>It should not be easy to examine private keys, but…</li>
+<li>We want to examine private keys.</li>
+</ul></li>
+</ul>
+<section id="openssl" class="level2">
+<h2 class="anchored" data-anchor-id="openssl">OpenSSL</h2>
+<ul>
+<li><code>ssh-keygen</code> may or may not be implemented on top of a larger and more culturally significant “OpenSSL” library.
+<ul>
+<li>It <em>always</em> was and now it <em>sometimes</em> is.</li>
+</ul></li>
+<li>OpenSSL has a cool backstory, <a href="https://en.wikipedia.org/wiki/OpenSSL">Read more</a></li>
+<li>While used in practice in security relevant applications (at least to the best of my knowledge) it could perhaps better be understood as an educational or informational library…
+<ul>
+<li>…and is therefore well-suited to out purposes.</li>
+</ul></li>
+</ul>
+<section id="genrsa" class="level3">
+<h3 class="anchored" data-anchor-id="genrsa"><code>genrsa</code></h3>
+<ul>
+<li>The OpenSSL command to generate an private key is as follows:
+<ul>
+<li><code>openssl</code> is the command-line utility</li>
+<li><code>genrsa</code> is the directive to generate a private rsa key.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>openssl genrsa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li>This is a big difficult to work with so we also:
+<ul>
+<li>Use <code>-out</code> specifies the destination
+<ul>
+<li>I specify I am not making security considerations by naming the key “unsafe”</li>
+<li>I use one of several industry standard formats, <code>.pem</code>
+<ul>
+<li>For “privacy enhanced email”</li>
+<li>It is a purely text-based format.</li>
+</ul></li>
+<li>I make a 512 bit key, the smallest possible in OpenSSL, to make understanding it easier.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>openssl genrsa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
+<li>I found <code>unsafe.pem</code> in the hidden <code>.ssh</code> folder in my home (<code>~</code>) directory.
+<ul>
+<li>It will not show up when naively listing files and folders via <code>ls</code></li>
+<li>It will show up when listing “all” files and folders via <code>ls -a</code></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>openssl genrsa -out unsafe.pem 512</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Inspect the file with <code>cat unsafe.pem</code> or our most beloved text editor.</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>unsafe.pem</strong></pre>
+</div>
+<div class="sourceCode" id="cb5" data-filename="unsafe.pem"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>-----BEGIN PRIVATE KEY-----</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>MIIBUwIBADANBgkqhkiG9w0BAQEFAASCAT0wggE5AgEAAkEAsWQ0ya/HGdpuzqJU</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>UEzr3OFj8grPajdPlCg7NHmsdNHLEiDui6rEgEb94Y43mAjUDn9NBfVHY6eLI5Bx</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>gbopwwIDAQABAkAt9dyHdPeNBz82YnCd7ZAexnbyu0JKLtJ7fID6c5vvGA2qjjXL</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ZnuUqLw4rVckPod0f5GsCDxs7YVfJnikL39hAiEA10gzhGV1Wkbs2J8TL84rOkgB</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>VDlWeAcjRzlqHW54sTUCIQDS8V6aq+dF/i/bi06WY4+hFkq9OQWvgIzqKzj3WC8G</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>FwIgItv6G5IiMoARkfIQNUl5DnLiZDT0n3Lob3wIhsOAn5ECIEAUrR2lnTNpHZa/</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>QhdzlV1lTT0ghnajQaudh8e0FUzvAiAFk8f2Mjmkkt7noGGXGdIV7kKhYU6gA6yw</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>0bjjw1yM2w==</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>-----END PRIVATE KEY-----</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Generate a new key and see how it differs, or doesn’t. Try other sizes.</li>
+</ul>
+</section>
+<section id="a-key-in-3-parts" class="level3">
+<h3 class="anchored" data-anchor-id="a-key-in-3-parts">A Key in 3 Parts</h3>
+<ul>
+<li>We recall that the private key minimally contains:
+<ul>
+<li><code>n</code>, a modular base</li>
+<li><code>e</code>, an encryptor, and</li>
+<li><code>d</code>, a descryptor.</li>
+</ul></li>
+<li>We note that:
+<ul>
+<li>That file is much larger than 512 bytes.</li>
+<li>522 characters - more than 8x in size.</li>
+<li>We use <code>wc</code> (word count)</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>wc unsafe.pem</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="wc unsafe.pem"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>10  14 522 unsafe.pem</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>So what is in there?</li>
+</ul></li>
+</ul>
+</section>
+<section id="text" class="level3">
+<h3 class="anchored" data-anchor-id="text"><code>-text</code></h3>
+<ul>
+<li>OpenSSL provides a utility to see a formated readout of the contents of a <code>.pem</code> file.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>openssl rsa -in unsafe.pem -text</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Mine appeared as follows.
+<ul>
+<li>We note you will have the same fields…</li>
+<li>in similar but not exactly the same level of precision (number of digits)</li>
+<li>but different values.</li>
+</ul></li>
+<li>If you any of your fields are e.g., of twice as many digits, check the size of the key you generated with <code>genrsa</code></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>openssl rsa -in unsafe.pem -text</strong></pre>
+</div>
+<div class="sourceCode" id="cb8" data-filename="openssl rsa -in unsafe.pem -text"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Private-Key: </span>(512 bit, 2 primes)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>modulus:</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    00:98:26:e6:f8:71:3a:bc:e9:ff:2a:47:90:85:84:</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    ba:8e:22:3b:8e:e9:70:0e:64:af:6e:44:06:65:c2:</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    de:ff:34:ce:87:f1:a1:94:7b:f9:92:7d:9f:ea:aa:</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    b7:93:03:85:4a:57:a1:c8:56:ac:0d:ca:4c:da:59:</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    1f:ef:ba:a3:d7</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">publicExponent: </span>65537 (0x10001)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>privateExponent:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    3a:20:5a:8a:bd:4f:30:4e:c0:c1:99:37:78:1a:bd:</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    de:80:eb:79:ec:6a:77:c5:35:54:0d:be:d7:ef:7b:</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    9b:c9:2c:f0:3f:95:4f:3f:cc:b2:61:bb:50:da:5f:</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    b2:49:07:ee:70:95:4a:fc:ce:6e:31:a1:35:d2:c1:</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    02:8e:9b:01</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>prime1:</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    00:c8:be:97:b0:ff:d0:20:b2:82:22:50:81:84:f5:</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    0d:36:be:2e:ef:89:db:f5:cf:da:73:95:05:56:5e:</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    f5:d2:57</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>prime2:</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    00:c2:08:3f:d7:17:84:8d:b5:c7:ac:91:ba:84:a4:</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    f8:0d:95:87:a8:47:79:e8:fa:4c:7d:fa:83:26:91:</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    55:ca:81</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>exponent1:</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    00:85:fc:20:06:f5:57:16:db:ce:5b:d4:db:fd:c0:</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    09:87:c6:3c:51:88:f4:15:07:1c:49:14:e7:b1:14:</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    44:82:95</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>exponent2:</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    07:79:01:dc:6a:cf:74:15:b8:26:f1:45:d9:ad:f0:</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    cf:b5:1e:90:60:90:55:64:ae:65:7b:ac:69:63:d7:</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    86:01</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>coefficient:</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    00:a7:e5:ed:d4:dd:16:e2:7e:90:de:ea:8e:7c:25:</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    74:bb:88:eb:ea:0a:9d:07:75:25:dd:7e:3f:7a:0f:</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    b4:6e:25</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>writing RSA key</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>-----BEGIN PRIVATE KEY-----</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAmCbm+HE6vOn/KkeQ</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>hYS6jiI7julwDmSvbkQGZcLe/zTOh/GhlHv5kn2f6qq3kwOFSlehyFasDcpM2lkf</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>77qj1wIDAQABAkA6IFqKvU8wTsDBmTd4Gr3egOt57Gp3xTVUDb7X73ubySzwP5VP</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>P8yyYbtQ2l+ySQfucJVK/M5uMaE10sECjpsBAiEAyL6XsP/QILKCIlCBhPUNNr4u</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>74nb9c/ac5UFVl710lcCIQDCCD/XF4SNtceskbqEpPgNlYeoR3no+kx9+oMmkVXK</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>gQIhAIX8IAb1VxbbzlvU2/3ACYfGPFGI9BUHHEkU57EURIKVAiAHeQHcas90Fbgm</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>8UXZrfDPtR6QYJBVZK5le6xpY9eGAQIhAKfl7dTdFuJ+kN7qjnwldLuI6+oKnQd1</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>Jd1+P3oPtG4l</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>-----END PRIVATE KEY-----</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>While I can’t find a reference in OpenSSL documentation, to the best of my knowledge, this format is described by <a href="https://www.rfc-editor.org/info/rfc3447">RFC 3447</a></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>rfc3447</strong></pre>
+</div>
+<div class="sourceCode" id="cb9" data-filename="rfc3447"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>   An RSA private key should be represented with the ASN.1 type</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>   RSAPrivateKey:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      RSAPrivateKey ::= SEQUENCE {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>          version           Version,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          modulus           INTEGER,  -- n</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          publicExponent    INTEGER,  -- e</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>          privateExponent   INTEGER,  -- d</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>          prime1            INTEGER,  -- p</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>          prime2            INTEGER,  -- q</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>          exponent1         INTEGER,  -- d mod (p-1)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>          exponent2         INTEGER,  -- d mod (q-1)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>          coefficient       INTEGER,  -- (inverse of q) mod p</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>          otherPrimeInfos   OtherPrimeInfos OPTIONAL</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>   The fields of type RSAPrivateKey have the following meanings:</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    * version is the version number, for compatibility with future</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>      revisions of this document.  It shall be 0 for this version of the</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>      document, unless multi-prime is used, in which case it shall be 1.</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>            Version ::= INTEGER { two-prime(0), multi(1) }</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>               (CONSTRAINED BY</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>               {-- version must be multi if otherPrimeInfos present --})</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    * modulus is the RSA modulus n.</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    * publicExponent is the RSA public exponent e.</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    * privateExponent is the RSA private exponent d.</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    * prime1 is the prime factor p of n.</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    * prime2 is the prime factor q of n.</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    * exponent1 is d mod (p - 1).</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    * exponent2 is d mod (q - 1).</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>    * coefficient is the CRT coefficient q^(-1) mod p.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Based on the KeyGen lab, it should be uncomplicated to calculate these values for 64 bit keys.</li>
+<li>It is probably complicated to store them in the encoding used within a <code>.pem</code> file.</li>
+</ul>
+</section>
+</section>
+</div>
+</section>
+<section id="base64-show" class="level1">
+<h1>base64&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#base64" role="button" aria-expanded="false" aria-controls="base64">Show</a></h1>
+<div id="base64" class="collapse multi-collapse">
+<ul>
+<li>I was unfamiliar with private key inspection for the very good reason of “protect your private key at all costs”.</li>
+<li>So I wasn’t familiar with text output of private keys.</li>
+<li>The two other ways to inspect file contents, to me, were clearly in (1) hexadecimal, and (2) “base64”.
+<ul>
+<li>We note the deviation in naming scheme between what are otherwise two numerical bases.</li>
+<li>Base64 can also be termed “tetrasexagesimal” (tetra~=4, sexa~=6)</li>
+<li>I have literally never heard it called that.</li>
+</ul></li>
+<li>Base64 encoding is described in <a href="https://www.rfc-editor.org/info/rfc4648">RFC 4648</a>
+<ul>
+<li>Check the <a href="https://en.wikipedia.org/wiki/Base64#Base64_table_from_RFC_4648">table</a> or….</li>
+<li>Understand it straightforwardly as follows:</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> num_to_b64(n)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> n <span class="kw">not</span> <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">64</span>):</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>      exit()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">26</span>):</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># A-Z</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>[n]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">26</span>,<span class="dv">52</span>):</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># A-Z</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"abcdefghijklmnopqrstuvwxyz"</span>[n <span class="op">-</span> <span class="dv">26</span>]</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">52</span>,<span class="dv">62</span>):</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 0-9</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">str</span>(n<span class="op">-</span><span class="dv">52</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 62 -&gt; `+`, 63 -&gt; `/`</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">"+"</span> <span class="cf">if</span> n<span class="op">==</span><span class="dv">62</span> <span class="cf">else</span> <span class="st">"/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>By convention, Base64 numerals at terminated with double equals <code>==</code>
+<ul>
+<li>By contrast, decimal numerals are unmarked.</li>
+<li>By contrast, hexadecimal numerals are ofter <code>0x</code> prefixed, or
+<ul>
+<li>Colon delineated in pairs, like <code>01:23:AB:CD</code></li>
+</ul></li>
+</ul></li>
+<li>Base64 may also be zero prefixed to ensure it aligns with 8-bit bytes.</li>
+</ul>
+<section id="quoth-the-rfc" class="level4">
+<h4 class="anchored" data-anchor-id="quoth-the-rfc">Quoth the RFC:</h4>
+<ol type="1">
+<li>The final quantum of encoding input is an integral multiple of 24 bits; here, the final unit of encoded output will be an integral multiple of 4 characters with no “=” padding</li>
+<li>The final quantum of encoding input is exactly 8 bits; here, the final unit of encoded output will be two characters followed by two “=” padding characters.</li>
+<li>The final quantum of encoding input is exactly 16 bits; here, the final unit of encoded output will be three characters followed by one “=” padding character.</li>
+</ol>
+</section>
+<section id="the-base64-utility" class="level2">
+<h2 class="anchored" data-anchor-id="the-base64-utility">The <code>base64</code> utility</h2>
+<ul>
+<li><code>base64</code> is also the name of a command line utility.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>man base64</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>The most useful flag for our purposes here is the <code>-d</code> flag, for decode.</li>
+<li>We note that a <code>.pem</code> file is <em>not</em> base64 encoded - rather it is a text file that <em>contains</em> a base64 numeral.</li>
+<li>So a naive application of <code>base64</code> draws an error.</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>base64 -d unsafe.pem</strong></pre>
+</div>
+<div class="sourceCode" id="cb12" data-filename="base64 -d unsafe.pem"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">base64: </span>invalid input</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>I used <code>head</code> and <code>tail</code> to remove the leading and tailing lines.
+<ul>
+<li>Or use <code>sed</code></li>
+</ul></li>
+<li>It is worth taking a moment to ensure you do some line-based text manipulation at command line with some technique.</li>
+<li>I used a pipe <code>|</code> to use the output of one command, before the pipe, as the input to a latter command, after the pipe.</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cat unsafe.pem | head -9 | tail -8 | base64 -d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><code>cat</code> shows file contents.</li>
+<li><code>head -9</code> takes the first 9 lines</li>
+<li><code>tail -8</code> takes the final 8 lines</li>
+<li><code>base64 -d</code> converts the base64 encoding to…</li>
+<li>Bits! Which the command line attempts to interpret as characters, many of them unprintable.</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>cat unsafe.pem | head -9 | tail -8 | base64 -d</strong></pre>
+</div>
+<div class="sourceCode" id="cb14" data-filename="cat unsafe.pem | head -9 | tail -8 | base64 -d"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>�=0�9A�d4ɯ��n΢TPL���c�</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>��5�f{���8�W$&gt;�t�&lt;l�_&amp;x�/a!�H3�euZF�؟/�+:HT9Vx#G9jnx�5!��^���E�/ۋN�c��J�9����+8�X/ "��"2���5Iyr�d4�r�o�À�� @���3i��Bs�]eM= �v�A���ǴL� ���29����a���B�aN���Ѹ��\��</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="the-hexdump-utility" class="level2">
+<h2 class="anchored" data-anchor-id="the-hexdump-utility">The “hexdump” utility</h2>
+<ul>
+<li>Fortunately, we can direct the commandline to print out information in hexadecimal format via <code>hexdump</code>
+<ul>
+<li>We note the leftmost column gives number of bits from the beginning of the “file” being read</li>
+<li>Here the file is whatever comes out of the “pipe” <code>|</code></li>
+<li>The first line is 8 chunks of 4 hexdigits each representing 4 bits
+<ul>
+<li>8 * 4 * 4 = 128 bits = 10 bytes</li>
+<li>Hence the second line beginning with <code>0000010</code></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>cat unsafe.pem | head -9 | tail -8 | base64 -d | hexdump</strong></pre>
+</div>
+<div class="sourceCode" id="cb15" data-filename="cat unsafe.pem | head -9 | tail -8 | base64 -d | hexdump"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>0000000 8230 5301 0102 3000 060d 2a09 4886 f786</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>0000010 010d 0101 0005 8204 3d01 8230 3901 0102</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>0000020 0200 0041 64b1 c934 c7af da19 ce6e 54a2</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>0000030 4c50 dceb 63e1 0af2 6acf 4f37 2894 343b</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>0000040 ac79 d174 12cb ee20 aa8b 80c4 fd46 8ee1</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>0000050 9837 d408 7f0e 054d 47f5 a763 238b 7190</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>0000060 ba81 c329 0302 0001 0201 2d40 dcf5 7487</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>0000070 8df7 3f07 6236 9d70 90ed c61e f276 42bb</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>0000080 2e4a 7bd2 807c 73fa ef9b 0d18 8eaa cb35</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>0000090 7b66 a894 38bc 57ad 3e24 7487 917f 08ac</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>00000a0 6c3c 85ed 265f a478 7f2f 0261 0021 48d7</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>00000b0 8433 7565 465a d8ec 139f ce2f 3a2b 0148</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>00000c0 3954 7856 2307 3947 1d6a 786e 35b1 2102</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>00000d0 d200 5ef1 ab9a 45e7 2ffe 8bdb 964e 8f63</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>00000e0 16a1 bd4a 0539 80af ea8c 382b 58f7 062f</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>00000f0 0217 2220 fadb 921b 3222 1180 f291 3510</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>0000100 7949 720e 64e2 f434 729f 6fe8 087c c386</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>0000110 9f80 0291 4020 ad14 a51d 339d 1d69 bf96</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>0000120 1742 9573 655d 3d4d 8620 a376 ab41 879d</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>0000130 b4c7 4c15 02ef 0520 c793 32f6 a439 de92</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>0000140 a0e7 9761 d219 ee15 a142 4e61 03a0 b0ac</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>0000150 b8d1 c3e3 8c5c 00db</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>0000157</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul></li>
+</ul>
+</section>
+</div>
+</section>
+<section id="raw" class="level1">
+<h1>Raw</h1>
+<pre><code>user@DESKTOP-THMS2PJ:~/.ssh$ openssl pkey -in unsafe.pem -pubout -out unsafe-pub.pem
+user@DESKTOP-THMS2PJ:~/.ssh$ cat unsafe-pub.pem
+-----BEGIN PUBLIC KEY-----
+MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALFkNMmvxxnabs6iVFBM69zhY/IKz2o3
+T5QoOzR5rHTRyxIg7ouqxIBG/eGON5gI1A5/TQX1R2OniyOQcYG6KcMCAwEAAQ==
+-----END PUBLIC KEY-----
+user@DESKTOP-THMS2PJ:~/.ssh$ openssl asn1parse -in unsafe-pub.pem -inform PEM
+    0:d=0  hl=2 l=  92 cons: SEQUENCE
+    2:d=1  hl=2 l=  13 cons: SEQUENCE
+    4:d=2  hl=2 l=   9 prim: OBJECT            :rsaEncryption
+   15:d=2  hl=2 l=   0 prim: NULL
+   17:d=1  hl=2 l=  75 prim: BIT STRING
+user@DESKTOP-THMS2PJ:~/.ssh$ openssl rsa -noout -text -inform PEM -in unsafe-pub.pem -pubin
+Public-Key: (512 bit)
+Modulus:
+    00:b1:64:34:c9:af:c7:19:da:6e:ce:a2:54:50:4c:
+    eb:dc:e1:63:f2:0a:cf:6a:37:4f:94:28:3b:34:79:
+    ac:74:d1:cb:12:20:ee:8b:aa:c4:80:46:fd:e1:8e:
+    37:98:08:d4:0e:7f:4d:05:f5:47:63:a7:8b:23:90:
+    71:81:ba:29:c3
+user@DESKTOP-THMS2PJ:~/.ssh$ openssl genrsa -out unsaf3.pem 512
+user@DESKTOP-THMS2PJ:~/.ssh$ openssl asn1parse -in unsaf3.pem -inform PEM
+    0:d=0  hl=4 l= 340 cons: SEQUENCE
+    4:d=1  hl=2 l=   1 prim: INTEGER           :00
+    7:d=1  hl=2 l=  13 cons: SEQUENCE
+    9:d=2  hl=2 l=   9 prim: OBJECT            :rsaEncryption
+   20:d=2  hl=2 l=   0 prim: NULL
+   22:d=1  hl=4 l= 318 prim: OCTET STRING      [HEX DUMP]:3082013A020100024100B6F60FD8F1B9A14ADA01FE609E3FC0550C7BEA1FFD61A0B5A792636EC1425361499C4E1C4E974D78D605EB07F5C3DB21C296749DA3679C4E849CFFFA9DF3969B0203010001024019BD5C55650C7C888F4B20826F4100C9F64BA8907F91308EDDD8566CCA7B8E47309816895A818FB0C357BDAE0F7E07AED008E3680AA15168BF6D04476CED4F61022100E57B90980553977097D9062E79720987D1828B33132DDCD94785ECE1E0F3C9B5022100CC1A52A25AF42108450C1A1C173FF5E5400D437663FC1B5C565D0D6B8EC6D10F022100AC776F36315A9F8829371BE435B5B4DFF45F6E0A56B1B33740FFB0061AB05DB902204DD46FD4677896AC0FA068C87379396C5D3B719150D94F19ABF939E7DCFF25B302205C97731A30B17E804E33549A07BB32FE63801B36F0107657BF07003EBABADF85
+user@DESKTOP-THMS2PJ:~/.ssh$ openssl rsa -in unsaf2.pem -text
+Private-Key: (512 bit, 2 primes)
+modulus:
+    00:98:26:e6:f8:71:3a:bc:e9:ff:2a:47:90:85:84:
+    ba:8e:22:3b:8e:e9:70:0e:64:af:6e:44:06:65:c2:
+    de:ff:34:ce:87:f1:a1:94:7b:f9:92:7d:9f:ea:aa:
+    b7:93:03:85:4a:57:a1:c8:56:ac:0d:ca:4c:da:59:
+    1f:ef:ba:a3:d7
+publicExponent: 65537 (0x10001)
+privateExponent:
+    3a:20:5a:8a:bd:4f:30:4e:c0:c1:99:37:78:1a:bd:
+    de:80:eb:79:ec:6a:77:c5:35:54:0d:be:d7:ef:7b:
+    9b:c9:2c:f0:3f:95:4f:3f:cc:b2:61:bb:50:da:5f:
+    b2:49:07:ee:70:95:4a:fc:ce:6e:31:a1:35:d2:c1:
+    02:8e:9b:01
+prime1:
+    00:c8:be:97:b0:ff:d0:20:b2:82:22:50:81:84:f5:
+    0d:36:be:2e:ef:89:db:f5:cf:da:73:95:05:56:5e:
+    f5:d2:57
+prime2:
+    00:c2:08:3f:d7:17:84:8d:b5:c7:ac:91:ba:84:a4:
+    f8:0d:95:87:a8:47:79:e8:fa:4c:7d:fa:83:26:91:
+    55:ca:81
+exponent1:
+    00:85:fc:20:06:f5:57:16:db:ce:5b:d4:db:fd:c0:
+    09:87:c6:3c:51:88:f4:15:07:1c:49:14:e7:b1:14:
+    44:82:95
+exponent2:
+    07:79:01:dc:6a:cf:74:15:b8:26:f1:45:d9:ad:f0:
+    cf:b5:1e:90:60:90:55:64:ae:65:7b:ac:69:63:d7:
+    86:01
+coefficient:
+    00:a7:e5:ed:d4:dd:16:e2:7e:90:de:ea:8e:7c:25:
+    74:bb:88:eb:ea:0a:9d:07:75:25:dd:7e:3f:7a:0f:
+    b4:6e:25
+writing RSA key
+-----BEGIN PRIVATE KEY-----
+MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAmCbm+HE6vOn/KkeQ
+hYS6jiI7julwDmSvbkQGZcLe/zTOh/GhlHv5kn2f6qq3kwOFSlehyFasDcpM2lkf
+77qj1wIDAQABAkA6IFqKvU8wTsDBmTd4Gr3egOt57Gp3xTVUDb7X73ubySzwP5VP
+P8yyYbtQ2l+ySQfucJVK/M5uMaE10sECjpsBAiEAyL6XsP/QILKCIlCBhPUNNr4u
+74nb9c/ac5UFVl710lcCIQDCCD/XF4SNtceskbqEpPgNlYeoR3no+kx9+oMmkVXK
+gQIhAIX8IAb1VxbbzlvU2/3ACYfGPFGI9BUHHEkU57EURIKVAiAHeQHcas90Fbgm
+8UXZrfDPtR6QYJBVZK5le6xpY9eGAQIhAKfl7dTdFuJ+kN7qjnwldLuI6+oKnQd1
+Jd1+P3oPtG4l
+-----END PRIVATE KEY-----</code></pre>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

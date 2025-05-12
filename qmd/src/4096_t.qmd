@@ -1,0 +1,207 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: 4096_t
+subtitle: "HW 0x5: Due Th, Feb 27"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Implement 4096 bit integers
+- My responsibility
+  - I will provide 1 week of instruction on rings, number theory, and programming languages.
+  - I will provide an autograder Containerfile
+- Your responsibility
+  - You will implement a 4096 bit unsigned integer in C89 as:
+    - "4096_t.c" implementation file, and
+    - "4096_t.h" header file.
+  - You will store your "4096_t" files in the "4096_t" folder on your "crypto" GitHub repository.
+  
+### Topic Areas
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- Rings    | - $\varnothing$      |
+
+# Resources
+
+- [The BigAdd lab](bigadd.html)
+    - The "Header" entry formed my starter code.
+- [My Finite Slides](finite.html)
+    - Contextual background
+- [My BigNum Slides](bignum.html)
+  - I used this, and its references. Try scroll mode (press 'r')
+  - I think my slides are suitable for multiplication.
+  - Division is something of a challenge problem. 
+    - I would begin with the following:
+    - [Wikipedia Division Algorithms](https://en.wikipedia.org/wiki/Division_algorithm)
+        - I used this and Stack Overflow to implement division.
+        - I used a variety of bitshifts.
+
+:::
+
+# BigMul&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bigmul" role="button" aria-expanded="false" aria-controls="bigmul">Show</a>
+
+::: {#bigmul .collapse .multi-collapse}
+
+- I find the following bulletin summary the most helpful to making a bigmul implementation:
+    - I Made a pointer to a `uint32_t`
+    - `uint32_t *alias;
+    - Set it equal to the location of some array of `uint64_t`
+    - `uint32_t *alias = &array;
+    - Copied elements of the "alias" into 64 bit values.
+    - `uint64_t tmp = alias[5];`
+    - Multiplied, tracking significance.
+- Versus in class, I will note I made `uint32_t` aliases for all operands.
+- Additional, I made a uint64_t twice as large as the input arrays, to hold intermediate results.
+
+```{.C}
+uint64_t bigmul(uint64_t *in0, uint64_t *in1, uint64_t *out) {
+    size_t i, j;
+    uint64_t wrk[S*2 + 1];
+    uint32_t *al0 = (uint32_t *)in0, *al1 = (uint32_t *)in1 , *alw = (uint32_t *)wrk, *alo = (uint32_t *)out;
+```
+
+:::
+
+# BigDiv&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bigdiv" role="button" aria-expanded="false" aria-controls="bigdiv">Show</a>
+
+::: {#bigdiv .collapse .multi-collapse}
+
+*While I hope all students complete BigDiv, it is a de facto challenge problem - I found no "easy" solution, and understand it is a comparatively complex system.*
+
+- I implemented division as a recursive long division with considerable error handling.
+- I began by aligning the most significant non-zero bit, which was non-trivial but simple enough.
+- You should write the following functions:
+
+```{.C}
+uint64_t bigdiv(uint64_t *num, uint64_t *den, uint64_t *quo, uint64_t *rem) {
+    /* Your code here */
+    return 0;
+}
+
+uint64_t bigquo(uint64_t *num, uint64_t *den, uint64_t *quo) {
+    uint64_t rem[S];
+    bigdiv(num,den,quo,rem);
+    return 0;
+}
+
+uint64_t bigrem(uint64_t *num, uint64_t *den, uint64_t *rem) {
+    uint64_t quo[S];
+    bigdiv(num,den,quo,rem);
+    return 0;
+}
+```
+
+- I additionally wrote the following helper functions.
+- These are not all required, or even recommended, simply what I used.
+- They are not debugged - some errors are likely handled within my `bigdiv`
+    - I expect many off-by-one errors from the comments, which I added just for this document.
+
+```{.C}
+/* Detemine the log of a 4096bit in base 2^64 */
+uint64_t biglog(uint64_t *in) {
+    uint64_t log = S;
+    while (log && !in[--log]) { }
+    return log;
+}
+
+/* Detemine the log of a 64bit in base 2 */
+uint64_t lillog(uint64_t in) {
+    uint64_t log = 0;
+    while ((in >> log++) && log < 64) {}
+    return log;
+}
+
+/* Find the address of the most significant bit of a 4096bit integer */
+uint64_t getmsb(uint64_t *n) {
+    uint64_t b, l;
+    b = biglog(n);
+    l = lillog(n[b]);
+    return b * 64 + l;
+}
+
+/* Return 64 bits from a 4096 bit integer, begging at bit `ind` */
+uint64_t get_64(uint64_t *n, uint64_t ind) {
+    uint64_t b = ind / 64, l = ind % 64;
+    return (n[b] << (64 - l)) + (b ? (n[b - 1] >> l) : 0);
+}
+```
+
+:::
+
+# Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls="tester">Show</a>
+
+::: {#tester .collapse .multi-collapse}
+
+- I am providing the following Containerfile, which will serve as a minimal autograder
+    - I pivoted back to Alpine because Ubuntu was slow.
+
+```{.email filename="Containerfile"}
+FROM alpine 
+
+RUN apk add build-base gcc curl python3
+
+RUN curl https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/4096_t/4096_t.h -o 4096_t.h
+
+RUN curl https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/4096_t/tester.c -o tester.c
+
+RUN curl https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/4096_t/tester.py -o tester.py
+
+COPY 4096_t.c .
+```
+
+- All three of the these files were previous introduced in the [BigAdd](./bigadd.html]) lab.
+
+#### Usage
+
+- I built my container via:
+
+```email
+podman build -t tester .
+```
+
+- I tested my code via:
+
+```email
+podman run tester python3 tester.py
+```
+
+- If the above script returns the following you are done:
+    - Upload your code to your GitHub on which I am a collaborator.
+- I will review the most recent version prior to the due date.
+```email
+ADD passes.
+MUL passes.
+QUO passes.
+REM passes.
+```
+
+#### Testing
+
+-   When the container is built, it copies in `4096_t.c`
+-   Within the container, `tester.py`:
+    -   Compiles `tester.c` as C89 with appropriate `gcc` flags.
+        -   `tester.c` is dependent on both your `4096_t.c` and my `4096_t.h`
+    -   Creates two values of size less than 2048 bits.
+    -   Performs all relevant operations over these values, check the results.
+
+:::

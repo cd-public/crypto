@@ -1,0 +1,896 @@
+---
+title: struct
+theme: dark
+author: Prof. Calvin
+subtitle: "Week 0xA I"
+institute: Crypto
+format: 
+    revealjs: 
+        code-fold: true
+        theme: dark
+        mainfont: monospace
+        slide-number: true
+        show-slide-number: all
+        width: 1050
+        height: 700
+        footer: "[Home](../index.html)"
+
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render
+    code-fold: false
+---
+
+# Announcements
+
+- **Welcome** to variously CS 276/CS 540
+  - Data Structures
+  - Actual physical structures in C
+    - Albeit in programable logic
+- **Action Items**:
+  - list_t after this
+
+# Today
+
+- Motivation
+- Vocab
+    - "Define" and "Declare"
+- `struct`
+    - Structures not objects
+- `typedef`
+    - Evade Monkeytype
+
+# Motivation
+
+# Data Clump
+
+- C contains a language-mandatory data clump anti-pattern
+- This is a data clump - two values that only make sense together.
+```{.C}
+int main(int argc, char **argv)
+```
+
+# With malloc
+
+- We can fix this with `malloc`
+
+```{.C}
+int main(int argc, char **argv) {
+    void **both = (void **)malloc(sizeof(void *) * 2);
+    /* really void * is 8 bytes so can store an int */
+    both[0] = (void *)argc;
+    /* char ** and void * are the same size */
+    both[1] = (void *)argv;
+    print_argv(both);
+    return 0;
+}
+```
+
+# Can accept a "both"
+
+- Really a... P vector?
+    - [Pascal string](https://en.wikipedia.org/wiki/String_(computer_science)#Length-prefixed)
+    - "Length prefixed"
+```{.C}
+void print_argv(void **both) {
+    /* back to int */
+    int i, argc = (int)both[0];
+    /* Pretend both[2] is a vector of strings */
+    char **argv = (char **)both[1];
+    for (i = 0; i < argc; i++) {
+        printf("argv[%d] = %s\n", i, argv[i]);
+    }
+}
+```
+
+# Tada!
+
+```{.email}
+$ gcc thing.c -w # we uh, will fix warnings latter
+$ ./a.out one two three
+argv[0] = ./a.out
+argv[1] = one
+argv[2] = two
+argv[3] = three
+```
+- By the way, `4096_t` integer arrays were data structures the whole time.
+
+# Today
+
+- `struct`
+    - Structures not objects
+- `typedef`
+    - Evade Monkeytype
+
+# Stack & Heap
+
+- This passes `both` to `print_argv` by:
+```{.c}
+int main(int argc, char **argv) {
+```
+1. `argc` a 4 byte `int` and `argv` an 8 byte address living on the stack.
+
+# Stack & Heap
+
+- This passes `both` to `print_argv` by:
+```{.c}
+int main(int argc, char **argv) {
+    int i, argc = &(int *)both[0];
+
+```
+1. `argc` and `argv` on the stack.
+2. Create space for two things on heap.
+    - We use `void *`
+    - To be avoided, but we're learning that right now.
+
+# Stack & Heap
+
+- This passes `both` to `print_argv` by:
+```{.c}
+int main(int argc, char **argv) {
+    void **both = (void **)malloc(sizeof(void *) * 2);
+    both[0] = (void *)&argc;
+
+```
+1. `argc` and `argv` on the stack.
+2. Create space for two things on heap.
+3. Put `argc`, a number, in `void *` slot
+    - Use a cast, which still draws a warning.
+    - This is bad style - don't do it ever.
+
+# Stack & Heap
+
+- This passes `both` to `print_argv` by:
+```{.c}
+int main(int argc, char **argv) {
+    void **both = (void **)malloc(sizeof(void *) * 2);
+    both[0] = (void *)argc;
+    both[1] = (void *)argv;
+
+```
+1. `argc` and `argv` on the stack.
+2. Create space for both on heap.
+3. Put `argc`, a number, in `void *` slot
+4. Put `argv`, a `char *`, in a `void *` slot
+    - This is fine.
+
+# Stack & Heap
+
+```{.c}
+int main(int argc, char **argv) {
+    void **both = (void **)malloc(sizeof(void *) * 2);
+    both[0] = (void *)argc;
+    both[1] = (void *)argv;
+    print_argv(both);
+```
+1. `argc` and `argv` on the stack.
+2. Create space for both on heap.
+3. Put `argc`, a number, in `void *` slot
+4. Put `argv`, a `char *`, in a `void *` slot
+5. Stack push `both`, the array location.
+
+# Stack & Heap
+
+- Now the annoying bit
+
+```{.c}
+void print_argv(void **both) {
+```
+1. Stack pop `both`, but...
+    - *No idea* what both is.
+    - We know it's a location, but of what?
+        - Other locations?
+    - This demands a solution.
+
+# Hack
+- Now the data clump antipattern.
+
+```{.c}
+void print_argv(void **both) {
+    int i, argc = &(int *)both[0];
+```
+1. Stack pop `both`
+2. Look into `both`, find a `void *` of size 8, take the lower order 4 bits and call it an `int` named `argc`
+    - This should feel *bad*
+
+# Hack
+- Now the data clump antipattern.
+
+```{.c}
+void print_argv(void **both) {
+    int i, argc = (int *)both[0];
+    char **argv = (char **)both[1];
+```
+1. Stack pop `both`
+2. `both[0] -> print_argv.argc:int`
+3. `both[1] -> print_argv.argv:char **`
+
+# Alternative
+
+- Why can't we just tell `gcc` what that `void **` really is?
+- Instead of renaming everything into `void *` and back?
+- And wasting those 4 bits and drawing warnings and and and
+
+# We can
+
+```{.C}
+struct argv_struct {
+        int argc;
+        char **argv;
+};
+```
+
+1. Semi-colon punctuatated, 
+2. Named 
+3. Code block
+4. Based on the `struct` keyword, which 
+5. Contains *only* variable declarations and
+6. No executable code.
+
+
+# Today
+
+- &check; Motivation
+- Vocab
+    - "Define" and "Declare"
+- `struct`
+    - Structures not objects
+- `typedef`
+    - Evade Monkeytype
+
+# A word
+
+*   Introduce term "**declare**"
+*   In e.g. `4096_t.h` we have *declared* functions.
+*   In this case we specify
+    *   A name
+    *   A function type (arguments and return)
+    *   No executable code.
+*   We can declare variables, including pointers and even functions.
+
+# A word
+
+*   Introduce term "**define**"
+*   Values defined via "single equals assignments"
+*   Functions and loops via parenthesize code blocks.
+*   In this case we specify:
+    *   A series of actions, possibly including 
+    *   Other declarations and 
+    *   Definitions.
+
+# declare & define
+
+- Declare allocates some bits (on stack) 
+```{.c}
+void some_func();
+int i; 
+char *str;
+```
+- Define fixes the value of those bits
+```{.c}
+void some_func() {
+    ;
+}
+i = 0; 
+str = "defined";
+```
+
+
+# Today
+
+- &check; Motivation
+- &check; Vocab
+    - "Define" and "Declare"
+- `struct`
+    - Structures not objects
+- `typedef`
+    - Evade Monkeytype
+
+# `struct`
+
+# Classes
+
+*   In lesser (object oriented) languages, class implement data structures.
+    *   Classes may lack both data and structure, 
+    *   They are, perhaps, "computation structures"?
+```{.py}
+class MultiAdd:
+    def do(self, ns):
+        if ns:
+            n = ns[0]
+            [n := n + i for i in ns[1:]]
+        return n
+```
+    *   No structure. No data.
+
+# Classes
+
+- Classes (allegedly) have their uses, but are not perhaps the most natural to implement, say, an ordered pair.
+```{.py}
+class OrderedPair: 
+    def __init__(self, x, y): 
+        self.x = x 
+        self.y = y
+        
+    def __str__(self): 
+        return f"({self.x}, {self.y})" 
+        
+    def __repr__(self): 
+        return f"OrderedPair({self.x}, {self.y})"
+```
+
+# Structs
+
+*   In C, the "struct": 
+```{.c}
+struct ordered_pair { 
+    int x, y; 
+};
+```
+
+# In practice
+
+-   While I *think* (it was was hard to find) it is up to the compiler, usually these just put all the variables in order.
+-   Vs. our `malloc` motivating example, structs, like other vars, will be stack allocated.
+-   As with our beloved object oriented languages, we use dot notation (`structs_variable_name.data_field_name`)
+
+# Example
+
+```{.c}
+struct argv_struct {
+    int argc;
+    char **argv;
+};
+
+void print_argv(struct argv_struct args) {
+    printf("location of arg(s,c,v): %p,%p,%p\n", &args, &(args.argc), &(args.argv));
+    for (int i = 0; i < args.argc; i++) {
+        printf("argv[%d] = %s\n", i, args.argv[i]);
+    }
+}
+
+int main(int argc, char **argv) {
+    struct argv_struct args;
+    printf("location of arg(s,c,v): %p,%p,%p\n", &args, &(args.argc), &(args.argv));
+    args.argc = argc;
+    args.argv = argv;
+    print_argv(args);
+    return 0;
+}
+```
+
+# Examine
+
+```{.email}
+$ ./a.out one two three
+location of arg(s,c,v): 0x7ffe800297b0,0x7ffe800297b0,0x7ffe800297b8
+location of arg(s,c,v): 0x7ffe80029770,0x7ffe80029770,0x7ffe80029778
+argv[0] = ./a.out
+argv[1] = one
+argv[2] = two
+argv[3] = three
+```
+- The struct and the first entry in the struct have the same location
+    - Like an array
+- The first entry is of size 4 but the next entry is 8 bits latter
+
+# Examine
+
+```{.email}
+$ ./a.out one two three
+location of arg(s,c,v): 0x7ffe800297b0,0x7ffe800297b0,0x7ffe800297b8
+location of arg(s,c,v): 0x7ffe80029770,0x7ffe80029770,0x7ffe80029778
+argv[0] = ./a.out
+argv[1] = one
+argv[2] = two
+argv[3] = three
+```
+- Distance is preserved even when there's two structs:
+    - One in `main`, one in `print_args`
+    - Passed on stack.
+
+# Takeaways
+
+- Structs can be though of as arrays with names and types.
+    - This is "record" theoretical type
+    - Increasingly implemented with `.json` instead of types, which is a whole thing
+- Structs are defined at compile time, and versus e.g. Python objects, cannot be altered by running code.
+
+
+# Today
+
+- &check; Motivation
+- &check; Vocab
+    - "Define" and "Declare"
+- &check; `struct`
+    - Structures not objects
+- `typedef`
+    - Evade Monkeytype
+
+# `typedef`
+
+::::{columns}
+
+:::{.column width=50%}
+
+- This is annoying:
+
+```{.c}
+struct argv_struct {
+    int argc;
+    char **argv;
+};
+
+void print_argv(struct argv_struct args) {
+```
+
+:::
+:::{.column width=50%}
+
+- Remove antipattern.
+```{.c}
+struct argv_struct {
+    int argc;
+    char **argv;
+};
+
+typedef struct argv_struct argv_s;
+
+void print_argv(argv_s args) {
+```
+
+:::
+::::
+
+# bools
+
+
+```{.c}
+#define True ((bool)1)
+#define Fals ((bool)0)
+
+typedef int bool;
+```
+
+- We can refer to `bool` before defining it because
+    - The preprocessor will scan for `True` and `Fals`
+    - Do a simple replace operation
+    - These operations will be below the header
+    - So no code ever runs with undefined `bool`
+
+
+# Today
+
+- &check; Motivation
+- &check; Vocab
+- &check; `struct`
+- &check; `typedef`
+- Header techniques
+    - If time
+
+# Private Fields
+
+::::{columns}
+
+:::{.column width=50%}
+
+
+*   If you ever took and/or taught CS 151  or a Java class you may have getter/setter fatigue.
+*   LLMs write this stuff so I don't:
+
+:::
+:::{.column width=50%}
+
+
+```{.py}
+class Pair: 
+    def __init__(self, x, y): 
+        self._x = x 
+        self._y = y 
+    
+    def get_x(self): 
+        return self._x 
+    
+    def get_y(self): 
+        return self._y 
+        
+    def set_x(self, x): 
+        self._x = x 
+
+    def set_y(self, y): 
+        self._y = y
+```
+
+:::
+
+::::
+
+# Java Better Here
+
+- #1 Java appreciator assistant prof. of computer science calvin "prof. calvin" deutschbein
+
+::::{columns}
+
+:::{.column width=50%}
+
+
+```{.java}
+public class PublicPair {
+    public int x;
+    public int y;
+
+    public PublicPair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+}
+```
+
+:::
+:::{.column width=50%}
+
+
+```{.java}
+public class PrivatePair {
+    private int x;
+    private int y;
+
+    public PrivatePair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+}
+```
+
+:::
+
+::::
+
+
+
+# That said
+
+- We love encapsulation
+- We don't for example, want to expose `4096_t` internal integer fields.
+    - I wrote code assuming endianness, which will be hard to maintain.
+- So we need private fields somehow.
+- We use header files.
+
+# 3 parts
+
+- "client" is whoever uses the structure implemented by the .c/.h files
+- Perhaps a la Python modules or standard libraries.
+
+::::{columns}
+
+:::{.column width=33%}
+
+
+```{.c filename="client.c"}
+#include "pair.h" 
+
+int main() { 
+    struct pair p;
+    p = newp(); 
+    p.x = 1;
+    p.y = p.x * 2;
+    return 0;
+}
+```
+
+:::
+
+:::{.column width=33%}
+
+
+```{.c filename="pair.h"}
+#include <stdlib.h>
+
+struct pair { 
+    int x, y; 
+}; 
+    
+struct pair newp();
+```
+
+:::
+
+:::{.column width=33%}
+
+```{.c filename="pair.h"}
+#include "pair.h" 
+
+struct pair newp() { 
+    struct pair p; 
+    p.x = 0; 
+    p.y = 0; 
+    return p; 
+}
+```
+
+:::
+
+::::
+
+# 3 parts
+
+- Probably use a Makefile here
+
+```{.mk filename="Makefile"}
+CC = gcc # or clang
+CFLAGS = -std=c89 -Wall -Wextra -Werror -Wpedantic -O2
+
+all: client.c pair.c pair.h
+    $(CC) client.c pair.c $(CFLAGS)
+```
+
+# 3 parts
+
+- Make the internals of pair private.
+
+::::{columns}
+
+:::{.column width=33%}
+
+
+```{.c filename="client.c"}
+#include "pair.h" 
+int main() { 
+    struct pair p; 
+    p = newp(); 
+    p.x = 1;
+}
+```
+
+:::
+
+:::{.column width=33%}
+
+
+```{.c filename="pair.h"}
+#include <stdlib.h>
+
+struct pair *newp();
+```
+
+:::
+
+:::{.column width=33%}
+
+```{.c filename="pair.h"}
+
+#include "pair.h" 
+
+struct pair { 
+    int x, y; 
+}; 
+
+struct pair newp() { 
+    struct pair p; 
+    p.x = 0; 
+    p.y = 0; 
+    return p; 
+}
+```
+
+:::
+
+::::
+
+# Not Allowed
+
+- `gcc` needs size information.
+
+```{.email}
+$ make
+gcc  client.c pair.c -std=c89 -Wall -Wextra -Werror -Wpedantic -O2
+client.c: In function ‘main’:
+client.c:4:17: error: storage size of ‘p’ isn’t known
+    4 |     struct pair p;
+      |                 ^
+client.c:5:9: error: invalid use of undefined type ‘struct pair’
+    5 |     p = newp();
+      |         ^~~~
+client.c:4:17: error: unused variable ‘p’ [-Werror=unused-variable]
+    4 |     struct pair p;
+      |                 ^
+cc1: all warnings being treated as errors
+make: *** [Makefile:5: all] Error 1
+```
+
+# Use a Pointer
+
+- `malloc` and `free` but any size goes.
+
+::::{columns}
+
+:::{.column width=33%}
+
+
+```{.c filename="client.c"}
+#include "pair.h" 
+
+int main() { 
+    pair_ptr p;
+    p = newp(); 
+    p->x = 1;
+    p->y = p->x * 2;
+    free(p);
+    return 0;
+}
+```
+
+:::
+
+:::{.column width=33%}
+
+
+```{.c filename="pair.h"}
+#include <stdlib.h>
+
+typedef struct pair *pair_ptr;
+
+pair_ptr newp();
+```
+
+:::
+
+:::{.column width=33%}
+
+```{.c filename="pair.h"}
+#include "pair.h" 
+
+struct pair { 
+    int x, y; 
+}; 
+    
+pair_ptr newp() {
+    pair_ptr p = malloc(sizeof(struct pair));
+    p->x = 0; 
+    p->y = 0; 
+    return p; 
+}
+```
+
+:::
+
+::::
+
+# Not Allowed
+
+- Ah! The problem we want!
+    - Can't access internal fields.
+    - Just get/set
+
+```{.email}
+$ make
+gcc  client.c pair.c -std=c89 -Wall -Wextra -Werror -Wpedantic -O2
+client.c: In function ‘main’:
+client.c:6:6: error: invalid use of undefined type ‘struct pair’
+    6 |     p->x = 1;
+      |      ^~
+client.c:7:6: error: invalid use of undefined type ‘struct pair’
+    7 |     p->y = p->x * 2;
+      |      ^~
+client.c:7:13: error: invalid use of undefined type ‘struct pair’
+    7 |     p->y = p->x * 2;
+      |             ^~
+make: *** [Makefile:5: all] Error 1
+```
+
+# Set
+
+::::{columns}
+
+:::{.column width=33%}
+
+
+```{.c filename="client.c"}
+#include "pair.h" 
+int main() { 
+    int x = 1;
+    pair_ptr p;
+    p = newp(); 
+    setp(p, x, x*2);
+    free(p);
+    return 0;
+}
+```
+
+:::
+
+:::{.column width=33%}
+
+
+```{.c filename="pair.h"}
+#include <stdlib.h>
+
+typedef struct pair *pair_ptr;
+pair_ptr newp();
+void setp(pair_ptr p, int x, int y);
+```
+
+:::
+
+:::{.column width=33%}
+
+```{.c filename="pair.h"}
+#include "pair.h" 
+struct pair { 
+    int x, y; 
+}; 
+    
+pair_ptr newp() { 
+    pair_ptr p = malloc(sizeof(struct pair));
+    p->x = 0; 
+    p->y = 0; 
+    return p; 
+}
+
+void setp(pair_ptr p, int x, int y) { 
+    p->x = x; 
+    p->y = y; 
+}
+```
+
+:::
+
+::::
+
+# Recall
+
+- We already passed `4096_t`'s as pointers.
+
+```{.c filename="4096_t.h"}
+uint64_t bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum); 
+uint64_t bigsub(uint64_t *min, uint64_t *sub, uint64_t *dif); 
+uint64_t bigmul(uint64_t *in0, uint64_t *in1, uint64_t *out); 
+uint64_t bigdiv(uint64_t *num, uint64_t *den, uint64_t *quo, uint64_t *rem); 
+uint64_t bigquo(uint64_t *num, uint64_t *den, uint64_t *quo);
+uint64_t bigrem(uint64_t *num, uint64_t *den, uint64_t *rem);
+```
+
+- By the way you now know enough to make mixed precision integers.
+    - Use `free` in your .c files and `valgrind` on your executables.
+
+# Today
+
+- &check; Motivation
+- &check; Vocab
+- &check; `struct`
+- &check; `typedef`
+- &check; Headers
+- If you are here, recursion livecode.

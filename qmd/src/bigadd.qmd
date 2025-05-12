@@ -1,0 +1,547 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: BigAdd
+subtitle: "Lab 0x5"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Learn modular and mixed precision arithmetic.
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- stdint   | - headers  |
+|- modulo   |   |
+|- rings   |   |
+
+- There are no required exercises of this lab.
+- It is supplementary material to the 4096_t homework.
+  - 4096_t requires add, sub, mul, div
+  - This lab provides sub
+  - This lab introduces add
+
+:::
+
+
+# Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls="podman">Show</a>
+
+::: {#podman .collapse .multi-collapse}
+
+# Setup
+
+- For this lab, I used the following Containerfile
+  - Same as the printb lab
+
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc vim python3 -y
+```
+- I built via the following:
+```email
+podman build -t printb .
+```
+- I conducted the full lab within a single container's `vim` instance.
+```email
+podman run -it printb vim printb.c
+```
+
+- I conducted all work within this `vim` window and it's `:term`
+
+:::
+
+
+# Header&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#header" role="button" aria-expanded="false" aria-controls = "header">Show</a>
+
+::: {#header .collapse .multi-collapse}
+
+## The .h file
+
+- There are two main types of C files.
+  - The .c files we have been working with.
+    - These tend to contain executable code.
+    - They contain a `main` function.
+    - Larger projects may have multiple .c files for which only one has a `main`
+  - The .h files we have incorporated via `#include`
+    - We can (and should) write these ourselves.
+    - This week we will write a library for a future task.
+    - With the Macros assignment, we copy pasted code.
+    - The code this week is far too large.
+
+## 4096_t.h
+
+- Create two new files.
+  - 4096_t.c, and
+  - 4096_t.h
+- We will work within both.
+  - You may, perhaps, which to keep both open in separate vim windows, or
+  - Implement completely in 4096_t.c then split latter.
+- We will want to be able to `#include` this work into rsainc.c next week.
+
+### Double Inclusion
+
+- By convention, there is a `double inclusion` guard
+  - Don't want to include one function with the same name twice.
+  - So we define a variable in the preprocess, like a constant.
+  - We check to see if it's defined.
+  - We write all header code within the `#ifndef`
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.h"}
+/* 4096_t.h */
+
+#ifndef _4096_T_H
+#define _4096_T_H
+
+/* We will put stuff here soon */
+
+#endif /* _4096_T_H */
+```
+
+:::
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.c"}
+/* 4096_t.c */
+
+/*
+gcc 4096_t.c --std=c89 -Wall -Wextra -Werror -Wpedantic
+*/
+
+int main() {
+  /* Perhaps test some big operations */
+  return 0;
+}
+
+```
+
+:::
+
+::::
+
+### Other headers
+
+- By convention, includes are made within a .h file
+  - I will use, say, `string` for `memcpy` and `stdint` for `uint64_t`
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.h"}
+/* 4096_t.h */
+
+#ifndef _4096_T_H
+#define _4096_T_H
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#endif /* _4096_T_H */
+```
+
+:::
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.c"}
+/* 4096_t.c */
+
+/*
+gcc 4096_t.c --std=c89 -Wall -Wextra -Werror -Wpedantic
+*/
+
+int main() {
+  /* Perhaps test some big operations */
+  return 0;
+}
+
+```
+
+:::
+
+::::
+
+### Constants
+
+- I intended this library specifically for use with 4096 bit values.
+- Specify that in the header.
+  - By convention, constants are defined in the .h file.
+  - Constants in the header are visible when the header is included.
+  - We can keep secret (like private fields in Python) values just within the .c file, if needed.
+  - That is pretty out-of-scope.
+- At this time, I also add the `#include` to the .c file.
+  - Note I use double quotes `"` rather than the `<>`
+  - This is convention for user-defined headers.
+- We could argue using `uint64_t` is an implementation detail not needed for broad distribution.
+  - However, this detail will be exposed by our function declarations latter.
+  - Users of `4096_t` will need to be able to use `S` to determine how large to make arrays.
+  - We'll come back to this!
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.h"}
+/* 4096_t.h */
+
+#ifndef _4096_T_H
+#define _4096_T_H
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define BYTES 4096 / 8 
+#define S BYTES / sizeof(uint64_t)
+
+#endif /* _4096_T_H */
+```
+
+:::
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.c"}
+/* 4096_t.c */
+
+/*
+gcc 4096_t.c --std=c89 -Wall -Wextra -Werror -Wpedantic
+*/
+
+#include "4096_t.h"
+
+int main() {
+  /* Perhaps test some big operations */
+  return 0;
+}
+
+```
+
+:::
+
+::::
+
+### Functions
+
+- All functions used within another file are *declared* (but not defined) within the .h file.
+  - They are *defined* within the .c file.
+  - Separate declaration/definition is also necessary in C for mutually recursive functions.
+  - In C, unlike Python, a function may not refer to a function latter in the file.
+  - However, it may refer to a declaration, much akin to a variable, that is latter defined.
+  - Declarations are like definitions but instead of a code block are semicolon terminated.
+- We will use `bigsub` which I am providing for this assignment.
+  - I make no claims my `bigsub` is good or anything.
+    - It does not handle negative results.
+    - I don't know why it'd need to do that...
+
+::::{.columns}
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.h"}
+/* 4096_t.h */
+
+#ifndef _4096_T_H
+#define _4096_T_H
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define BYTES 4096 / 8 
+#define S BYTES / sizeof(uint64_t)
+
+/* Given a
+ * minuend    uint64_t min[S]
+ * subtrahend uint64_t sub[S]
+ * difference uint64_t dif[S]
+ * 1. Populate dif with the difference between min and sub
+ * 2. Return the "carry bit" capturing whether an overflow occured.
+  */
+uint64_t bigsub(uint64_t *min, uint64_t *sub, uint64_t *dif); 
+
+#endif /* _4096_T_H */
+```
+
+:::
+
+:::{.column width="50%"}
+
+```{.C filename="4096_t.c"}
+/* 4096_t.c */
+
+/*
+gcc 4096_t.c --std=c89 -Wall -Wextra -Werror -Wpedantic
+*/
+
+#include "4096_t.h"
+
+uint64_t bigsub(uint64_t *min, uint64_t *sub, uint64_t *dif) {
+      size_t i;
+      uint64_t carry = 0, tmp;
+      for (i = 0; i < S; i++) {
+          tmp = min[i] - sub[i] - carry;
+          carry = min[i] < sub[i];
+          dif[i] = tmp;
+    }
+    return carry;
+}
+
+int main() {
+  /* Perhaps test some big operations */
+  return 0;
+}
+```
+
+:::
+
+::::
+
+### Testing
+
+- It is nontrival to test this code.
+  - How would we input a 4096_t?
+- Write some supporting testing and printing operations.
+- I provide a (very) minimal example.
+
+```{.C filename="4096_t.c"}
+int main() {
+    uint64_t min[S], sub[S], dif[S];
+    size_t i;
+    memset(min, 0, BYTES);
+    memset(sub, 0, BYTES);
+    for (i = 0; i < S; i++) {
+        min[i] = i * 3;
+        sub[i] = i * 2;
+    }
+    bigsub(min, sub, dif);
+    for (i = 0; i < S; i++) {
+        printf("dif[%02lx] = %02lx\n", i, dif[i]);
+    }
+    return 0;
+}
+```
+
+- We note this testing can only work if `S`, `BYTES`, and `memcpy` are successfully included!
+
+### 4096_t.h 
+
+- The 4096_t homework autograder will require code compliant with the following header file:
+
+```{.C filename="4096_t.h"}
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define S (size_t)(4096 / 64)
+#define BYTES S * sizeof(uint64_t)
+
+uint64_t bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum); 
+uint64_t bigsub(uint64_t *min, uint64_t *sub, uint64_t *dif); 
+uint64_t bigmul(uint64_t *in0, uint64_t *in1, uint64_t *out); 
+uint64_t bigquo(uint64_t *num, uint64_t *den, uint64_t *quo);
+uint64_t bigrem(uint64_t *num, uint64_t *den, uint64_t *rem);
+```
+
+- You may use a different header file while you are working on your code, but:
+  - For the homework, will need to implement these functions.
+  - For SHA-256, will need to implement these functions.
+
+:::
+
+
+# Python&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#python" role="button" aria-expanded="false" aria-controls = "python">Show</a>
+
+::: {#python .collapse .multi-collapse}
+
+## 2 &rArr; 3
+
+- Python 2 had maximum integer sizes, not unlike C
+- Python 3 lacks such limitations.
+  - [Read more](https://www.datacamp.com/tutorial/everything-you-need-to-know-about-pythons-maximum-integer-value)
+- While unsuitable for cryptographic applications for limitations including performance, it is suitable for testing.
+- It is a simple enough matter to translate the following into Python:
+
+```{.C filename="4096_t.c"}
+int main() {
+    uint64_t min[S], sub[S], dif[S];
+    size_t i;
+    memset(min, 0, BYTES);
+    memset(sub, 0, BYTES);
+    for (i = 0; i < S; i++) {
+        min[i] = i * 3;
+        sub[i] = i * 2;
+    }
+    bigsub(min, sub, dif);
+    for (i = 0; i < S; i++) {
+        printf("dif[%02lx] = %02lx\n", i, dif[i]);
+    }
+    return 0;
+}
+```
+
+- Simply:
+  - Create two accumulating variables.
+  - Add in values multiplied by powers of two.
+  - Perform the built-in Python subtract
+  - Print the output as a hex value, perhaps split onto multiple lines.
+
+```{.python}
+S = 64
+
+min, sub = 0, 0
+# Factor this, obviously.
+[min := min + 3 * n * (2 ** (n * 64)) for n in range(S)]
+[sub := sub + 2 * n * (2 ** (n * 64)) for n in range(S)]
+print(hex(min-sub))
+```
+
+## Recommendation
+
+- It is recommended but not required to develop an interface between Python and your `4096_t`.
+  - I recommend passing numerical values as hexadecimal strings.
+  - Generate values in Python, perform operations, and test results vs. 4096_t
+- I found it difficult to debug `bigadd` and `bigsub` without constructing an interface.
+- Here is an example of a function I used in testing:
+
+```{.C}
+/* print the big value as a string */
+void seebig(uint64_t *a) {
+    size_t i;
+    for (i = S-1; i < S ; i--) {
+        fprintf(stderr, "%016lx ", a[i]); 
+        if ((i % 8 == 0 && i)) {
+            fprintf(stderr, "\n");
+        }       
+    }
+    fprintf(stderr, "\n\n");
+    return;
+}
+```
+
+## Autograder
+
+- The interface implemented by the autograder may be informative here.
+  - It uses a Python script.
+  - It uses a dedicated .c file with a `main` function.
+  - It uses `gcc 4096_t.c tester.c` to compile the 4096_t code for use in the tester executable.
+  - It uses Python `subprocess` to examine the results.
+- I was unable to achieve a bugfree multiply absent this interface, but was able to progress rapidly once I developed it.
+  - [tester.py](https://github.com/cd-c89/crypto/blob/main/4096_t/tester.py)
+  - [tester.c](https://github.com/cd-c89/crypto/blob/main/4096_t/tester.c)
+
+
+:::
+
+# BigAdd&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#bigadd" role="button" aria-expanded="false" aria-controls = "bigadd">Show</a>
+
+::: {#bigadd .collapse .multi-collapse}
+
+## Big Addition
+
+- Using what you know so far, write `bigadd`.
+  - *Declare* `bigadd` in the header file.
+  - *Define* `bigadd` in the .c file.
+  - Test `bigadd` to ensure, mostly, you are handling carries correctly.
+
+```{.C filename="4096_t.h"}
+/* 4096_t.h */
+
+#ifndef _4096_T_H
+#define _4096_T_H
+
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define BYTES 4096 / 8 
+#define S BYTES / sizeof(uint64_t)
+
+/* Given a
+ * minuend    uint64_t min[S]
+ * subtrahend uint64_t sub[S]
+ * difference uint64_t dif[S]
+ * 1. Populate dif with the difference between min and sub
+ * 2. Return the "carry bit" capturing whether an overflow occured.
+  */
+uint64_t bigsub(uint64_t *min, uint64_t *sub, uint64_t *dif); 
+
+/* Given a
+ * addend_0     uint64_t in0[S]
+ * addend_1     uint64_t in1[S]
+ * sum          uint64_t sum[S]
+ * 1. Populate sum with the sum over in0 and in1
+ * 2. Return the "carry bit" capturing whether an overflow occured.
+  */
+uint64_t bigadd(uint64_t *in0, uint64_t *in1, uint64_t *sum); 
+
+#endif /* _4096_T_H */
+```
+
+- If you want different names for the inputs, use "augend" and "addend".
+- Addition is generally regarded associative (order doesn't matter), but 
+- There are times in computing that operand order matters.
+  - In x86 assembly, `add` accepts two operands, storing the result in the first (augend) operand's location.
+- It would be suitable to write all bigops in this format, if that is your perference!
+  - Just different.
+
+## Testing
+
+- You should minimally be able to do the following, over arbitrary data.
+  - Check the carries just in case, of course.
+  - Or use an e.g. `biggte` to determine which value is greater than or equal before subtracting.
+
+
+```{.C filename="4096_t.c"}
+int main() {
+    uint64_t a[S], b[S], c[S], d[S];
+    size_t i;
+    memset(a, 0, BYTES);
+    memset(b, 0, BYTES);
+    for (i = 0; i < S; i++) {
+        min[i] = i * 3;
+        sub[i] = i * 2;
+    }
+    bigsub(a, b, c);
+    bigadd(b, c, d);
+    /* You may have written `bigeqs` or */
+    for (i = 0; i < S; i++) {
+        if (a[i] != d[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+```
+
+:::

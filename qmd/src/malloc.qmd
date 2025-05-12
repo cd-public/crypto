@@ -1,0 +1,1274 @@
+---
+title: malloc
+theme: dark
+author: Prof. Calvin
+subtitle: "Week 0x9 II"
+institute: Crypto
+format: 
+    revealjs: 
+        code-fold: true
+        theme: dark
+        mainfont: monospace
+        slide-number: true
+        show-slide-number: all
+        width: 1050
+        height: 700
+        footer: "[Home](../index.html)"
+
+execute:
+    echo: true
+    cache: true
+    freeze: true  # never re-render during project render
+    code-fold: false
+---
+
+# Announcements
+
+- **Welcome** to variously CS 276/CS 540
+  - Passes of storing structured data
+  - Antipatterns no more
+- **Action Items**:
+  - BigRSA due this week.
+  - list_t *possible* after this
+
+# Data Clump
+
+- C contains a language-mandatory data clump anti-pattern
+- This is a data clump - two values that only make sense together.
+```{.C}
+int main(int argc, char **argv)
+```
+
+# Today
+
+- `malloc`
+    - Dynamically sized C
+- `free`
+    - Unmalloc
+
+# Review
+
+*   Python has no array (NumPy does)
+    
+    *   Historically lists $\neq$ arrays 
+    *   Python lists are closer to being array-lists - an implementation of a list *abstract data type* using an array *data structure*
+
+# Arrays are:
+
+- Fixed length (replace only, no add/remove)
+```{.C}
+int arr[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } ;
+arr = { 1, 2, 3 } ; // compile error 
+arr[15] = -1 ; // runtime error - "stack smashing"`
+```
+- Typed, mostly (still just bits, but of certain size)
+```{.C}
+char *str = "hihi" ; 
+arr[3] = str ; // compile warning - integer from pointer w/o cast
+```
+
+# Arrays are:
+
+- Just "bits" storing a memory address - no known type or size.
+```{.C}
+arr[sizeof(arr) -1] = -1 ; // *can* be a segmentation fault
+```
+- Arrays exist at fixed location in physical memory. 
+```{.C}
+int *old = arr, *new ; 
+new = arr ; 
+old == new ; // this is "true"
+```
+
+# Review
+
+*   We use char \* in a function argument to account for arrays of any size.
+    *   What does this mean \*physically\* within the physical computing device?
+*   We use "char arr[$n$]" in the main function so we know we have enough space.
+    *   What does this mean \*physically\* within the physical computing device?
+
+# Takeaways
+
+|Pointers|Arrays|
+|-|-|
+| Fixed size, like `8` | Any specified size |
+| Change with `=` | `=` triggers error |
+| Names some bits | Provides/names bits |
+| Can describe any array | One specific array |
+
+
+# `malloc`
+
+```{.email}
+malloc(3)                Library Functions Manual               malloc(3)
+
+NAME         top
+
+       malloc, free, calloc, realloc, reallocarray - allocate and free
+       dynamic memory
+
+LIBRARY         top
+
+       Standard C library (libc, -lc)
+
+SYNOPSIS         top
+
+       #include <stdlib.h>
+
+       void *malloc(size_t size);
+```
+
+# Malloc
+
+```{.c}
+#include <stdlib.h>
+void *malloc(size_t size);
+```
+
+- `void *` is new, that is how we refer to something but we don't know to what.
+    - Could be a string, could be a vector of strings (argv) could the message schedule array in SHA.
+
+# Malloc
+
+-   returns a `void *`
+    - This gives the location of some bits
+    - Those bits can be used however
+    - The argument `size` is the number of bytes
+```{.c}
+char *ptr = (char *)malloc(sizeof(char) * 6) ;
+```
+-   Once we have the `void *`, we can use a *cast* to change it to some other star.
+    -  Voilà, something a lot like an array, but of software defined size
+        - That is, can perform a calculation how much space you need, then dget it.
+        - "Here is some memory" vs "This memory contains characters".
+
+# Malloc
+
+- Treat this memory region the same way we treat a character array. 
+    - Handwave the null terminator for now.
+```{.c}
+char *str = "hello"; 
+char buf[6]; 
+char *ptr = (char *)malloc(sizeof(char) * 6) ;
+size_t i; 
+for (i = 0; src[i]; i++) { 
+    buf[i] = str[i]; 
+    ptr[i] = str[i]; 
+} 
+printf("%s %s %s\n", str, buf, ptr) ; // "hello hello hello"
+```
+
+# `size_t`
+
+*   Imagine mallocing all of memory in a single call.
+    *   `malloc(0xFF...)` will either crash or return a void \* of zero
+*   Imagine mallocing all of memory one byte at a time
+    *   This would return 0xFF... `void *`, the largest of which would be 0xFF...
+*   `void *` and `size_t` are the same size.
+
+# `void *`
+
+```{.c}
+#include <stdlib.h> /* for size_t */
+#include <assert.h> // for assert
+
+int main() {
+    assert(sizeof(void *) == sizeof(size_t)) ; /* pass */
+    assert(sizeof(char) == 1) ;                /* pass */
+    assert(1 == 0) ;                           /* fail */
+    return 0;
+}
+```
+
+- Read more on assert [here](https://web.archive.org/web/20090707025230/http://www.ddj.com/blog/cppblog/archives/2007/07/assertions_vers.html) (or don't).
+
+# From hence
+
+*   But where does the memory come from?
+*   So far, "the stack" - akin to the data structure of the same name
+    * Operating Systems concept
+*   For malloc, "the heap" - again akin
+*   Stack and heap exist in different physical regions of system memory
+    *   So stack memory is near stack memory but distant from heap memory. 
+
+# Stack & Heap
+
+```{.c}
+char arr0[256], arr1[256], arr2[256]; 
+char *ptr0 = malloc(256), *ptr1 = malloc(256), *ptr2 = malloc(256); 
+printf("%p\n%p\n%p\n%p\n%p\n%p\n", arr0, arr1, arr2, ptr0, ptr1, ptr2) ;
+```
+*   How far are all these things apart from each other: 
+```{.email}
+0x7ffdcfaae0c0
+0x7ffdcfaae1c0
+0x7ffdcfaae2c0 
+0x556f982022a0 
+0x556f982023b0 
+0x556f982024c0
+```
+*   Hmmm they all end in zero?
+
+# Stack & Heap
+
+*   In C, bits are in the stack, where we declare variables, or heap, another special magic place.
+*   Stack memory in explicit sizes fixed when code is compiled.
+*   We have only used stack memory so far so we have to fix memory size when we write the code.
+
+# Stack & Heap
+
+*   In C, bits are in the stack, where we declare variables, or heap, another special magic place.
+*   A scratchpad  space that GCC configures programs to request and the OS allows use of (up to some limit).
+*   The "magic" is implementation details of the compiler and the operating system.
+*   The only way we will learn to interface with the heap is malloc.
+
+# Stack & Heap
+
+|Stack|Heap|
+|-|-|
+|Fixed Size|Arbitrary Size|
+|Holds Function Variables|Returned by a function (`malloc`)|
+|Defined when compiling by GCC |Defined when running by OS using magic|
+|Higher/larger (~`0xFF...`)|Lower/smaller (~`0x00...`)|
+
+
+# [Credit](https://courses.engr.illinois.edu/cs225/fa2022/resources/stack-heap/)
+    
+|Jenny Chen|Ruohao Guo|
+|-|-|
+|she/her|she/her|
+|Software Engineer|Graduate Research Assistant|
+|Apple|Georgia Institute of Technology|
+|B.S. Computer Science, 2021, UIUC|B.S. Computer Science, 2021, UIUC|
+
+
+# Stack
+
+# Memory layout
+
+
+::::{columns}
+
+:::{.column width=50%}
+  
+- stack: function variables, functions, globals
+- heap: malloced variables
+- Other stuff for an OS/compilers class
+
+:::
+
+:::{.column width=50%}
+
+![](https://martinlwx.github.io/img/program_layout_in_memory.png)
+
+:::
+
+::::
+
+# Stack
+
+::::{columns}
+
+:::{.column width=50%}
+
+*   Stack reserved when variables declared
+    * Why C89 requires declares before code
+    * Why declares require a type with a size.
+*   Regarded as "growing downwards" from large address to small.
+
+:::
+
+:::{.column width=50%}
+
+![](https://martinlwx.github.io/img/program_layout_in_memory.png)
+
+:::
+
+::::
+
+# Example
+
+
+::::{columns}
+
+:::{.column width=50%}
+
+1.  Allocate `sizeof(int)` bytes for variable `a` for function `main`
+    * A is uninitialized, so the value is undefined.
+    * Compilers may initialize to a default value
+    * Assume they don't.
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_1.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Example
+
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Allocate `a` for `main`
+2.  Allocate `sizeof(int)` bytes for variable `b` for function `main`
+    *   Store the numerical value `(int)-3` in these bytes.
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_2.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+
+# Example
+
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Allocate `a` for `main`
+2.  Allocate `b` for `main`
+3.  Allocate `sizeof(int)` bytes for variable `c` for `main`
+    *   Store the numerical value `(int)12345`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_3.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Function Call
+
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Allocate `a` for `main`
+2.  Allocate `b` for `main`
+3.  Allocate `c` for `main`
+4.  Allocate `sizeof(int)` bytes for variable `a` for hello
+    *   Store `(int)100`
+    * Perhaps `hello.a` vs `main.a`
+
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_4.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+
+
+# Function Call
+
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Allocate `a` for `main`
+2.  Allocate `b` for `main`
+3.  Allocate 'c' for main'`c` for `main`
+    *   Store the numerical value `(int)12345`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_3.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# What of `return`
+
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1. Deallocate the function's stack.
+2. "Stack push"  the return value.
+3. `a` already at the top (bottom) of the stack.
+    * Still `100`, no longer `hello.a`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_4.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# What of `return`
+
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1. The calling function does a "stack pop"
+2. The "stack pop" is stored as `d`
+3. The `100` never moves.
+    * That's why we use a stack.
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_5.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Return
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Push `main.a`
+2.  Push `main.b=3`
+3.  Push `main.c=12345`
+4.  Call `hello`
+    1. Push `hello.a=100`
+    2. `return`
+6.  Pop `a`'s value into into `main.d` 
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_6.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+
+# Stack Discussion?
+
+::::{columns}
+
+:::{.column width=50%} 
+
+
+![](https://upload.wikimedia.org/wikipedia/commons/b/b4/Lifo_stack.png)
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/stack_demo_6.png)
+
+:::
+
+::::
+
+# Stack
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Three operations.
+    *   Stack-allocate `sizeof(int *)` bytes for `main.p`.
+    *   Heap-allocate `sizeof(int)` bytes
+    *   Store the address in `p`.
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_0.png)
+
+*   As a reference, we denote this with an arrow rather than by showing a value.
+
+:::
+
+::::
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+- `*p` is the value of the bits on the heap.
+    - It is an `int`
+    - It is 4 bytes
+- `p` is the value of the bits on the stack.
+    - It is an `int *` or `void *`
+    - It is 8 bytes
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_0.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Malloc
+2.  Store `0` at `main.p`
+    * Or store `0` at the location described by `main.p`
+    * Not a push operation!
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_1.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+*   Stack-allocate `main.q`
+*   Heap-allocate `2 * sizeof(int)` bytes
+*   Make a note that they are `int`s
+*   Store the address in `main.q`.
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_2.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Malloc `p`
+2.  Store `0` at `main.p`
+3.  Malloc `q`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_2.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Malloc `p`
+2.  Store `0` at `main.p`
+3.  Malloc `q`
+4.  Store `1` at `main.q`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_3.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Malloc `p`
+2.  Store `0` at `main.p`
+3.  Malloc `q`
+4.  Store `1` at `main.q`
+5.  Store `2` at index `1` of the `int` array which begins at `main.q`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_4.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Malloc `p`
+2.  Store `0` at `main.p`
+3.  Malloc `q`
+4.  Store `1` at `main.q`
+5.  Store `2` in `main.q[1]`
+6.  Store the value of `main.q` (a location) in `main.p`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_5.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Heap Example
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  Malloc `p`
+2.  Store `0` at `main.p`
+3.  Malloc `q`
+4.  Store `1` at `main.q`
+5.  Store `2` in `main.q[1]`
+6.  Store the value of `main.q` (a location) in `main.p`
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_5.png)
+![](struct_files/demo_legend.png){width="50%"}
+
+:::
+
+::::
+
+# Today
+
+- &check; `malloc`
+    - Dynamically sized C
+- `free`
+    - Unmalloc
+
+# Free   
+
+::::{columns}
+
+:::{.column width=50%} 
+
+1.  p holds address of the heap location holding the integer value `0`.
+2.  q holds address of the heap location holding the integer array value `1`.
+    *   Same location as integer array `{1, 2}` in this case.
+
+:::
+
+:::{.column width=50%}
+
+![](struct_files/heap_demo_4.png)
+
+:::
+
+::::
+
+# Free
+
+```{.email}
+malloc(3)                Library Functions Manual               malloc(3)
+
+NAME         top
+
+       malloc, free, calloc, realloc, reallocarray - allocate and free
+       dynamic memory
+
+LIBRARY         top
+
+       Standard C library (libc, -lc)
+
+SYNOPSIS         top
+
+       #include <stdlib.h>
+
+       void *malloc(size_t size);
+       void free(void *_Nullable ptr);
+```
+
+# Free   
+
+```{.c}
+void free(void *_Nullable ptr);
+```
+
+-  `p` is a pointer returned from `malloc`
+    *   We term this type of pointer a "\*\_Nullable".
+    *   Not all \*'s and \*\_Nullable's
+$$
+\{ p \in \text{*_Nullable}\} \subset \{ p \in * \}
+$$
+    
+
+
+```{.c}
+int *arr = malloc(4 * sizeof(int));
+int buf[4];
+int *ptr;
+ptr = buf; /* Star but not Nullable */
+ptr = arr; /* Star_Nullable */
+```
+
+# Free
+
+- Every `malloc` in your code should have a corresponding `free`
+- Otherwise you could run out memory (or other problems)
+
+# Memory Leak 
+
+1.  p holds a \*\_Nullable.
+2.  q holds a \*\_Nullable.
+
+![](struct_files/heap_demo_4.png){width="50%"}
+
+# Memory Leak 
+
+1.  p, q holds a \*\_Nullable.
+2.  "old `p`" forgotten!
+
+![](struct_files/heap_demo_5.png){width="50%"}
+
+# Your poor OS
+
+- Your poor OS is on contract to protect that `1` you left in "old `p`" forever!
+- This is why sometimes restarting your computer causes it work.
+- E.g. Java, Python have a "garbage collector" that frees memory for you and causes you code to run 500 times (not always an exaggeration) slower.
+- Also if you try really hard you can memory leak Python.
+
+# Instead
+
+1. `free(p)` and the bytes return to circulation.
+2. `0` persists until overwritten*
+
+![](struct_files/free_demo_5.png){width="50%"}
+
+# Valgrind
+
+- Verifying that all memory has been freed isn't easy!
+- I recommend use of `valgrind`
+    - [Read more](https://valgrind.org/docs/manual/quick-start.html)
+- I won't teach Valgrind this term but may show it time to time.
+
+# leaky.c
+
+- Write a quick memory leaking program:
+
+```{.c filename="leaky.c"}
+#include <stdlib.h>
+
+void main() {
+        int *p = (int *)malloc(sizeof(int));
+        int *q = (int *)malloc(sizeof(int));
+        p = q;
+}
+```
+
+# Valgrind
+
+- Compile a run within `valgrind`
+```{.email}
+$ gcc leaky.c
+$ valgrind ./a.out
+==1331== Memcheck, a memory error detector
+==1331== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1331== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==1331== Command: ./a.out
+==1331==
+==1331==
+==1331== HEAP SUMMARY:
+==1331==     in use at exit: 8 bytes in 2 blocks
+==1331==   total heap usage: 2 allocs, 0 frees, 8 bytes allocated
+==1331==
+==1331== LEAK SUMMARY:
+==1331==    definitely lost: 4 bytes in 1 blocks
+==1331==    indirectly lost: 0 bytes in 0 blocks
+==1331==      possibly lost: 0 bytes in 0 blocks
+==1331==    still reachable: 4 bytes in 1 blocks
+==1331==         suppressed: 0 bytes in 0 blocks
+==1331== Rerun with --leak-check=full to see details of leaked memory
+==1331==
+==1331== For lists of detected and suppressed errors, rerun with: -s
+==1331== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
+
+# Emph
+
+```{.c}
+==1331== LEAK SUMMARY:
+==1331==    definitely lost: 4 bytes in 1 blocks
+```
+- Those are these 4 bytes:
+```{.c}
+int *p = (int *)malloc(sizeof(int));
+```
+
+# Fix it
+
+```{.c filename="leaky.c"}
+#include <stdlib.h>
+
+void main() {
+        int *p = (int *)malloc(sizeof(int));
+        int *q = (int *)malloc(sizeof(int));
+        free(p);
+        p = q;
+}
+```
+
+```{.email}
+==1430== LEAK SUMMARY:
+==1430==    definitely lost: 0 bytes in 0 blocks
+==1430==    indirectly lost: 0 bytes in 0 blocks
+==1430==      possibly lost: 0 bytes in 0 blocks
+==1430==    still reachable: 4 bytes in 1 blocks
+==1430==         suppressed: 0 bytes in 0 blocks
+```
+
+# "Good Enough"
+
+- It is possible to confuse Valgrind (and I intend to do so if we have time)
+- As a rule, if it confused Valgrind it likely contains some antipattern.
+    - Up to debate with my planned example.
+
+# Free + Leak = Freak
+
+*   We can generate a silly outcome at high probability by:
+    
+    1.  Store value to heap
+    2.  Memory leak
+    3.  Check value
+
+# Freak
+
+```{.c}
+#include <stdio.h>
+#include <stdlib.h>
+
+void main() {
+    int *p = malloc(sizeof(int)), *q, i ;
+    *p = 1 ;                         
+    printf("%d\n", *p) ;             
+    free(p) ;
+    for ( i = 0 ; i < 1000000 ; i++) {
+        q = malloc(0xFF) ;
+    }
+    printf("%d\n", *p) ;   
+}
+```
+
+- Run it:
+```{.email}
+$ ./a.out
+1
+1551349524
+```
+
+# Without free
+
+```{.c}
+#include <stdio.h>
+#include <stdlib.h>
+
+void main() {
+    int *p = malloc(sizeof(int)), *q, i ;
+    *p = 1 ;                         
+    printf("%d\n", *p) ;          
+    for ( i = 0 ; i < 1000000 ; i++) {
+        q = malloc(0xFF) ;
+    }
+    printf("%d\n", *p) ;   
+}
+```
+
+- Run it:
+```{.email}
+$ ./a.out
+1
+1
+```
+
+# Without leaks
+
+```{.c}
+#include <stdio.h>
+#include <stdlib.h>
+
+void main() {
+    int *p = malloc(sizeof(int)), *q, i ;
+    *p = 1 ;                         
+    printf("%d\n", *p) ;          
+    free(p)
+    printf("%d\n", *p) ;   
+}
+```
+
+- Run it:
+```{.email}
+$ ./a.out
+1
+1
+```
+
+- `1` is unprotected but not yet overwritten.
+
+
+# Today
+
+- &check; `malloc`
+    - Dynamically sized C
+- &check;`free`
+    - Unmalloc
+- Memory-adjacent techniques?
+    - If time
+
+# Overthinking
+
+*   It's just bits.
+*   A void \*, a size\_t, and a character array of length 8 walk into a compiler.
+    *   The compiler asks "Why the long int"?
+*   In running code, there is no distinction between any of these: each is simply 64 bits.
+*   The compiler maintains the distinction when generating code to make writing code easier for humans.
+    
+# 
+    
+|Type|Use|Print code|sizeof(), usually|
+|-|-|-|-|
+|`void *`|a memory location|`%p`|8|
+|`size_t`|size of some memory|`%zu` or `%ld`|8|
+|`char buf[8]`|8 values of size 1|`%s`|8|
+|`long`,`long int`,`int64_t`|$\text{abs}(x) <= 2^{63}$|`%ld`|8|
+    
+
+# Casting
+
+- Casting avoids `gcc` warnings/errors:
+```{.c}
+#include <stdio.h>
+#include <stdlib.h>
+
+void main() {
+        char *buf[8];
+        void *p = (void *)buf;
+        void *q = malloc(1);
+        size_t dist = (size_t)p - (size_t)q;
+        printf("q was malloc'ed %zu bytes from stack allocated p.\n", dist);
+}
+```
+- See it:
+```{.email}
+$ gcc leaky.c
+$ ./a.out
+q was malloc'ed 45975329250096 bytes from stack allocated p.
+```
+
+
+# Implicit Cast
+
+*   Can infer casts, but some draw warnings:
+```{.email}
+$ cat leaky.c
+void main() {
+            char buf[2] = "h";
+            void *letter = buf;
+            void *ptr = 'h';
+}
+$ gcc leaky.c
+leaky.c: In function ‘main’:
+leaky.c:7:25: warning: initialization of ‘void *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversio]
+    7 |             void *ptr = 'h';
+      |
+$ python3 -c 'print(ord("h"))'
+104       
+```
+- char array to `void *` is fine - both addresses
+
+# Documentation
+
+*   Sometimes we can use casts to make it more clear what our code should be doing. 
+```{.c}
+char *str = (char *)malloc(sizeof(char) * 8) ; // malloc returns void *`
+```
+*   I like void casts, they remind me of Python "\_ =" which I use in notebooks to discard output. 
+```{.c}
+(void)printf("%s\n", str) ; // printf returns an int - we don't care.
+```
+
+
+# Takeaways
+
+*   Cast the return value of malloc. 
+```{.c}
+int main() { 
+    char *ptr = malloc(8) ; // error-prone, ambigious 
+    char *str = (char *)malloc(sizeof(char) * 8) ; // more intentional 
+}
+```
+*   Much bigger deal when using types of size other than one, or of unknown size.  
+    
+
+
+# Pointer Arithmetic
+
+::::{columns}
+
+:::{.column width=50%}
+*   Wait a minute... `sizeof(int) != 1`.
+*   So `q` is must be some value other than `1` away from `q[1]`
+*   Yet we do not address the next int in an array by saying `q[1*sizeof(int)]`
+:::
+
+:::{.column width=50%}
+![](struct_files/heap_demo_4.png)
+:::
+::::
+
+# Overload
+
+*   People are allowed to like things, so you are allowed to like this.
+*   I don't. 
+```{.py}
+>>> x, y, s, t = 1, 2, "h", "i" 
+>>> x + y 3 
+>>> x + s 
+Traceback (most recent call last): File "<stdin>", line 1, in <module> TypeError: unsupported operand type(s) for +: 'int' and 'str' 
+>>> s + t 'hi' 
+>>>
+```
+*   This is called operator overloading. 
+*   It's not allowed in C.
+
+# Two many `gcc`'s
+
+*   If you add strings together, `gcc` stops you.
+```{.c}
+void main() {
+        "a" + "b";
+}
+```
+*   Thanks, `gcc`. 
+```{.emai}
+leaky.c: In function ‘main’:
+leaky.c:2:13: error: invalid operands to binary + (have ‘char *’ and ‘char *’)
+    2 |         "a" + "b";
+      |         ~~~ ^
+      |         |   |
+      |         |   char *
+      |         char *
+```
+*   What does "binary" mean ? (Hint: MATH 251W)
+
+# Trust `gcc`
+
+- Let's do a cast and an addition
+```{.c}
+void main() { 
+    uint64_t *p = (uint64_t *) 0x100 ; 
+    uint64_t x = (uint64_t) 0x001 ; 
+    // With casting, %p expects "void *", so we cast to (void *) 
+    printf("%p + %p = %p\n", (void *)p, (void *)x, (void *)(p + x)); 
+}
+```
+```{.email}
+$ gcc leaky.c ; ./a.out 
+0x100 + 0x1 = 0x108
+```
+
+# Trust!
+
+*   At least it's consistent. 
+```{.c}
+printf("%p + %p = %p \n", (void *)p, (void *)x, (void *)((char *)p + x)) ; 
+printf("%p + %p = %p \n", (void *)p, (void *)x, (void *)((int *)p + x)) ; 
+printf("%p + %p = %p \n", (void *)p, (void *)x, (void *)((long *)p + x)) ;`
+```
+*   All 0x108 I'm sure. 
+```{.email}
+$ ./a.out 
+0x100 + 0x1 = 0x101 
+0x100 + 0x1 = 0x104 
+0x100 + 0x1 = 0x108
+```
+*   Get it?
+
+# Overload?
+
+*   "operator overloading... not allowed in C."
+*   Addition and subtraction... are(?) overloaded
+    *   Realistically, not quite (not commutative)
+*   Add a (1) location and (2) integer
+    *   int \* + int
+    *   int \* + long
+    *   char \* + int
+    *   long \* + char
+
+
+# On `[]`
+
+*   Pointer arithmetic too. 
+```{.c}
+int arr[4] = { 0x10, 0x100, 0x1000, 0x10000 } ; 
+printf(" arr+1 : %p\n", arr+1) ; 
+printf("*(arr+1): %p\n", *(arr+1)) ; 
+printf("(*arr+1): %p\n", (*arr+1)) ; 
+printf(" arr[1]: %p\n", arr[1]) ;
+```
+*   See it.
+```{.email}
+arr+1 : 0x7fff5956cce4 
+*(arr+1): 0x100 
+(*arr+1): 0x11 
+arr[1]: 0x100`
+```
+
+# Unary `&`
+
+*   & is both a unary and binary operator in C, like - (minus) 
+```{.c}
+int main() { 
+    int x, y
+    x = 1 - 2; 
+    y = - 2; 
+    x = x & y;
+    x = &y; 
+}
+```
+# &
+
+- Unary `&` is inverse `*`
+
+```{.c}
+int main() { 
+    int x = 0xF0, y = 0x0F, *p; // just unique vals 
+    p = &y; 
+    printf("*p = %x,  p = %p\n", *p,  p); 
+    printf(" y = %x, &y = %p\n",  y, &y);
+}
+```
+- `p = &y` $\implies$ `*p = y`
+```{.email}
+*p = f,  p = 0x7ffc85ee5f68
+ y = f, &y = 0x7ffc85ee5f68
+```
+
+# &
+
+- `*` is not (quite) inverse `&`
+
+```{.c}
+int main() { 
+    int x = 0xF0, y = 0x0F, *p; // just unique vals 
+    *p = y; 
+    printf("*p = %x,  p = %p\n", *p,  p); 
+    printf(" y = %x, &y = %p\n",  y, &y);
+}
+```
+- `*p = y` $\not\!\!\!\implies$ `p = &y` 
+```{.email}
+Segmentation fault
+```
+
+# Malloc fail
+
+*   There is no guarantee `malloc` worked
+    
+    *   Imagine `malloc(∞)`
+    *   Rather, it is very likely to return correctly if used mindfully.
+    *   But you must check.
+    
+```{.c}
+void main() { 
+    int *p = (int *)malloc(sizeof(int));
+    if (p == 0) { 
+       fprintf(stderr, "Malloc failed.\n"); 
+       exit(-1); 
+    } 
+}
+```
+
+# Force fail
+
+```{.c}
+void main() { 
+    int *p = (int *)malloc(-1);
+    if (p == 0) { 
+       fprintf(stderr, "Malloc failed.\n"); 
+       exit(-1); 
+    } 
+}
+``` 
+
+# Today
+
+- &check; `malloc`
+    - Dynamically sized C
+- &check;`free`
+    - Unmalloc
+- &check; Memory-adjacent techniques?
+    - If time

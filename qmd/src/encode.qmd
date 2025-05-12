@@ -1,0 +1,892 @@
+---
+title: Encode
+author: Prof. Calvin
+subtitle: "Week 0x2"
+institute: Crypto
+format: 
+    revealjs: 
+        code-fold: false
+        theme: dark
+        mainfont: monospace
+        slide-number: true
+        show-slide-number: all
+        width: 1050
+        height: 700
+        footer: "[Home](../index.html)"
+
+execute:
+    echo: true
+    cache: true
+    freeze: true  ## never re-render during project render
+---
+
+## Announcements
+
+- **Welcome** to CS 276
+- Desynced Lecture
+    - No Class Thursday, 30 Jan
+
+## Today
+
+- Encoding
+    -   Endianness
+    -   Casts
+    -   Two's Complement
+
+# Endianness
+
+## "Good at"
+
+- Computers "are good at" storing numerical data.
+    - At a high level *numerical computing*
+        - NumPy
+        - R
+        - Julia
+        - Stata
+        - SAS
+
+## Why?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Imagine thinking in digits.
+- To store a ~3 digit number, need $3 \times 10 = 30$ "things" that can hold a number.
+
+:::
+
+::: {.column width="50%"}
+
+```{dot}
+//| echo: false
+//| fig-width: 400px
+digraph finite_automata {
+  rankdir=TD; bgcolor="#191919";
+  node [fontcolor = "#ffffff", color = "#ffffff", shape=record];
+  edge [color = "#ffffff",fontcolor = "#ffffff"]
+
+  struct [label="{ {<0> 10^0  | <1> 10^1| <2> 10^2}} "];
+  struct0 [label="{0|1|2|3|4|5|6|7|8|9}"];
+  struct1 [label="{0|1|2|3|4|5|6|7|8|9}"];
+  struct2 [label="{0|1|2|3|4|5|6|7|8|9}"];
+  struct:0 -> struct0
+  struct:1 -> struct1
+  struct:2 -> struct2
+
+}
+```
+
+:::
+
+::::
+
+## Binary
+
+- We are familiar with binary encoding.
+- We note: $\log_2(999) \lt 10$
+- *Decimal encoding **squanders** $\dfrac{2}{3}$ of it's storage space.*
+- So we store in binary.
+
+
+```{dot}
+//| echo: false
+//| fig-width: 800px
+//| fig-height: 200px
+digraph finite_automata {
+  rankdir=LR; bgcolor="#191919";
+  node [fontcolor = "#ffffff", color = "#ffffff", shape=record];
+
+  struct [label="{2^0|2^1|2^2|2^3|2^4|2^5|2^6|2^7|2^8|2^9}|{0|0|0|0|0|0|0|0|0|0}|{1|1|1|1|1|1|1|1|1|1}"];
+}
+```
+
+## Binary
+
+- The benefit here is that is sufficient to note the presence or absence of a digit (`1`) 
+- Versus the specific digit $\in [1,9]$ and presence of absense (`0`)
+
+```{dot}
+//| echo: false
+//| fig-width: 800px
+//| fig-height: 200px
+digraph finite_automata {
+  rankdir=LR; bgcolor="#191919";
+  node [fontcolor = "#ffffff", color = "#ffffff", shape=record];
+
+  struct [label="{2^0|2^1|2^2|2^3|2^4|2^5|2^6|2^7|2^8|2^9}|{|1|||1|1|||1|}"];
+}
+```
+
+## Wait a minute.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Why is the ones digit ($n^0$) leftmost ?
+    - The "least significant bit" or "lsb"
+- In e.g. English place the "lsb" last.
+    - CS 276 &rArr;
+
+:::
+
+::: {.column width="50%"}
+
+
+```{dot}
+//| echo: false
+//| fig-width: 400px
+//| fig-height: 400px
+digraph finite_automata {
+  rankdir=TD; bgcolor="#191919";
+  node [fontcolor = "#ffffff", color = "#ffffff", shape=record];
+  edge [color = "#ffffff",fontcolor = "#ffffff"]
+
+  struct [label="{ {<0> 10^0  | <1> 10^1| <2> 10^2}} "];
+  struct0 [label="{||||||6|||}"];
+  struct1 [label="{|||||||7||}"];
+  struct2 [label="{||2|||||||}"];
+  struct:0 -> struct0
+  struct:1 -> struct1
+  struct:2 -> struct2
+}
+```
+
+:::
+
+::::
+
+## Languages
+
+- In e.g. spoken word, makes sense to lead with the biggest value.
+    - 200 of something is closer to 299 of something than 0 of something is to 9 of something.
+- In e.g. programming, we often lead with lowest numerical index.
+    - We look at the `arr[0]` or something before the `arr[1]` of something.
+
+## In Practice
+
+- We end up with
+```{.python}
+"276"[0] == '2' and 276 % (10 ** 1) == 6
+```
+- Confusing!  
+
+## Annoyance
+
+- This gets *very annoy* when trying to move numbers around that don't quite fit in some number of bits.
+    - Say I have 123,456 followers on Instagram📷
+    - Boycott Meta etc etc.
+    - And/or follow me [@calvinallegedly](https://www.instagram.com/calvinallegedly/)
+- Also imagine it is 1969 and you only have 8 bit integers.
+
+## Scanf
+
+- We can use `scanf` - the inverse of `printf`
+    - We give `scanf` a format string, like:
+        -   `%d,%d`
+        -   Two comma-separated decimal values.
+        -   Astute observers will realize where .csv's come from
+            - From whence .csv's hail
+
+
+```{.C}
+scanf("%d,%d");
+```
+
+## Test
+
+- Test it
+
+```{.C filename="scanf.c"}
+#include <stdio.h>
+
+int main() {
+    scanf("%d,%d");
+    return 0;
+}
+```
+
+## Warning
+
+- We draw a warning for missing *arguments* for each *format code*
+
+```{.email}
+scanf.c: In function ‘main’:
+scanf.c:4:13: warning: format ‘%d’ expects a matching ‘int *’ argument [-Wformat=]
+    4 |     scanf("%d,%d");
+      |            ~^
+      |             |
+      |             int *
+scanf.c:4:16: warning: format ‘%d’ expects a matching ‘int *’ argument [-Wformat=]
+    4 |     scanf("%d,%d");
+      |               ~^
+      |                |
+      |                int *
+```
+
+## Arguments
+
+- We need integers.
+
+```{.C}
+    int a,b;
+```
+
+- Well actually, were asked to provided an `int *` for each integer format code.
+
+> format ‘%d’ expects a matching ‘int *’ 
+
+```{.C}
+    int a[1], b[1]; /* Think of these as arrays of one element. */
+```
+
+- Regard `int *n` is just an `int n[m]` for which we don't say what `m` is. 
+
+## []
+
+:::: {.columns}
+
+::: {.column width="70%"}
+
+- Some of you used arrays of unspecified length on `enigma`, that is banned by `c89`.
+- You should know how long the arrays in your code are.
+- This is a security class and that stuff matters.
+- [See more](https://xkcd.com/1354/)
+- [Read more](https://heartbleed.com/)
+
+:::
+
+::: {.column width="30%"}
+
+![](https://imgs.xkcd.com/comics/heartbleed_explanation.png)
+
+:::
+
+::::
+
+## Use small arrays
+
+- Just like the Python `x = [0]` example.
+
+```{.C filename="scanf.c"}
+#include <stdio.h>
+
+int main() {
+    int a[1], b[1];
+    scanf("%d,%d", a, b);
+    return 0;
+}
+```
+
+- Use as follows:
+```{.email}
+$ gcc scanf.c && ./a.out
+123,456
+$
+```
+- Clean exit!
+
+## Use small arrays
+
+- Print the value commaless.
+
+```{.C filename="scanf.c"}
+#include <stdio.h>
+
+int main() {
+    int a[1], b[1];
+    scanf("%d,%d", a, b);
+    return 0;
+}
+```
+
+- Use as follows:
+```{.email}
+$ gcc scanf.c && ./a.out
+123,456
+$
+```
+- Clean exit!
+
+## Printing
+
+- Let's print our values back...
+
+```{.C filename="scanf.c"}
+#include <stdio.h>
+
+int main() {
+    int a[1], b[1];
+    scanf("%d,%d", a, b);
+    printf("%d%d\n", a, b);
+    return 0;
+}
+```
+- Oops!
+
+```{.email}
+scanf.c: In function ‘main’:
+scanf.c:6:14: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘int *’ [-Wformat=]
+    6 |     printf("%d%d\n", a, b);
+      |             ~^       ~
+      |              |       |
+      |              int     int *
+      |             %ls
+...
+```
+
+## Printing
+
+- Print needs values, not references.
+
+```{.C filename="scanf.c"}
+#include <stdio.h>
+
+int main() {
+    int a[1], b[1];
+    scanf("%d,%d", a, b);
+    printf("%d%d\n", a[0], b[0]);
+    return 0;
+}
+```
+- Nothing too fancy.
+
+```{.email}
+$ gcc scanf.c && ./a.out
+123,456
+123456
+$
+```
+
+## Double it 
+
+- Let's say we want to double our input value.
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{.C filename="scanf.c"}
+#include <stdio.h>
+
+int main() {
+    int a[1], b[1];
+    scanf("%d,%d", a, b);
+    a[0] *= 2;
+    b[0] *= 2;
+    printf("%d%d\n", a[0], b[0]);
+    return 0;
+}
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{.email}
+$ gcc scanf.c && ./a.out
+123,456
+246912
+$ ./a.out
+123,567
+2461134
+$
+```
+
+- Uh oh.
+
+:::
+
+::::
+
+## Carries
+
+- One reason to put the one's place first is for carries.
+
+```{dot}
+//| echo: false
+//| fig-width: 800px
+//| fig-height: 200px
+digraph finite_automata {
+  rankdir=TD; bgcolor="#191919";
+  node [fontcolor = "#ffffff", color = "#ffffff", shape=record];
+
+  struct [label="{2^||+|=}|{0|1|0|1}|{1|0|1|1}|{2|0|0|0}|{3|1|1|?}"];
+}
+```
+- As we add across a value, we want to carry over a bit to a higher power.
+- Same with multiply!
+
+## Carries
+
+- One reason to put the one's place first is for carries.
+
+```{dot}
+//| echo: false
+//| fig-width: 800px
+//| fig-height: 200px
+digraph finite_automata {
+  rankdir=TD; bgcolor="#191919";
+  node [fontcolor = "#ffffff", color = "#ffffff", shape=record];
+
+  struct [label="{2^||+|c|=}|{0|1|0|0|1}|{1|0|1|0|1}|{2|0|0|0|0}|{3|1|1|0|0}"];
+}
+```
+
+## Carries
+
+- Addition is easier least-to-most
+
+```{dot}
+//| echo: false
+//| fig-width: 800px
+//| fig-height: 200px
+digraph finite_automata {
+  rankdir=TD; bgcolor="#191919";
+  node [fontcolor = "#ffffff", color = "#ffffff", shape=record];
+
+  struct [label="{2^||+|c|=}|{0|1|0|0|1}|{1|0|1|0|1}|{2|0|0|0|0}|{3|1|1|0|0}|{4|0|0|1|1}"];
+}
+```
+- This denotes a binary add of `0b01001` to `0b01010` which equals `0b10011`
+```{.python}
+>>> bin(0b01001 + 0b01010)
+'0b10011'
+>>> bin(0b01001 + 0b01010)[2::-1]
+'1b0'
+>>> bin(0b01001 + 0b01010)[:2:-1]
+'1100'
+>>> bin(0b01001 + 0b01010)[:1:-1]
+'11001'
+```
+
+## Does it matter?
+
+- Kinda.
+- This is called, Endianness, the subject a latter lab.
+- It mostly matters when we rearrange numbers around.
+    - SHA256 works with chunks of various sizes - 8, 32, 256, 512.
+    - In which order do we place values from 4 8-bit fields into 1 32-bit field.
+
+# Casts
+
+## 32 -> 64
+
+- It is common to find 32 bit code that is running on 64 bit devices.
+    - Say e.g. "World of Warcraft: Classic"
+        - Released in 2004 for 32 bit devices.
+        - Repopularized in 2019 then 2024
+        - Literal trillion dollar company (MS)
+- Need a *very good* way to go between 32 and 64 bits.
+
+## Casts
+
+- That way is *casts*
+- In C, we prefix a value by a type (in parens) when assigning it to a variable.
+    - `1` is a value.
+    - `long` is a type (usually the 64 bit type)
+    - `(long)1` is the value of `1` as a 64 bit type
+```{.C}
+long x = 0;
+int y = 10;
+x = (long)y;
+```
+
+## Arrays
+
+- We regarded, following "macros", C integers as akin to arrays of booleans.
+- C integers can also be regarded as arrays of bytes.
+- For example, an `int` is commonly 4 bytes, or `char` values.
+- We can achieve this with a cast.
+
+## Example
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Create a variable `x`
+- It *can* refer to an `int`
+```{.python}
+x : list[int] # not x = [None]
+```
+- Can't use yet.
+```{.python}
+x[0] = 1 # this would error
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{.c code-line-numbers="4"}
+#include <stdio.h>
+
+int main() {
+    int *x;
+    char buf[4];
+    buf[0] = 0xA;
+    buf[1] = 0xB;
+    buf[2] = 0xC;
+    buf[3] = 0xD;
+    x = (int *)buf;
+    printf("%x\n", x[0]);
+    return 0;
+}
+```
+
+:::
+
+::::
+
+## Example
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Create variable `buf`
+- Array of 4 `char`.
+- Versus a `char *`:
+    - The value `buf` holds *some* reference.
+```{.python}
+buf =  = [None] * 4
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{.c code-line-numbers="5"}
+#include <stdio.h>
+
+int main() {
+    int *x;
+    char buf[4];
+    buf[0] = 0xA;
+    buf[1] = 0xB;
+    buf[2] = 0xC;
+    buf[3] = 0xD;
+    x = (int *)buf;
+    printf("%x\n", x[0]);
+    return 0;
+}
+```
+
+:::
+
+::::
+
+## Example
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Easy-to-recognize values.
+    - Can assign $n$ at once but
+    - But only for declares.
+    - (The array could be the wrong size)
+
+:::
+
+::: {.column width="50%"}
+
+```{.c code-line-numbers="6-9"}
+#include <stdio.h>
+
+int main() {
+    int *x;
+    char buf[4];
+    buf[0] = 0xA;
+    buf[1] = 0xB;
+    buf[2] = 0xC;
+    buf[3] = 0xD;
+    x = (int *)buf;
+    printf("%x\n", x[0]);
+    return 0;
+}
+```
+
+:::
+
+::::
+
+```{.C}
+char buf[4] = { 0xA, OxB, 0xC, 0xD }; /* okay */
+/* say, char notbuf[2]; buf = notbuf; */
+buf = {1,2,3,4}; /* banned - it isn't safe */
+```
+
+## I lied
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Tell `gcc` that no, really, buf is actually an array of integers.
+- It will believe you.
+- If you omit the cast, you will get a warning or error
+:::
+
+::: {.column width="50%"}
+
+```{.c code-line-numbers="10"}
+#include <stdio.h>
+
+int main() {
+    int *x;
+    char buf[4];
+    buf[0] = 0xA;
+    buf[1] = 0xB;
+    buf[2] = 0xC;
+    buf[3] = 0xD;
+    x = (int *)buf;
+    printf("%x\n", x[0]);
+    return 0;
+}
+```
+
+```
+d0c0b0a
+```
+
+:::
+
+::::
+
+## Ordering
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Let's see the output.
+- What order is that?
+    - *Same order* within bytes
+        - `0x0` before `0xa`
+    - *Reverse order* within a number
+        - `0x0b` before `0x0a`
+
+:::
+
+::: {.column width="50%"}
+
+```{.c code-line-numbers="11"}
+#include <stdio.h>
+
+int main() {
+    int *x;
+    char buf[4];
+    buf[0] = 0xA;
+    buf[1] = 0xB;
+    buf[2] = 0xC;
+    buf[3] = 0xD;
+    x = (int *)buf;
+    printf("%x\n", x[0]);
+    return 0;
+}
+```
+
+- I got no warnings/errors.
+
+```email
+d0c0b0a
+```
+
+:::
+
+::::
+
+## Takeaway:
+
+- The way integers are printed and the way they are stored in the computer aren't necessarily related.
+- This matters a lot on SHA-256.
+
+# Two's Complement
+
+## Negative values
+
+- From time to time we like to use a negative value.
+- I know, I was disappointed too.
+- We build them using subtraction.
+
+## int vs uint
+
+- It is a simply enough matter to establish the ranges for potentially negative (signed, or default) values and necessarily positive (unsigned) values.
+- We work with `char` and `unsigned char`
+
+# Script
+
+```{.c filename="tester.c"}
+#include <stdio.h>
+
+int main() {
+        char x = 0;
+        unsigned char y = 0;
+        char buf[0x10];
+        while (scanf("%s", buf)) {
+                printf("%d, %u\n", x, y);
+                x += 10;
+                y += 10;
+        }
+        return 0;
+}
+```
+- Simply type any string then press ENTER.
+
+## Output
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{.email}
+a
+0, 0
+...
+a
+120, 120
+a
+-126, 130
+a
+-116, 140
+...
+a
+-16, 240
+a
+-6, 250
+a
+4, 4
+```
+
+:::
+
+
+::: {.column width="50%"}
+
+- Unsigned values have roughly double the maximum of signed values.
+- Unsigned values have similar maximum and minimum values by absolute values.
+    - Read more e via `man abs`
+
+:::
+
+::::
+
+## More tests
+
+- Create somewhere to store an integer.
+- Scan input into said integer.
+- Cast integer to a char and print
+- Cast integer to an unsigned char and print.
+
+```{.c filename="tester.c"}
+#include <stdio.h>
+
+int main() {
+        int x[0];
+        while (scanf("%d", x)) {
+                printf("%hhd, %u\n", (char)x[0], (unsigned char)x[0]);
+        }
+        return 0;
+}
+```
+
+## Output
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{.email}
+10
+10, 10
+126
+126, 126
+127
+127, 127
+128
+-128, 128
+255
+-1, 255
+256
+0, 0
+```
+
+:::
+
+
+::: {.column width="50%"}
+
+- Signed values in $n$ bit integers loop at $2^{n-1}$
+    - Or do they? Test it on ints!
+- Unsigned values are maximal when signed values are -1
+- max + 1 and -1 + 1 both equal zero.
+
+:::
+
+::::
+
+## Look at ints
+
+
+```{.c filename="tester.c"}
+#include <stdio.h>
+
+int main() {
+        int x[0];
+        while (scanf("%d", x)) {
+                printf("%d, %u, %032b\n", 
+                *x, (unsigned)*x, x[0]);
+        }
+        return 0;
+}
+```
+
+## Some things to try
+
+```{.email}
+65536
+65536, 65536, 00000000000000010000000000000000
+-1
+-1, 4294967295, 11111111111111111111111111111111
+4294967295
+-1, 4294967295, 11111111111111111111111111111111
+4294967296
+0, 0, 00000000000000000000000000000000
+255
+255, 255, 00000000000000000000000011111111
+256
+256, 256, 00000000000000000000000100000000
+-255
+-255, 4294967041, 11111111111111111111111100000001
+```
+
+## Takeaways
+
+- The algorithm is simply.
+    - For unsigned values, simple binary
+    - For signed values, negatives are 1-prefixed not 0-prefixed.
+- The only difference is in printing.
+- Arithmetic operations proceed smoothly without consideration of signage.
+- Call this "two's complement" - negatives by binary (0->1) complement.
+
+## Stinger
+
+```{.C}
+#include <stdio.h>
+
+int main() {
+        int x[0], y[0];
+        while (1) {
+                scanf("%d %d", x, y);
+                printf("%d, %u, %032b\n",
+                                x[0]/y[0],
+                                (unsigned)x[0]/y[0],
+                                x[0]/y[0]);
+        }
+        return 0;
+}
+```

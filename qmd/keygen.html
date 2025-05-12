@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>KeyGen</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9884a2177d2957eae00b06e372949a78.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6143deb5822414b99d6193ead6da13dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">KeyGen</h1>
+            <p class="subtitle lead">Lab 0x6</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+<section id="review-show" class="level1">
+<h1>Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a></h1>
+<div id="review" class="collapse multi-collapse">
+<section id="goal-public-key-encryption" class="level3">
+<h3 class="anchored" data-anchor-id="goal-public-key-encryption">Goal: Public Key Encryption</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Review:</th>
+<th>Newish:</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>- Public key encryption</td>
+<td>- RSA in C</td>
+</tr>
+<tr class="even">
+<td>- Fermat’s little theorm</td>
+<td>- .pem files</td>
+</tr>
+<tr class="odd">
+<td>- RSA</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>There are no required exercises of this lab.</li>
+<li>It is supplementary material to the RSAinC homework.
+<ul>
+<li>This lab will generate the key <span class="math inline">\((n, e, d)\)</span>
+<ul>
+<li><span class="math inline">\(n\)</span>, the modular base, part of the public and private key.</li>
+<li><span class="math inline">\(e\)</span>, the encryptor, part of the public key.</li>
+<li><span class="math inline">\(d\)</span>, the decryptor, part of the private key.</li>
+</ul></li>
+</ul></li>
+<li>RSAinC will additional require the usage of these to encrpyt and decrypt text.
+<ul>
+<li>RSAinC will require two .c files, the first of which is keygen.</li>
+<li>I would do all my work for this lab in <code>keygen.c</code> in an <code>rsainc</code> folder.</li>
+<li>For this lab, I provide an <em>intermediate</em> autograder, as a Python script, to support partial homework completion.
+<ul>
+<li>The script is under the “32 bit” heading.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+</div>
+</section>
+<section id="podman-show" class="level1">
+<h1>Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls="podman">Show</a></h1>
+</section>
+<div id="podman" class="collapse multi-collapse">
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<ul>
+<li>For this lab, I used the following Containerfile
+<ul>
+<li>Same as the printb lab</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Containerfile</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="Containerfile"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>FROM ubuntu</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>RUN apt update &amp;&amp; apt install gcc vim python3 astyle -y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Mostly, having <code>astyle</code> and <code>python3</code> is nice.</li>
+</ul>
+</section>
+</div>
+<section id="python-show" class="level1">
+<h1>Python&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#python" role="button" aria-expanded="false" aria-controls="python">Show</a></h1>
+<div id="python" class="collapse multi-collapse">
+<ul>
+<li>There is a complete, correct, RSA implementation embedded in the <a href="fermat.html">Fermat</a> slides.
+<ul>
+<li>I extracted .qmd to .ipynb and .ipynb to .py.</li>
+<li>I editted lightly for readability (removed comments).</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>fermat.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="fermat.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sixkp1(k): <span class="co"># 6k+1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">any</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> candidate</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> gcd(a, b):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> b:</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: sixkp1(<span class="dv">10</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: sixkp1(<span class="dv">15</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> <span class="dv">65537</span> <span class="co"># encryptor</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_d():</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> d</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> modexp(m, e, n) <span class="co"># ciphertext</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>I did not show this in class, but it’s probably easier to think of as follows:</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make_encrypt takes an </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># * encryptor e and </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># * modular base n and </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># returns a function the performs public key encryption.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>make_encrypt <span class="op">=</span> <span class="kw">lambda</span> e, n : <span class="kw">lambda</span> m : modexp(m,e,n)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>encrypt <span class="op">=</span> make_encrypt(e,n)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>decrypt <span class="op">=</span> make_encrypt(find_d(),n)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">chr</span>(decrypt(encrypt(<span class="bu">ord</span>(<span class="st">"C"</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>There’s no graceful (or even ungraceful) way to retuun functions in C, but I thought this was really cool <code>¯\_(ツ)_/¯</code></li>
+</ul>
+</div>
+</section>
+<section id="k-1-show" class="level1">
+<h1>6k + 1&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#sixkp1" role="button" aria-expanded="false" aria-controls="sixkp1">Show</a></h1>
+<div id="sixkp1" class="collapse multi-collapse">
+<ul>
+<li>Implement primality generation in C.</li>
+<li>You may use any method but I recommend <span class="math inline">\(6k + 1\)</span></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>fermat.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="fermat.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sixkp1(k): <span class="co"># 6k+1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">any</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> candidate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>For BigRSA, you will primality testing for the <code>4096_t</code>.</li>
+<li>Likewise, for BigRSA, you will need fairly narrow bounds on <em>precision</em>, or how many bits your primes take up.</li>
+<li>That said, for now the following should be sufficient:</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint64_t</span> sixkp1<span class="op">(</span><span class="dt">uint64_t</span> k<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* Your code here (and update the return statement)  */</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Advanced Primality Testing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Advanced students may wish to implement sieves but should not do so unless they achieve a memory safe implementation, likely utilizing (enormous) buffers for the file system.</li>
+<li>Advanced students may with to implement Pocklington-Lehmer primality testing, for which I am not familiar with memory usage.
+<ul>
+<li>Fermat primality testing is a component of Pocklington-Lehmer, a fun callback to lecture.</li>
+</ul></li>
+<li>A student implementing either will be invited to deliver a guest lecture on their implementation in a future class session or other venue.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="gcdlcm-show" class="level1">
+<h1>gcdlcm&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#gcdlcm" role="button" aria-expanded="false" aria-controls="gcdlcm">Show</a></h1>
+<div id="gcdlcm" class="collapse multi-collapse">
+<ul>
+<li>Implement lcm - least common multiple - calculation in C.</li>
+<li>As with <span class="math inline">\(6k+1\)</span>, I will make a non-binding to calculate the gcd - greatest common denominator - as your method.</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>fermat.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="fermat.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> gcd(a, b):</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> b:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>For BigRSA, this operation will require considerably optimizations related to the “Extended Euclidean Algorithm”.</li>
+<li>Note that inner functions are non-standard C and not permitted in C89.</li>
+<li>That said, for now the following should be sufficient:</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode C code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">uint64_t</span> gcd<span class="op">(</span><span class="dt">uint64_t</span> a<span class="op">,</span> <span class="dt">uint64_t</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* Your code here (and update the return statement)  */</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="dt">uint64_t</span> lcm<span class="op">(</span><span class="dt">uint64_t</span> a<span class="op">,</span> <span class="dt">uint64_t</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* Your code here (and update the return statement)  */</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">*</span> b<span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Optimizations and Assertions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Advanced students may wish to apply a series of tests, perhaps as assert statements, to monitor overflow during this calculation.
+<ul>
+<li>We note that the lcm can be larger than two values that are implicitly only bounded by the 64 bit size.</li>
+<li>How should we manage this?</li>
+<li><span class="math inline">\(\exists\)</span> proofs of correctness, given starting assumptions.</li>
+</ul></li>
+<li>Advanced students may wish to implement the extended Euclidean algorithm <em>without</em> using signed integers, which I found to be non-trivial but not impossibly difficult.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="keygen-show" class="level1">
+<h1>KeyGen&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#keygen" role="button" aria-expanded="false" aria-controls="keygen">Show</a></h1>
+<div id="keygen" class="collapse multi-collapse">
+<section id="a-key-in-3-parts" class="level3">
+<h3 class="anchored" data-anchor-id="a-key-in-3-parts">A Key in 3 Parts</h3>
+<ul>
+<li>We recall that the private key minimally contains:
+<ul>
+<li><code>n</code>, a modular base</li>
+<li><code>e</code>, an encryptor, and</li>
+<li><code>d</code>, a descryptor.</li>
+</ul></li>
+<li>Based on the KeyGen lab, it should be uncomplicated to calculate these values for 64 bit keys.</li>
+<li>We will use <code>.bad</code> instead of <code>.pem</code> and insecurely store these values in plaintext.</li>
+<li>We will then make executables to generate <code>.bad</code> and encrypt content provided a <code>.bad</code>
+<ul>
+<li>We name a <code>.bad</code> so helpfully we don’t use it by accident.</li>
+</ul></li>
+<li>We will naively print 3 lines of hexademical values, <code>n</code>, <code>e</code>, then <code>d</code>.</li>
+<li>We will write them to a 5-line file as follows:
+<ul>
+<li>The first line is the precise header text.</li>
+<li>The second line is the <code>n</code> value in hexadecimal.</li>
+<li>The third line is the <code>e</code> value, which is <code>10001</code>.</li>
+<li>The fourth line is the <code>d</code> value, which should be kept secret.</li>
+<li>The fifth and final line is the precise footer text.</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>unsafe.bad</strong></pre>
+</div>
+<div class="sourceCode" id="cb8" data-filename="unsafe.bad"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>-----BEGIN UNSAFE PRIVATE KEY-----</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>95a61f99198bd8e9</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>10001</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>fbea5e6a3ed31e8f</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>-----END UNSAFE PRIVATE KEY-----</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>This format is based on the <code>.pem</code> format
+<ul>
+<li>For privacy enhanced email.</li>
+<li>Used to store keys generated by <code>ssh-keygen</code>.</li>
+<li>It does not split up <code>n</code>, <code>e</code>, and <code>d</code></li>
+<li>More on it latter.</li>
+</ul></li>
+<li>For reference This is a 1024 bit key made by <code>ssh-keygen -b 1024</code>
+<ul>
+<li>This 1024 bit key is too small to be regarded secure.</li>
+<li>So our 32 bit keys are far too small to be regarded secure.</li>
+<li>And separating components may be regarded as less secure.</li>
+</ul></li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>~/.ssh/id_rsa</strong></pre>
+</div>
+<div class="sourceCode" id="cb9" data-filename="~/.ssh/id_rsa"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>-----BEGIN OPENSSH PRIVATE KEY-----</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>NhAAAAAwEAAQAAAIEAv97YRG/TOK6VnXi3LK8N6z/meRvSo5vkjjm0YUIV5zEx8OyZUdTV</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>cu114ll/eC4ZgrW3bISzyIO0MB5rnt8oPcO5uiSJIqRSKbd2LNJdkefIpMe4LJJLuzfB4z</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>xqtG9vgsxrJNYUMJ6Vsn5YKRQCaCZQdKxMPx+itHkPeQLWQ40AAAIQ0XWwz9F1sM8AAAAH</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>c3NoLXJzYQAAAIEAv97YRG/TOK6VnXi3LK8N6z/meRvSo5vkjjm0YUIV5zEx8OyZUdTVcu</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>114ll/eC4ZgrW3bISzyIO0MB5rnt8oPcO5uiSJIqRSKbd2LNJdkefIpMe4LJJLuzfB4zxq</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>tG9vgsxrJNYUMJ6Vsn5YKRQCaCZQdKxMPx+itHkPeQLWQ40AAAADAQABAAAAgEOvSh2CUU</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>HKnK7rWbrimgdmCFiqzvi2Ur81bgNtO6rN+O8jl8Z9TTr4t8A8kDIGGSu6DNW0TnOqulLL</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>OG3YDSp4UqMyK1ofNE9ikVFlUEyneNtcIoAtRElcqzwV65yQpujqRKtA0t2HxxRTREX4Jb</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>6dHkAPnVC9Yvjede203GVhAAAAQAd79ekwwt++/m6PadnZeLvvWUzHZqkjgOjN5M3a1uS8</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>82Y2LQ1oO8hmVTc4d/Gy8+3YkJ480Kjpxm7nirTdYf4AAABBAOC1HxQeZaQcaK7oEulsAL</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>w3tvwxZXcTAHGyrwXAhwbEym5V/naUGIB8QWlsbG3tZB03V0qnregcYdtQRXTy1KkAAABB</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>ANqXE1Toyq5aPp2DqN5Il1zTK5gmDOcmil+ao8M93Zc5ZDAANG40RcEDBHj1xxMzNCwJDo</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>XTYW2ynMpXNi5QokUAAAAUdXNlckBERVNLVE9QLVRITVMyUEoBAgMEBQYH</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>-----END OPENSSH PRIVATE KEY-----</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</div>
+</section>
+<section id="pubkey-show" class="level1">
+<h1>PubKey&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#pubkey" role="button" aria-expanded="false" aria-controls="pubkey">Show</a></h1>
+<div id="pubkey" class="collapse multi-collapse">
+<section id="a-key-in-2-parts" class="level3">
+<h3 class="anchored" data-anchor-id="a-key-in-2-parts">A Key in 2 Parts</h3>
+<ul>
+<li>We recall that the public key contains, and should only contain:
+<ul>
+<li><code>n</code>, a modular base, and</li>
+<li><code>e</code>, an encryptor</li>
+</ul></li>
+<li>Based on the KeyGen lab, it should be uncomplicated to calculate these values for 64 bit keys.</li>
+<li>We will use <code>.pub</code> instead of <code>.pem</code> or <code>.bad</code>
+<ul>
+<li>Not a huge deal how these are stored, actually.</li>
+<li>The key itself though, is still unsafe to use.</li>
+</ul></li>
+<li>We will naively print 2 lines of hexademical values, <code>n</code>, then <code>e</code>.</li>
+<li>We will right them to a file prefixed and suffixed as follows:</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>unsafe.pub</strong></pre>
+</div>
+<div class="sourceCode" id="cb10" data-filename="unsafe.pub"><pre class="sourceCode email code-with-copy"><code class="sourceCode email"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>-----BEGIN UNSAFE PUBLIC KEY-----</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>95a61f99198bd8e9</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>10001</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>-----END UNSAFE PUBLIC KEY-----</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Update your <code>keygen.c</code> such that each time it runs it:
+<ul>
+<li>Generates a new <code>unsafe.bad</code></li>
+<li>Generates a new <code>unsafe.pub</code></li>
+<li>That the <code>n</code> and <code>e</code> value in each of these agree.</li>
+<li>The the <code>n</code>, <code>e</code>, and <code>d</code> value may be used to encrypt and decrypt a letter.</li>
+</ul></li>
+</ul>
+</section>
+</div>
+</section>
+<section id="bit-show" class="level1">
+<h1>32 bit&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#32_bit" role="button" aria-expanded="false" aria-controls="32_bit">Show</a></h1>
+<div id="32_bit" class="collapse multi-collapse">
+<ul>
+<li>The largest keys we can naively fit in the <code>uint64_t</code> type at 32 bit keys.
+<ul>
+<li>Why? Well:
+<ul>
+<li>We do all operations modulo <code>n</code></li>
+<li>We must be able to multiple numbers as large as <code>n</code> together.</li>
+<li>The product of two numbers requires as many bits to store as the both factors.</li>
+<li>So we must cap intermediate result at 32 bits by capping <code>n</code> at 32 bits.</li>
+</ul></li>
+</ul></li>
+<li>We get 32 bit <code>n</code> by generating 16 bit primes.
+<ul>
+<li>Why? Well:
+<ul>
+<li><code>n</code> is the product of the primes.</li>
+<li>The product of two 16 bit numbers is a 32 bit number.</li>
+</ul></li>
+</ul></li>
+<li>We get 16 bit primes by finding primes less than <code>2 ** 16</code> and more than <code>2 ** 15</code>.
+<ul>
+<li>This is easy to write in hex as <code>0x8000</code> and <code>0x10000</code>.</li>
+</ul></li>
+<li>Ensure your keys are 32 bit.
+<ul>
+<li>Simply encrypt values up to <code>1 &lt;&lt; 31</code> in size.</li>
+</ul></li>
+<li>Here is a testing script:</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tester.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb11" data-filename="tester.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>make_encrypt <span class="op">=</span> <span class="kw">lambda</span> e, n : <span class="kw">lambda</span> m : modexp(m,e,n)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>lines <span class="op">=</span> <span class="bu">open</span>(<span class="st">"unsafe.bad"</span>).readlines()</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">int</span>(lines[<span class="dv">1</span>], <span class="dv">16</span>) </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> <span class="bu">int</span>(lines[<span class="dv">2</span>], <span class="dv">16</span>) </span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">int</span>(lines[<span class="dv">3</span>], <span class="dv">16</span>) </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>lines <span class="op">=</span> <span class="bu">open</span>(<span class="st">"unsafe.pub"</span>).readlines()</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> n <span class="op">!=</span> <span class="bu">int</span>(lines[<span class="dv">1</span>], <span class="dv">16</span>) <span class="kw">or</span> e <span class="op">!=</span> <span class="bu">int</span>(lines[<span class="dv">2</span>], <span class="dv">16</span>):</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Public key does not match private key."</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    exit()</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>encrypt <span class="op">=</span> make_encrypt(e,n)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>decrypt <span class="op">=</span> make_encrypt(d,n)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">all</span>([i <span class="op">==</span> decrypt(encrypt(i)) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bn">0x100</span>)]):</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Keys work for small values."</span>)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Keys failed on small values."</span>)</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">all</span>([i <span class="op">==</span> decrypt(encrypt(i)) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">31</span>, <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">29</span>)]):</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Keys work for larger values."</span>)</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Keys failed on larger values."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>By successfully encrypting and decrypting up to <code>1 &lt;&lt; 31</code>, the key is large enough for some small tasks, such encrypting the string “hi” - a string of length 3 when including the null terminator, which therefore contains 24 bits of information.</p>
+</blockquote>
+<section id="python-reference-solution" class="level3">
+<h3 class="anchored" data-anchor-id="python-reference-solution">Python Reference solution</h3>
+<ul>
+<li>This reference solution is logically correct to the best of my knowledge.</li>
+<li>It is not intended for readability.</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>keygen.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb12" data-filename="keygen.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_large_prime():</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">all</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> random.randint(<span class="dv">5460</span>,<span class="dv">10000</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> candidate</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> egcd(a, b):</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> a <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (b, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        g, y, x <span class="op">=</span> egcd(b <span class="op">%</span> a, a)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (g, x <span class="op">-</span> (b <span class="op">//</span> a) <span class="op">*</span> y, y)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>lcm <span class="op">=</span> <span class="kw">lambda</span> a, b: a <span class="op">*</span> b <span class="op">//</span> egcd(a, b)[<span class="dv">0</span>]</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>p, q <span class="op">=</span> find_large_prime(), find_large_prime()</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> p <span class="op">*</span> q</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> <span class="dv">65537</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>lmdb <span class="op">=</span> lcm(p <span class="op">-</span> <span class="dv">1</span>,  q <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> egcd(e, lmdb)[<span class="dv">1</span>]</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> d <span class="op">&lt;</span> <span class="dv">0</span>: <span class="co"># fix sign problem</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    d <span class="op">+=</span> lcm(p <span class="op">-</span> <span class="dv">1</span>,  q <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>hd <span class="op">=</span> <span class="st">"-----BEGIN"</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>ft <span class="op">=</span> <span class="st">"-----END"</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>tl <span class="op">=</span> <span class="st">" UNSAFE PRIVATE KEY-----</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"unsafe.bad"</span>, <span class="st">"w"</span>).write(<span class="ss">f"</span><span class="sc">{</span>hd<span class="sc">}{</span>tl<span class="sc">}{</span>n<span class="sc">:x}</span><span class="ch">\n</span><span class="sc">{</span>e<span class="sc">:x}</span><span class="ch">\n</span><span class="sc">{</span>d<span class="sc">:x}</span><span class="ch">\n</span><span class="sc">{</span>ft<span class="sc">}{</span>tl<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>tl <span class="op">=</span> <span class="st">" UNSAFE PUBLIC KEY-----</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="bu">open</span>(<span class="st">"unsafe.pub"</span>, <span class="st">"w"</span>).write(<span class="ss">f"</span><span class="sc">{</span>hd<span class="sc">}{</span>tl<span class="sc">}{</span>n<span class="sc">:x}</span><span class="ch">\n</span><span class="sc">{</span>e<span class="sc">:x}</span><span class="ch">\n</span><span class="sc">{</span>ft<span class="sc">}{</span>tl<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

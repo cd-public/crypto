@@ -1,0 +1,17 @@
+```{r}
+library(tidyverse)
+library(caret)
+```
+
+```{r}
+bank <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/BankChurners.rds")))
+```
+
+```{r}
+train(Churn ~ .,
+      data = bank |> select(1,2,3,4,5,grep("Churn", colnames(bank))), 
+      trControl = trainControl(method = "cv", number = 5),
+      method = "glm",
+      family = "binomial",
+      maxit = 5)$results['Kappa']
+```

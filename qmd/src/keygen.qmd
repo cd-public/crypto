@@ -1,0 +1,421 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: KeyGen
+subtitle: "Lab 0x6"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Public Key Encryption
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- Public key encryption   | - RSA in C  |
+|- Fermat's little theorm   | - .pem files  |
+|- RSA   |   |
+
+- There are no required exercises of this lab.
+- It is supplementary material to the RSAinC homework.
+  - This lab will generate the key $(n, e, d)$
+    - $n$, the modular base, part of the public and private key.
+    - $e$, the encryptor, part of the public key.
+    - $d$, the decryptor, part of the private key.
+- RSAinC will additional require the usage of these to encrpyt and decrypt text.
+  - RSAinC will require two .c files, the first of which is keygen.
+  - I would do all my work for this lab in `keygen.c` in an `rsainc` folder.
+  - For this lab, I provide an *intermediate* autograder, as a Python script, to support partial homework completion.
+    - The script is under the "32 bit" heading.
+
+:::
+
+
+# Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls="podman">Show</a>
+
+::: {#podman .collapse .multi-collapse}
+
+# Setup
+
+- For this lab, I used the following Containerfile
+  - Same as the printb lab
+
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc vim python3 astyle -y
+```
+- Mostly, having `astyle` and `python3` is nice.
+
+:::
+
+
+# Python&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#python" role="button" aria-expanded="false" aria-controls = "python">Show</a>
+
+::: {#python .collapse .multi-collapse}
+
+- There is a complete, correct, RSA implementation embedded in the [Fermat](fermat.html) slides.
+  - I extracted .qmd to .ipynb and .ipynb to .py.
+  - I editted lightly for readability (removed comments).
+
+```{.python filename="fermat.py"}
+def sixkp1(k): # 6k+1
+    is_prime = lambda n : any([n % i for i in range(2, int(n **.5))])
+    candidate = 6 * k + 1
+    while not is_prime(candidate):
+        candidate += 6
+    return candidate
+
+def lcm(a, b):
+    def gcd(a, b):
+        while b:
+            a, b = b, a % b
+        return a
+    return a * b // gcd(a, b)
+
+s = "C" # a random string
+m = ord(s) # to number
+
+hide_p = lambda: sixkp1(10)
+hide_q = lambda: sixkp1(15)
+n = hide_p() * hide_q()
+
+hide_λ = lambda: lcm(hide_p() - 1,  hide_q() - 1)
+
+e = 65537 # encryptor
+
+def find_d():
+    d = 1
+    while 1 != (d * e % hide_λ()):
+        d += 1
+    return d
+
+def modexp(m, e, n):
+    if e == 0:
+        return 1
+    if e == 1:
+        return m % n
+    if e % 2:
+        return (m * modexp(m*m % n, e//2, n)) % n
+    return  modexp(m*m % n, e//2, n) % n
+
+c = modexp(m, e, n) # ciphertext
+
+chr(modexp(modexp(ord("C"), e, n), find_d(), n))
+```
+
+- I did not show this in class, but it's probably easier to think of as follows:
+
+```{.python}
+# make_encrypt takes an 
+# * encryptor e and 
+# * modular base n and 
+# returns a function the performs public key encryption.
+
+make_encrypt = lambda e, n : lambda m : modexp(m,e,n)
+
+encrypt = make_encrypt(e,n)
+decrypt = make_encrypt(find_d(),n)
+
+chr(decrypt(encrypt(ord("C"))))
+```
+
+- There's no graceful (or even ungraceful) way to retuun functions in C, but I thought this was really cool `¯\_(ツ)_/¯ `
+
+:::
+
+# 6k + 1&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#sixkp1" role="button" aria-expanded="false" aria-controls = "sixkp1">Show</a>
+
+::: {#sixkp1 .collapse .multi-collapse}
+
+- Implement primality generation in C.
+- You may use any method but I recommend $6k + 1$
+
+```{.python filename="fermat.py"}
+def sixkp1(k): # 6k+1
+    is_prime = lambda n : any([n % i for i in range(2, int(n **.5))])
+    candidate = 6 * k + 1
+    while not is_prime(candidate):
+        candidate += 6
+    return candidate
+```
+
+- For BigRSA, you will primality testing for the `4096_t`.
+- Likewise, for BigRSA, you will need fairly narrow bounds on *precision*, or how many bits your primes take up.
+- That said, for now the following should be sufficient:
+
+```{.C}
+uint64_t sixkp1(uint64_t k) {
+  /* Your code here (and update the return statement)  */
+  return 6 * k + 1;
+}
+```
+
+::: {.callout-note appearance="simple"}
+
+### Advanced Primality Testing
+
+- Advanced students may wish to implement sieves but should not do so unless they achieve a memory safe implementation, likely utilizing (enormous) buffers for the file system.
+- Advanced students may with to implement Pocklington-Lehmer primality testing, for which I am not familiar with memory usage.
+  - Fermat primality testing is a component of Pocklington-Lehmer, a fun callback to lecture.
+- A student implementing either will be invited to deliver a guest lecture on their implementation in a future class session or other venue.
+
+:::
+
+:::
+
+# gcdlcm&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#gcdlcm" role="button" aria-expanded="false" aria-controls = "gcdlcm">Show</a>
+
+::: {#gcdlcm .collapse .multi-collapse}
+
+- Implement lcm - least common multiple - calculation in C.
+- As with $6k+1$, I will make a non-binding to calculate the gcd - greatest common denominator - as your method.
+
+```{.python filename="fermat.py"}
+def lcm(a, b):
+    def gcd(a, b):
+        while b:
+            a, b = b, a % b
+        return a
+    return a * b // gcd(a, b)
+```
+
+- For BigRSA, this operation will require considerably optimizations related to the "Extended Euclidean Algorithm".
+- Note that inner functions are non-standard C and not permitted in C89.
+- That said, for now the following should be sufficient:
+
+```{.C}
+uint64_t gcd(uint64_t a, uint64_t b) {
+  /* Your code here (and update the return statement)  */
+  return 1;
+}
+
+uint64_t lcm(uint64_t a, uint64_t b) {
+  /* Your code here (and update the return statement)  */
+  return a * b;
+}
+```
+
+::: {.callout-note appearance="simple"}
+
+### Optimizations and Assertions
+
+- Advanced students may wish to apply a series of tests, perhaps as assert statements, to monitor overflow during this calculation.
+  - We note that the lcm can be larger than two values that are implicitly only bounded by the 64 bit size.
+  - How should we manage this?
+  - $\exists$ proofs of correctness, given starting assumptions.
+- Advanced students may wish to implement the extended Euclidean algorithm *without* using signed integers, which I found to be non-trivial but not impossibly difficult.
+:::
+
+:::
+
+
+
+# KeyGen&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#keygen" role="button" aria-expanded="false" aria-controls = "keygen">Show</a>
+
+::: {#keygen .collapse .multi-collapse}
+
+### A Key in 3 Parts
+
+- We recall that the private key minimally contains:
+  - `n`, a modular base
+  - `e`, an encryptor, and 
+  - `d`, a descryptor.
+
+- Based on the KeyGen lab, it should be uncomplicated to calculate these values for 64 bit keys.
+- We will use `.bad` instead of `.pem` and insecurely store these values in plaintext.
+- We will then make executables to generate `.bad` and encrypt content provided a `.bad`
+    - We name a `.bad` so helpfully we don't use it by accident.
+- We will naively print 3 lines of hexademical values, `n`, `e`, then `d`.
+- We will write them to a 5-line file as follows:
+  - The first line is the precise header text.
+  - The second line is the `n` value in hexadecimal.
+  - The third line is the `e` value, which is `10001`.
+  - The fourth line is the `d` value, which should be kept secret.
+  - The fifth and final line is the precise footer text.
+
+```{.email filename="unsafe.bad"}
+-----BEGIN UNSAFE PRIVATE KEY-----
+95a61f99198bd8e9
+10001
+fbea5e6a3ed31e8f
+-----END UNSAFE PRIVATE KEY-----
+```
+
+- This format is based on the `.pem` format
+  - For privacy enhanced email.
+  - Used to store keys generated by `ssh-keygen`.
+  - It does not split up `n`, `e`, and `d`
+  - More on it latter.
+- For reference This is a 1024 bit key made by `ssh-keygen -b 1024`
+  - This 1024 bit key is too small to be regarded secure.
+  - So our 32 bit keys are far too small to be regarded secure.
+  - And separating components may be regarded as less secure.
+
+```{.email filename="~/.ssh/id_rsa"}
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn
+NhAAAAAwEAAQAAAIEAv97YRG/TOK6VnXi3LK8N6z/meRvSo5vkjjm0YUIV5zEx8OyZUdTV
+cu114ll/eC4ZgrW3bISzyIO0MB5rnt8oPcO5uiSJIqRSKbd2LNJdkefIpMe4LJJLuzfB4z
+xqtG9vgsxrJNYUMJ6Vsn5YKRQCaCZQdKxMPx+itHkPeQLWQ40AAAIQ0XWwz9F1sM8AAAAH
+c3NoLXJzYQAAAIEAv97YRG/TOK6VnXi3LK8N6z/meRvSo5vkjjm0YUIV5zEx8OyZUdTVcu
+114ll/eC4ZgrW3bISzyIO0MB5rnt8oPcO5uiSJIqRSKbd2LNJdkefIpMe4LJJLuzfB4zxq
+tG9vgsxrJNYUMJ6Vsn5YKRQCaCZQdKxMPx+itHkPeQLWQ40AAAADAQABAAAAgEOvSh2CUU
+HKnK7rWbrimgdmCFiqzvi2Ur81bgNtO6rN+O8jl8Z9TTr4t8A8kDIGGSu6DNW0TnOqulLL
+OG3YDSp4UqMyK1ofNE9ikVFlUEyneNtcIoAtRElcqzwV65yQpujqRKtA0t2HxxRTREX4Jb
+6dHkAPnVC9Yvjede203GVhAAAAQAd79ekwwt++/m6PadnZeLvvWUzHZqkjgOjN5M3a1uS8
+82Y2LQ1oO8hmVTc4d/Gy8+3YkJ480Kjpxm7nirTdYf4AAABBAOC1HxQeZaQcaK7oEulsAL
+w3tvwxZXcTAHGyrwXAhwbEym5V/naUGIB8QWlsbG3tZB03V0qnregcYdtQRXTy1KkAAABB
+ANqXE1Toyq5aPp2DqN5Il1zTK5gmDOcmil+ao8M93Zc5ZDAANG40RcEDBHj1xxMzNCwJDo
+XTYW2ynMpXNi5QokUAAAAUdXNlckBERVNLVE9QLVRITVMyUEoBAgMEBQYH
+-----END OPENSSH PRIVATE KEY-----
+```
+
+:::
+
+# PubKey&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#pubkey" role="button" aria-expanded="false" aria-controls = "pubkey">Show</a>
+
+::: {#pubkey .collapse .multi-collapse}
+
+### A Key in 2 Parts
+
+- We recall that the public key contains, and should only contain:
+  - `n`, a modular base, and
+  - `e`, an encryptor
+
+- Based on the KeyGen lab, it should be uncomplicated to calculate these values for 64 bit keys.
+- We will use `.pub` instead of `.pem` or `.bad`
+  - Not a huge deal how these are stored, actually.
+  - The key itself though, is still unsafe to use.
+- We will naively print 2 lines of hexademical values, `n`, then `e`.
+- We will right them to a file prefixed and suffixed as follows:
+
+```{.email filename="unsafe.pub"}
+-----BEGIN UNSAFE PUBLIC KEY-----
+95a61f99198bd8e9
+10001
+-----END UNSAFE PUBLIC KEY-----
+```
+
+- Update your `keygen.c` such that each time it runs it:
+  - Generates a new `unsafe.bad`
+  - Generates a new `unsafe.pub`
+  - That the `n` and `e` value in each of these agree.
+  - The the `n`, `e`, and `d` value may be used to encrypt and decrypt a letter.
+
+:::
+
+# 32 bit&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#32_bit" role="button" aria-expanded="false" aria-controls = "32_bit">Show</a>
+
+::: {#32_bit .collapse .multi-collapse}
+
+- The largest keys we can naively fit in the `uint64_t` type at 32 bit keys.
+  - Why? Well:
+    - We do all operations modulo `n`
+    - We must be able to multiple numbers as large as `n` together.
+    - The product of two numbers requires as many bits to store as the both factors.
+    - So we must cap intermediate result at 32 bits by capping `n` at 32 bits.
+- We get 32 bit `n` by generating 16 bit primes.
+  - Why? Well:
+    - `n` is the product of the primes.
+    - The product of two 16 bit numbers is a 32 bit number.
+- We get 16 bit primes by finding primes less than `2 ** 16` and more than `2 ** 15`.
+  - This is easy to write in hex as `0x8000` and `0x10000`.
+- Ensure your keys are 32 bit.
+  - Simply encrypt values up to `1 << 31` in size. 
+- Here is a testing script:
+
+```{.python filename="tester.py"}
+def modexp(m, e, n):
+    if e == 0:
+        return 1
+    if e == 1:
+        return m % n
+    if e % 2:
+        return (m * modexp(m*m % n, e//2, n)) % n
+    return  modexp(m*m % n, e//2, n) % n
+
+make_encrypt = lambda e, n : lambda m : modexp(m,e,n)
+
+lines = open("unsafe.bad").readlines()
+n = int(lines[1], 16) 
+e = int(lines[2], 16) 
+d = int(lines[3], 16) 
+
+lines = open("unsafe.pub").readlines()
+if n != int(lines[1], 16) or e != int(lines[2], 16):
+    print("Public key does not match private key.")
+    exit()
+
+encrypt = make_encrypt(e,n)
+decrypt = make_encrypt(d,n)
+
+if all([i == decrypt(encrypt(i)) for i in range(0x100)]):
+    print("Keys work for small values.")
+else:
+    print("Keys failed on small values.")
+
+if all([i == decrypt(encrypt(i)) for i in range(0,1 << 31, 1 << 29)]):
+    print("Keys work for larger values.")
+else:
+    print("Keys failed on larger values.")
+```
+
+> By successfully encrypting and decrypting up to `1 << 31`, the key is large enough for some small tasks, such encrypting the string "hi" - a string of length 3 when including the null terminator, which therefore contains 24 bits of information.
+
+### Python Reference solution
+
+- This reference solution is logically correct to the best of my knowledge.
+- It is not intended for readability.
+
+```{.python filename="keygen.py"}
+import random
+
+def find_large_prime():
+    is_prime = lambda n : all([n % i for i in range(2, int(n **.5))])
+    candidate = 6 * random.randint(5460,10000) + 1
+    while not is_prime(candidate):
+        candidate += 6
+    return candidate
+
+def egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+    
+lcm = lambda a, b: a * b // egcd(a, b)[0]
+p, q = find_large_prime(), find_large_prime()
+n = p * q
+e = 65537
+lmdb = lcm(p - 1,  q - 1)
+d = egcd(e, lmdb)[1]
+while d < 0: # fix sign problem
+    d += lcm(p - 1,  q - 1)
+hd = "-----BEGIN"
+ft = "-----END"
+tl = " UNSAFE PRIVATE KEY-----\n"
+open("unsafe.bad", "w").write(f"{hd}{tl}{n:x}\n{e:x}\n{d:x}\n{ft}{tl}")
+tl = " UNSAFE PUBLIC KEY-----\n"
+open("unsafe.pub", "w").write(f"{hd}{tl}{n:x}\n{e:x}\n{ft}{tl}")
+```
+
+:::

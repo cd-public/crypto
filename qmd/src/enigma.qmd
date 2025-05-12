@@ -1,0 +1,1418 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: Enigma
+subtitle: "HW 0x0: Due Th, Jan 23"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Enigma&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#enigma" role="button" aria-expanded="false" aria-controls = "enigma">Show</a>
+
+::: {#enigma .collapse .multi-collapse}
+
+### Goal: Learn C I/O and strings
+
+- My responsibility
+  - I will provide a reference solution in Python (solved)
+  - I will provide an autograder Containerfile (tester)
+- Your responsibility
+  - You will create a solution in C as an "enigma.c" file
+  - You will create a [Gist](https://gist.github.com/) with an "enigma.c"
+  - You will email me, from your credentialed school email, the url of your Gist, it will look something like:
+  ```email
+  https://gist.github.com/cd-public/a840e95e71ac7309a53ab0bb1282ba40
+  ```
+- What follows is reference material to prepare you to implement "enigma.c"
+  - Enigma, Solved, Visual, and Rotors form a description of the requirements
+  - Tester documents the autograder
+  - Other headings cover the technical details that support the implementation.
+
+
+### Topic Areas
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- `podman` | - `curl`   |
+|- `vim`    | - stdio    |
+|- `gcc`    | - ciphers  |
+|- `git`    |            |
+
+### Motivation
+
+- Enigma was a historically significant technology
+  - It was a Nazi encryption device, using ciphers
+  - It was broken by Turing, gay icon and one of the first and greatest computer scientists
+- At Willamette, Enigma is an (in)famous CS 151 Intro to Programming assignment
+  - Basically it is the first assignment that requires nested *for loop*s
+- In this course, Enigma will demonstrate the obscurity/clarity divide
+  - In Python, letters and numbers are different things
+  - In C, there are no letters or really numbers, just bits and bytes
+  - This makes Enigma in C **easier**, despite being a "harder" language.
+
+### Reference Materials
+
+- You can review the Python assignment if you wish:
+  - Write-ups:
+    - [Prof. Roberts](https://people.willamette.edu/~esroberts/roberts-enigma/Milestones/)
+    - [Prof. Rembold](https://jrembold.github.io/Website_Backup/class_files/cs151/Projects/Project_Enigma.html)
+    - [Prof. Calvin](https://cd-public.github.io/courses/old/cs1f24/hws/p4.html)
+  - Slides
+    - [Prof. Rembold](https://jrembold.github.io/Website_Backup/class_files/cs151/Slides/slides/Ch10_Enigma.html#/say-it-secret)
+    - [Prof. Calvin](https://cd-public.github.io/courses/old/cs1f24/slides/wcd1_enigma.html)
+  - [Assignment Repository](https://github.com/rembold-cs151-master/Project_Enigma)
+- I also provide
+  - "Solved": A Python implementation of the machine
+  - "Visual": A text visualizer of the Engima machine's ciphers
+  - "Rotors": A text visualizer of the full Enigma machine
+
+:::
+
+# Solved&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#solved" role="button" aria-expanded="false" aria-controls = "solved">Show</a>
+
+
+::: {#solved .collapse .multi-collapse}
+
+- Here is a reference solution, with a few tests, in Python. 
+  - [Gist](https://gist.github.com/cd-public/a840e95e71ac7309a53ab0bb1282ba40)
+- I regard this code as considerably easier to read, test, and understand than most plaintext descriptions.
+- I will also do a visual representation.
+- The ciphers are sometimes called "rotors" because historically they were implemented as a rotating... cipher.
+
+
+```py
+#!/usr/bin/env python3
+
+# constants                       # constant
+rs = [                            # rotors
+    "BDFHJLCPRTXVZNYEIWGAKMUSQO", # fast
+    "AJDKSIRUXBLHWTMCQGZNPYFVOE", # medium
+    "EKMFLGDQVZNTOWYHXUSPAIBRCJ", # slow
+    "IXUHFEZDAOMTKQJWNSRLCYPBVG"  # reflect
+]
+A  = ord('A')                     # value of 'A'
+NC = len(rs[0])                   # number of characters
+
+# apply a cipher/rotor `r` to a letter `c`
+rapply = lambda c, r : r[ord(c) - A]
+
+# invert a cipher/rotor `r`
+    # create a list of letters with their index
+        # [(r[i],i) for i in range(NC)]
+    # sort the list
+        # for p in sorted
+    # convert indexes to back to letters in the alphabet
+        # chr(p[1]+A)
+invert = lambda r : [chr(p[1]+A) for p in sorted([(r[i],i) for i in range(NC)])]
+
+# extend the rotor set to include inverted ciphers
+    # In reversed order, as well
+    # fas med slo ref slo med fas
+rs += [invert(r) for r in rs[2::-1]]
+
+# encrypt letter `c` with rotors in default* positions
+rotors = lambda c : [c := rapply(c,r) for r in rs][-1]
+
+# default position a,b,c -> r,f,o, respectively
+assert([
+    rotors('A'),
+    rotors('B'),
+    rotors('C')
+] == ['R','F','O'])
+
+# shift letter `c` forward `n` letters in alphabet
+nshift = lambda c, n : chr((ord(c) - A + n) % NC + A)
+
+# allow rotor rotations
+    # fast spins every letter
+    # medi spins every time fast loops back NC->0
+    # slow ""               medi ""
+shifts = lambda l, n : [
+    l % NC, l // NC % NC, l // (NC*NC) % NC,
+    0,
+    l // (NC*NC) % NC, l // NC % NC, l % NC
+][n]
+
+# combine shift apply? don't know what to call
+shiply = lambda c, n, r : nshift(rapply(nshift(c,n),r),-n)
+# or if you prefer
+shiply = lambda c, n, r : chr((ord(r[(ord(c)-A+n)%NC])-A-n)%NC+A)
+
+# single letter enigma, with number of previous letters `l`
+letter = lambda c, l : [c := shiply(c,shifts(l,i),rs[i]) for i in range(len(rs))][-1]
+
+# phrase
+    # enigma starts with an single rotation before first encryption.
+enigma = lambda s : "".join([letter(s[i],i+1) for i in range(len(s))])
+
+# test
+assert([
+    enigma("AAA"),
+    enigma("ABC"),
+    enigma("ZLC")
+] == ["ZLC","ZRA","AAA"])
+
+if __name__ == "__main__":
+    import sys
+    print(enigma(sys.argv[1]))
+```
+
+- Here is an example of how it is used to print "HELLOWORLD":
+
+```email
+python3 enigma.py MNBOASVTTB
+```
+
+
+
+:::
+
+
+# Visual&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#visual" role="button" aria-expanded="false" aria-controls = "visual">Show</a>
+
+::: {#visual .collapse .multi-collapse}
+
+#### Single Cipher
+
+- Visualize a cipher as mapping a A-Z to A-Z.
+  - Say, 'E' becomes 'J'
+
+
+```email
+      E
+ _____|______________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[     |                      ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher
+ ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      J
+```
+
+#### Iterative Cipher
+- We can apply ciphers iteratively.
+  - So the output 'J' of the first cipher is input to the next cipher.
+
+```email{.larger}
+ ____________________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[     |                      ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher[0]
+ ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      J>>>>J               
+ __________|_________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[          |                 ]  
+[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # cipher[1]
+ ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+           B
+```
+
+#### All Ciphers
+- Enigma ciphers/rotors are named:
+  - Fast
+  - Medium
+  - Slow
+  - Reflect, which has special properties
+
+```email
+      E
+ _____|______________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[     |                      ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast
+ ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      J>>>>J               
+ __________|_________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[          |                 ]  
+[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium
+ ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+   B<<<<<<<B
+ __|_________________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[  |                         ]
+[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow
+ ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+   K>>>>>>>>K
+ ___________|________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[           |                ]
+[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect
+ ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+            M
+```
+
+##### _Reflector_
+
+- We note that with the reflector:
+  - If we take the _alphabet_ and find a corresponding letter in the _cipher_, or
+  - If we take the _cipher_ and find a corresponding letter in the _alphabet_
+  - We get the same letter...
+- This is...
+  - The special property of the reflector, and
+  - How we will re-use the fast, medium, and slow ciphers.
+
+:::: {.columns}
+
+::: {.column}
+```email
+            K
+ ___________|________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[           |                ]
+[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect
+ ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+            M
+```
+:::
+
+::: {.column}
+```email
+              K
+ _____________|______________
+[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect
+[             |              ]
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+              M
+```
+:::
+
+::::
+
+#### Decryption
+
+- After the reflect cipher, values are _decrypted_
+  - A letter's place in the _cipher_, not alphabet, is found
+  - This location is used to determine the letter in the _alphabet_
+  - Essentially, a change from mapping the alphabet to a cipher, and vice versa.
+- 'H' comes out of the reflector
+  - 'H' is is index 7 letter of the alphabet
+  - So in the next cipher, we'll look up the index 7 letter of the _cipher_
+  - It is now more helpful to think of an index than a letter - that is what changes here.
+
+```email
+            K
+ ___________|________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[           |                ]
+[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect
+ ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    M<<<<<<<M
+ ___|________________________
+[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow
+[   |                        ]
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    C
+```
+
+#### Inversion
+
+- We can separately calculate what cipher would correspond to the "inverted" slow cipher.
+  - We take all the slow->alphabet pairs
+  - We alphabetize the pairs by the first letter
+  - The output is no longer alphabetized, as is a new cipher.
+- It is left to the student as a design decision whether do
+  - "Decrypt" via a provided cipher, or
+  - "Invert" a provided cipher, and apply the inverted cipher.
+- Students should consider the complexity of both methods.
+
+:::: {.columns}
+
+::: {.column}
+```email
+    M
+ ___|________________________
+[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow
+[   |                        ]
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    C
+```
+:::
+
+::: {.column}
+```email
+              M
+ _____________|______________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[             |              ]
+[ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+              C
+```
+:::
+
+::::
+
+#### Iterating Back
+
+- The next cipher is "medium" and its index 7 letter is 'U'
+  - 'U' is the index 20 letter of the alphabet.
+  
+:::: {.columns}
+
+::: {.column}
+```email
+    M
+ ___|________________________
+[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow
+[   |                        ]
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    C>>>>>>>>>>>>C
+ ________________|____________
+[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium
+[                |           ]  
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾
+                 P
+```
+:::
+
+::: {.column}
+```email
+              M
+ _____________|______________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[             |              ]
+[ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    C<<<<<<<<<C
+ ___|________________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[   |                        ]  
+[ AJPCZWRLFBDKOTYUQGENHXMIVS ] # medium^-1
+ ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    P            
+```
+:::
+
+::::
+
+#### End-to-end
+
+- The entire end-to-end cipher application can be visualized as follows...
+
+:::: {.columns}
+
+::: {.column}
+
+```email
+      E
+ _____|______________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[     |                      ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast
+ ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      J>>>>J               
+ __________|_________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[          |                 ]  
+[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium
+ ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+   B<<<<<<<B
+ __|_________________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[  |                         ]
+[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow
+ ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+   K>>>>>>>>K
+ ___________|________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[           |                ]
+[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect
+ ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    M<<<<<<<M
+ ___|________________________
+[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow
+[   |                        ]
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    C>>>>>>>>>>>>C
+ ________________|____________
+[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium
+[                |           ]  
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾
+         P<<<<<<<P
+ ________|___________________
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast
+[        |                   ]  
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+         H
+```
+
+:::
+
+::: {.column}
+
+```email
+      E
+ _____|______________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[     |                      ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast
+ ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      J>>>>J               
+ __________|_________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[          |                 ]  
+[ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium
+ ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+   B<<<<<<<B
+ __|_________________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[  |                         ]
+[ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow
+ ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+   K>>>>>>>>K
+ ___________|________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[           |                ]
+[ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect
+ ‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+            M>M
+ _____________|______________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[             |              ]
+[ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    C<<<<<<<<<C
+ ___|________________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[   |                        ]  
+[ AJPCZWRLFBDKOTYUQGENHXMIVS ] # medium^-1
+ ‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    P>>>>>>>>>>>>P    
+ ________________|___________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[                |           ]  
+[ TAGBPCSDQEUFVNZHYIXJWLRKOM ] # fast^-1
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾
+                 H
+```
+
+
+
+:::
+
+::::
+
+_For the remainder of the write-up, I will assume without loss of generality the usage of inverted ciphers._
+
+:::
+
+
+# Rotors&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#rotors" role="button" aria-expanded="false" aria-controls = "rotors">Show</a>
+
+::: {#rotors .collapse .multi-collapse}
+
+#### Single Rotor
+
+- Visualize a rotor as mapping a A-Z to A-Z.
+  - Say, 'E' becomes 'J'
+
+
+```email
+      E
+ _____|______________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[     |                      ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher
+ ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      J
+```
+
+#### Rotation
+
+- We call these things rotors because they rotate:
+  - The mapping from e.g. index _i_ of the input to index _j_ of the output is unalterated
+    - For example, 'E' is index 5 and maps to 'J' at index 10, both of the alphabet
+  - However, we can change the rotors as follows:
+    - The input index is shifted forward by some shift value _n_
+    - This input index is mapped to an output index
+    - This output index is shifted backward by the same _n_
+- Let's visualize with _n_ = 3
+
+```email
+      E
+      |>>>
+      EFGH
+      >>>|
+ ________|___________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[        |                   ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher
+ ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+         P
+      <<<|
+      MNOP 
+      |<<<
+      M
+```
+
+#### As ciphers
+
+- It is worth noting this identical to generating ciphers that start an the index _n_ letter of the alphabet and wrap around from Z to A.
+
+:::: {.columns}
+
+::: {.column}
+
+```email
+      E
+      |
+      |>>>
+      EFGH
+      >>>|
+         |
+         |
+ ________|___________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[        |                   ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher
+ ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+         P
+         |
+      <<<|
+      MNOP 
+      |<<<
+      |
+      M
+```
+
+:::
+
+::: {.column}
+
+```email
+      E
+ _____|______________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[     |                      ]  
+[ DEFGHIJKLMNOPQRSTUVWXYZABC ] # forward(3)
+ ‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      H>>H
+ ________|___________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[        |                   ]  
+[ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # cipher
+ ‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+         P>>>>>>>P
+ ________________|___________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+[                |           ]  
+[ XYZABCDEFGHIJKLMNOPQRSTUVW ] # forward(-3)
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾
+                 M
+```
+
+:::
+
+::::
+
+_For the remainder of the write-up, I will assume without loss of generality that rotations can be understood without considering them to be ciphers._
+
+#### For Enigma
+
+- The Enigma machine triggers rotor rotations every time a letter is encrypted.
+- They rotate as follows
+  - **Before** a letter is encryped, the fast rotor rotates forward once.
+    - So **before the first encryption**, 
+      - (_n_ = 0 : A->A) becomes (_n_ = 1 : A->B) before the fast rotor.
+    - To understand this, the rotation must be applied at two points:
+  - If the fast rotor "loops back" from a rotation from (_n_ = 25 : A->Z) to a non-rotation of (_n_ = 26 = 0 : A->A), then
+    - The medium rotor advances once, from e.g.  (_n_ = 0 : A->A) to (_n_ = 1 : A->B)
+  - When medium loops back, slow advances once.
+  - There are no rotations related to the reflector.
+- Imagine we have typed 29 letters:
+  - the fast rotor has progressed 29 times and progresses once more before encryption.
+    - So shift by _n_ = 30, or _n_ = 30-26 = 4.
+  - the medium rotor progresed 1 time, 
+  - and slow rotor progressed not at all.
+- Steps labelled "adjust" are not computational
+  - I change horizontal alignment of letters to align the rotors.
+  - This is a visual change only, as it was in "Visual" above.
+
+```email
+     X
+     |
+=====|===========================================
+=    X                                          =
+=    |>>>>                                      =
+=    XYZAB                           # rotate   =
+=    >>>>|                                      =
+=        B                                      =
+=      __|_________________________             =
+=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet = 
+=     [  |                         ]            = # fast
+=     [ BDFHJLCPRTXVZNYEIWGAKMUSQO ] # fast     =
+=      ‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾             =
+=        D                                      =
+=    <<<<|                                      =
+=    ZABCD                           # rotate   =
+=    |<<<<                                      =
+=    Z                                          =
+=====|===========================================
+     |
+     Z>Z                             # adjust
+       |
+=======|=========================================
+=      Z                                        =
+=      |>                                       =
+=      ZA                            # rotate   =
+=      >|                                       =
+=       A                                       =
+=      _|__________________________             =
+=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =
+=     [ |                          ]            = # medium
+=     [ AJDKSIRUXBLHWTMCQGZNPYFVOE ] # medium   =
+=      ‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾             =
+=       A                                       =
+=      <|                                       =
+=      ZA                            # rotate   =
+=      |<                                       =
+=      Z                                        =
+=======|=========================================
+       |
+       Z>>>>>>>>>>>>>>>>>>>>>>>>>Z   # adjust
+                                 |
+=================================|===============
+=                                Z              =
+=                                |              =
+=                                Z   # rotate   =
+=                                |              =
+=                                Z              =
+=      __________________________|_             =
+=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =
+=     [                          | ]            = # slow
+=     [ EKMFLGDQVZNTOWYHXUSPAIBRCJ ] # slow     =
+=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾             =
+=                                J              =
+=                                |              =
+=                                J   # rotate   =
+=                                |              =
+=                                J              =
+=================================|===============
+                                 |
+                 J<<<<<<<<<<<<<<<J   # adjust
+       __________|_________________
+      [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+      [          |                 ]              # reflect
+      [ IXUHFEZDAOMTKQJWNSRLCYPBVG ] # reflect
+       ‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+                 O>>>>O              # adjust
+                      |
+======================|==========================
+=                     O                         =
+=                     |                         =
+=                     O              # rotate   =
+=                     |                         =
+=                     O                         =
+=      _______________|____________             =
+=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =
+=     [               |            ]            = # slow
+=     [ UWYGADFPVZBECKMTHXSLRINQOJ ] # slow^-1  =
+=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾             =
+=                     M                         =
+=                     |                         =
+=                     M              # rotate   =
+=                     |                         =
+=                     M                         =
+======================|==========================
+                      |
+                    M<M              # adjust
+                    |
+====================|=============================
+=                   M                           =
+=                   |>                          =
+=                   MN               # rotate   =
+=                   >|                          =
+=                    N                          =
+=      ______________|_____________             =
+=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet =
+=     [ |            |             ]            = # medium
+=     [ AJPCZWRLFBDKOTYUQGENHXMIVS ] # medium^-1=
+=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾‾‾‾‾‾‾‾‾‾             =
+=                    T                          =
+=                   <|                          =
+=                   ST               # rotate   =
+=                   |<                          =
+=                   S                           =
+====================|============================
+                    |
+                    S>>>>>S          # adjust
+                          |
+==========================|======================
+=                         |                     =
+=                         S                     =
+=                         |>>>>      # rotate   =
+=                         STUVW                 =
+=                         >>>>|                 =
+=      _______________________|____             =
+=     [ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet = 
+=     [                       |    ]            = # fast
+=     [ TAGBPCSDQEUFVNZHYIXJWLRKOM ] # fast^-1  =
+=      ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|‾‾‾‾             =
+=                             R                 =
+=                         <<<<|                 =
+=                         NOPQR       # rotate  =
+=                         |<<<<                 =
+=                         N                     =
+==========================|======================
+                          |
+                          N
+
+```
+
+:::
+
+# char *&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#string" role="button" aria-expanded="false" aria-controls = "string">Show</a>
+
+::: {#string .collapse .multi-collapse}
+
+#### Hello, world!
+
+- I start "enigma.c" with "hello.c" from [Alpine](../dem/alpine.html)
+    - This file will successfully create an executable, not correctly encrypt or decrypt.
+    - Try it out with the autograder container.
+
+```{.C filename="enigma.c"}
+#include <stdio.h>
+
+int main() {
+    printf("hello, world\n");
+    return 0 ;
+}
+```
+
+#### No strings attached
+
+- In C there are no strings.
+  - There are instead things called `char *`
+  - Say "character star"
+  - We attach the * to the variable name
+    - We'll revisit this later - it will make sense.
+  - That is, an array, or buffer, of characters
+    - Not quite a list - closer to a NumPy array.
+- It matters what things are called.
+  - In C we must say what kind of thing a variable is when we "declare" the variable.
+  - Later we use the variable, without specifying the kind of thing
+  - But we cannot change its kind.
+  - C variable declaration is like how Python function declaration, with `def`
+- We will use format print and variable declarations to introduce `char *`
+  - We note that Python `print` appends a newline and C `printf` does not.
+    - I specify an non-newline terminator in Python for equivalence.
+
+:::: {.columns}
+
+::: {.column}
+
+```{.python filename="test.py"}
+x = 1
+print(f"{x:d}", end="")
+# we can reassign x and change its type
+x = "hello world"
+print(f"{x:s}", end="")
+```
+
+:::
+
+::: {.column}
+
+```{.C filename="test.c"}
+int n = 1;
+printf("%d", n) ;
+/* we have to make a new variable of novel type */
+char *m = "hello world";
+printf("%s", m) ;
+```
+
+:::
+
+::::
+
+- Both have the same output:
+  - The numerical value "1" and the string value "hello world" on the same line.
+
+```email
+1hello world
+```
+
+
+- You can update "hello.c" to use a format print.
+  - This will form the basis of output in this assignment.
+
+```{.C filename="enigma.c"}
+#include <stdio.h>
+
+int main() {
+    char *str = "hello, world";
+    printf("%s\n", str);
+    return 0 ;
+}
+```
+
+#### Constants
+
+- The C language has a form of support for constants
+    - These are values that are fixed when the executable is created.
+    - They may not be reassigned by any line of code.
+- The `#define` "pre-processor directive" is used to create constants.
+    - `#define` is like `#include` which is somewhat like `import`
+    - It defines new values, which are not variables, for use in the .c file
+    - The pre-processor reads .c files before the executable is created.
+- We can also use `#define` for strings, such as the rotor strings.
+    - By convention, constants are named in all caps, like `ROTORS`
+    - I used a single string of all rotors concatenated.
+    - You may do whatever works for you.
+    
+```{.C filename="enigma.c"}
+#include <stdio.h>
+
+#define STR "hello, world"
+
+int main() {
+    printf("%s\n", STR);
+    return 0 ;
+}
+```
+
+- An astute learner will note that constants need not be computed within an executable.
+- It is not uncommon to compute constants in a different file, or even in a different language.
+  - My `ROTORS` constant was computed in Python.
+  - I used Python file operations to save this computation to "enigma.c"
+  - Via `vim` I used the "yank" and "paste" features to move it to the top of "enigma.c".
+
+#### Just a little bit
+
+- In C, characters aren't printing characters.
+  - They are "just bits" - a collection of ones and zeroes, or a number.
+  - We attach the * to the variable name
+    - We'll revisit this latter - it will make sense.
+  - This differs from Python, which uses strings of length one.
+    - This is sketchy, sometimes.
+    - Strings are a non-numeric.
+- If we want to use a numerical value as a printing character, we use a format print.
+- **C characters use single quotes, and C strings use double quotes.**
+
+
+:::: {.columns}
+
+::: {.column}
+
+```{.python filename="test.py"}
+x = ord('A')
+print(f"{x:d}, {x:x}, {x:c}")
+```
+
+:::
+
+::: {.column}
+
+```{.C filename="test.c"}
+/* We do not use anything like ord() */
+printf("%d, %x, %c\n", 'A','A','A');
+```
+
+:::
+
+::::
+
+- Both have the same output:
+  - The decimal (base 10), hexadecimal (base 16), and unicode/ascii *representations* of the same *value*.
+
+```email
+65, 41, A
+```
+
+- An astute learner will note that this insight is sufficient to implement a rotor.
+
+:::
+
+# C loop <a class="btn btn-primary" data-bs-toggle="collapse" href="#loop" role="button" aria-expanded="false" aria-controls = "loop">Show</a>
+
+::: {#loop .collapse .multi-collapse}
+
+### Building Character
+
+- The core complication of the Enigma machine was that it was an *iterative* cipher.
+- Let's practice iteration by iterating over a char *
+- We note:
+  - In C there is no string, list, tuple, generator, dictionary, or set type.
+  - In Python, *for loop*s require one of these types.
+  - Henceforth we refer to the C *for loop* as a "*for loop*" and the Python *for loop* as a "*for each loop*".
+- A *for loop* is composed of three components:
+  - Initiate
+  - Terminate
+  - Iterate
+- Syntactically, they are structured follows:
+
+```C
+for ( 𝘪𝘯𝘪𝘵𝘪𝘢𝘵𝘦; 𝘵𝘦𝘳𝘮𝘪𝘯𝘢𝘵𝘦; 𝘪𝘵𝘦𝘳𝘢𝘵𝘦) { 
+    𝘤𝘰𝘥𝘦 𝘣𝘭𝘰𝘤𝘬
+}
+```
+
+- Print 0 through 9
+
+```C
+int i ;
+for ( i = 0; i < 10; i++) { 
+    printf("%d\n", i);
+}
+```
+
+- We now explore each component.
+- An astute learner will note that this insight is sufficient to implement the entire enigma machine.
+  - Remaining headings provide guidance on common pitfalls.
+  - If you can do enigma now, skip to "C args"
+
+#### Iterate
+
+- The last of the three *for loop* components, the iterator, is closest to the Python *for each loop*.
+- The iterator statement is run each time the loop completes, after the internal code block is run.
+- Any statement may be placed in this position.
+- The most common is `i++`, a special shorthand for incrementation.
+  - It is logically equivalent to Python `i += 1`.
+- **Example:** Find the length of the first word in a string with an iterator only:
+    - Increase a string index by one within the iterator.
+    - Include an if statement in the *for loop* code block.
+    - Use a return statement in the if statement code block.
+
+```C
+char *str = "hello world";
+int i = 0;
+for ( ; ; i++) {
+        if (str[i] == ' ') {
+                printf("%d\n", i);
+                return 0;
+        }
+}
+```
+
+#### Terminate
+
+- Unlike Python strings, C character arrays have no length.
+- Rather, they end with a special character.
+  - This character is called the *null terminator*
+  - It is non-printing (not visible).
+  - It is denoted explicitly via ```'\0'```
+    - Single quotes to denote a character.
+    - A backslash "escape" character to denote a special character.
+    - A zero to denote it is "null", "zero", or "nothing"
+  - It is numerically equal to zero.
+- Unlike Python booleans, C has no boolean type.
+  - Rather, it has truthiness, akin to Python *if* statements with numerical conditions.
+  - The numerical value zero is false.
+  - All other numerical values are true.
+- The termination statement causes the loop to end when it is equal to zero.
+- **Example:** Find the length of the first word in a string with a terminator only:
+    - Check if a character is the null terminator in the termination statement.
+    - Include an incrementation in the *for loop* code block.
+
+```C
+char *str = "hello world";
+int i = 0;
+for ( ; str[i] ; ) {
+        i++;
+}
+printf("%d\n", i);
+return 0;
+```
+
+- This is also a good example of how sometimes the C *for loop* may have no code block.
+  - Here is a logically equivalent way to measure the length of a char * serving as a string.
+
+```C
+char *str = "hello world";
+int i = 0;
+for ( ; str[i] ; i++ ) { }
+printf("%d\n", i);
+return 0;
+```
+
+- This is also a good chance to test what order the terminator and iterator are checked.
+  - The terminator is checked before the iterator.
+  - The iterator does not if the terminator is true.
+- This matters a lot in this case, where the length calculated would be off by one.
+  - 12 instead of 11
+  - The value of the iteration variable `i` is increased the same time the terminator is checked.
+  - So the null terminator is at index 11 but this C code would print the numerical value 12.
+
+```C
+char *str = "hello world";
+int i = 0;
+for ( ; str[i++] ; ) { }
+printf("%d\n", i);
+return 0;
+```
+
+#### Initiate
+
+- The initiator allows setting a variable to a certain value before beginning a loop.
+- I mostly use it when I have more than one loop, and want to use `i` for both.
+- Here is the above example, with an iniatiator.
+```C
+char *str = "hello world";
+int i ;
+for ( i = 0; str[i++] ; ) { }
+printf("%d\n", i);
+return 0;
+```
+- The following is permissable in all modern forms of C, but was not an initial feature of the language.
+  - As a rule, I try not to declare variables in the initializer so my code works on older devices.
+  - It also makes writing a C compiler easier, if you ever plan to do that.
+  
+```C
+char *str = "hello world";
+for ( int i = 0; str[i++] ; ) { }
+printf("%d\n", i);
+return 0;
+```
+
+:::
+
+# Arrays <a class="btn btn-primary" data-bs-toggle="collapse" href="#arrays" role="button" aria-expanded="false" aria-controls = "arrays">Show</a>
+
+::: {#arrays .collapse .multi-collapse}
+
+
+### Collections
+
+- C lacks any collection type (list, set, tuple, string)
+
+- `*` notation is used instead
+  - `*` denotes the location of a some value
+  - The type of this value gives its size
+  - Successive values are at successive locations
+  - These are memory addresses.
+- [] notation may also be used
+  - We simply include the length within brackets.
+- We don't worry about any of that for now.
+- You will likely want to use a collection on Enigma:
+  - Rotor rotations
+  - Rotors themselves
+  - I don't know, for fun.
+- C array notation is very similar to Python set notation, but maintains order
+  - You are responsible for keeping track of the length.
+
+```C
+char carray[5] = {'a', 'e', 'i', 'o', 'u'};
+int iarray[5] = {2, 4, 8, 16, 32};
+int i;
+for (i = 0; i < 5; i++) {
+    printf("%c %d\n", carray[i], iarray[i]);
+}
+```
+
+#### Character arrays
+
+- Unlike Python, where a list of characters and a string of characters differ, in C, an array of characters and a "string" of characters are identical.
+
+```C
+char carray[5] = {'a', 'e', 'i', 'o', 'u'};
+char string[5] = "abcde";
+int i;
+for (i = 0; i < 5; i++) {
+        printf("%c %c\n", carray[i], string[i]);
+}
+```
+
+- C strings are implicitly null terminated, so there is a minor difference, but that is immaterial here.
+  - How would you check if a string is null terminated?
+
+
+:::
+
+# C math <a class="btn btn-primary" data-bs-toggle="collapse" href="#math" role="button" aria-expanded="false" aria-controls = "math">Show</a>
+
+::: {#math .collapse .multi-collapse}
+
+### Integer Division
+
+- In C, there are numerous integer data types, including *int* and *char*
+- All use integer division by default.
+- Test as follows:
+
+```C
+int i;
+for (i = 0; i < 5; i++) {
+        printf("%d / %d -> %d\n", i, 2, i / 2);
+}
+```
+
+- The results are clear:
+
+```email
+0 / 2 -> 0
+1 / 2 -> 0
+2 / 2 -> 1
+3 / 2 -> 1
+4 / 2 -> 2
+```
+
+### Modulo
+
+- Both C and Python have a % operator
+  - In Python it is the "more mathematically correct" modulo operation
+  - In C it is the less common remainder operation.
+- The differences were non-obvious and led to a pernicious bug in my enigma.c
+
+#### Python %
+
+- First, test Python
+
+```{.py filename="modulo.py"}
+[print(f"{i:2d} % 3 -> {i%3:d}") for i in range(-5,5)]
+```
+
+- We see the predictable result.
+
+```email
+-5 % 3 -> 1
+-4 % 3 -> 2
+-3 % 3 -> 0
+-2 % 3 -> 1
+-1 % 3 -> 2
+ 0 % 3 -> 0
+ 1 % 3 -> 1
+ 2 % 3 -> 2
+ 3 % 3 -> 0
+ 4 % 3 -> 1
+```
+
+#### C %
+
+- Now, test C
+
+```{.C filename="remainder.c"}
+#include <stdio.h>
+
+int main() {
+        int i;
+        for (i = -5; i != 5; i++) {
+                printf("%2d %% %d -> %2d\n", i, 3, i % 3);
+        }
+        return 0;
+}
+```
+
+- We see the predictable result.
+
+```email
+-5 % 3 -> -2
+-4 % 3 -> -1
+-3 % 3 ->  0
+-2 % 3 -> -2
+-1 % 3 -> -1
+ 0 % 3 ->  0
+ 1 % 3 ->  1
+ 2 % 3 ->  2
+ 3 % 3 ->  0
+ 4 % 3 ->  1
+```
+
+- Unlike Python, C % may generate negative results.
+- There are a number of ways to deal with that.
+
+#### Pythonic % in C
+
+- With thanks to [Stack Overflow](https://stackoverflow.com/a/1907585)
+
+```C
+printf("%2d Py%% %d -> %d\n", i, 3, ((i % 3) + 3) % 3);
+```
+
+- This gives necessarily positive values.
+
+```email
+-5 Py% 3 -> 1
+-4 Py% 3 -> 2
+-3 Py% 3 -> 0
+-2 Py% 3 -> 1
+-1 Py% 3 -> 2
+ 0 Py% 3 -> 0
+ 1 Py% 3 -> 1
+ 2 Py% 3 -> 2
+ 3 Py% 3 -> 0
+ 4 Py% 3 -> 1
+```
+
+:::
+
+# C args <a class="btn btn-primary" data-bs-toggle="collapse" href="#args" role="button" aria-expanded="false" aria-controls = "args">Show</a>
+
+::: {#args .collapse .multi-collapse}
+
+### Arguments
+
+- The reference Python contains the following snippet:
+
+```py
+if __name__ == "__main__":
+    import sys
+    print(enigma(sys.argv[1]))
+```
+
+- This is roughly equivalent to printing the return result of the enigma function within a function called main.
+- This is close to C, but we haven't introduced a way to use command line arguments.
+- Let's look at a minimal Python example.
+
+#### PyEcho
+
+```{.py filename="pyecho.py"}
+import sys
+print(sys.argv[1])
+```
+
+- We use as follows:
+
+```bash
+python3 pyecho.py "hello world"
+```
+
+- We can construct the same within C.
+
+#### CEcho
+
+- The Python `sys` module contains many features present by default in a systems programming language.
+- One such is `argv`, a vector (in the mathematical sense) of arguments.
+  - These are command line arguments.
+  - In Python a list of strings
+  - In C an array of char *
+  - The zeroth argument is the name of the Python script or C executable
+- There is additionally something called `argc`, an integer count of arguments.
+  - In C this is needed to know the length of the vector
+  - In Python it is redundant, but potentially useful
+- We have thus far written main with no arguments, so we also introduce how to write functions with arguments.
+  - C function arguments are identical to Python function arguments
+  - As with other variables, C function argument variables must be declared with a type
+  - Using functions will make writing C much easier.
+
+```{.C filename="cecho.c"}
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+        printf("%s\n", argv[1]);
+        return 0;
+}
+```
+
+- You may wish to compile then try the following:
+
+```email
+gcc cecho.c -o cecho
+```
+
+- No arguments, which gives a segmentation fault, a type of error when you try to read something that doesn't exist
+
+```email
+./cecho
+```
+
+- One argument, which is printed.
+
+```email
+./cecho hello
+```
+
+- Two arguments, of which one is printed.
+
+```email
+./cecho hello world
+```
+
+
+- Two words as a single argument using quotes.
+
+```email
+./cecho "hello world"
+```
+
+- You may note that Python has all the same features.
+
+:::
+
+# Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls = "tester">Show</a>
+
+::: {#tester .collapse .multi-collapse}
+
+
+#### Podman
+
+- I am providing the following Containerfile, which will serve as a minimal autograder
+    - It sets up an Alpine container.
+    - It downloads a Python script to test.
+    - It copies in "enigma.c" from your system.
+
+```{.email filename="Containerfile"}
+FROM alpine
+
+RUN apk add gcc libc-dev python3 curl
+
+RUN curl https://raw.githubusercontent.com/cd-c89/crypto/main/enigma/tester.py -o tester.py
+
+COPY enigma.c .
+```
+
+#### Usage
+
+- I built my container via:
+
+```email
+podman build -t tester .
+```
+
+- I tested my code via:
+
+```email
+podman run tester python3 tester.py
+```
+
+- If the above script returns "Perfect!" you are done.
+    - Create a [Gist](https://gist.github.com/) with an "enigma.c".
+    - Email me the url of your Gist, it will look something like, from your official school email:
+
+```email
+https://gist.github.com/cd-public/a840e95e71ac7309a53ab0bb1282ba40
+```
+
+- I will review the most recent version prior to the due date.
+
+
+#### Vim trick:
+
+- You will probably want to work in a container with `vim` and also test your code in the same container.
+  - It is possible to create a second command line tab that is also within the container.
+    - Consult `podman` documentation - many ways to do this.
+  - I recommend using `vim` built-in `:term` command, which splits the screen into a vim editor and a vim terminal.
+  - You can move between windows using ctrl+w - if it doesn't work, Google it.
+
+#### Podman trick:
+
+- You will probably want to create one container then work in that container until you finish.
+- `podman run` will create a new container each time, which is not what you probably want.
+- The following recycles the previous container, mostly.
+  - Read more: [Stack Overflow](https://stackoverflow.com/a/37886136)
+  
+```email
+podman start -a -i `podman ps -q -l`
+```

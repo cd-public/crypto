@@ -1,0 +1,1020 @@
+---
+title: C89/99
+theme: dark
+author: Prof. Calvin
+subtitle: "Week 0x1"
+institute: Crypto
+format: 
+    revealjs: 
+        code-fold: true
+        theme: dark
+        mainfont: monospace
+        slide-number: true
+        show-slide-number: all
+        width: 1050
+        height: 700
+        footer: "[Home](../index.html)"
+
+execute:
+    echo: false
+---
+# Announcements
+
+- **Welcome** to variously CS 276/CS 540
+- **Action Items**:
+  - Get out our feelings on the Enigma assignment
+    - We are learning by doing.
+  - Next homework coming out now - Macros
+
+# Homework
+
+- The first homework, "Enigma", is due when class starts Th of Week 0x1
+- The next homework, "Macros", is ready at any time
+  - Fiddling with bits, building on the lab, etc.
+  - Applies our learnings from today.
+  
+# Today
+
+- Reintroduce the technologies
+  - `podman`
+  - `vim`
+  - `gcc`
+  - `git`
+  
+# What is Podman?
+
+- **Definition:**
+  - Platform to develop, ship, and run applications in isolated containers.
+- **Benefits:**
+  - Portability, consistency across environments.
+- **Editorializing:**
+  - Probably all code should be written in a container now that they exist.
+
+# In practice:
+
+- **Windows** only
+  - Run `wsl --install -d ubuntu` command once
+  - Run `wsl` to... enter wsl.
+  - Run `sudo apt update` once
+  - Run `sudo apt upgrade` once
+  - Run `sudo apt install podman`
+  - Use `podman` commands within WSL
+
+# In practice:
+
+- **Mac** only
+  - Use podman desktop installer
+  - Before using containers, run
+    -  `podman machine start`
+    -  If it didn't work, may need to `podman machine init`
+  - This may create a large file on your device
+    - `podman-machine-default-arm64.raw`
+
+# In practice:
+
+- Podman works well without hacks on Linux
+  - In fairness, the goal is have access to Linux anyways.
+  - "Linux" search term shows ~100 jobs in Portland area
+  - vs. 300:Python, 200:SQL, 100:Tableau, 200:R but the first is HVAC?
+    - "HVAC/R Service Technician"
+
+# Podman
+
+- Podman solves the problem of writing code on one computer and running it another.
+- Simply specify a Podman image
+  - a description of a imaginary computer
+- Podman will pretend to be that computer
+- We can run code "inside" Podman
+  - Code in the container can't tell it's running inside Podman
+
+# Inside:
+
+```email
+user@DESKTOP-THMS2PJ:~/tmp$ echo "hello world" > file.txt
+user@DESKTOP-THMS2PJ:~/tmp$ cat file.txt
+hello world
+user@DESKTOP-THMS2PJ:~/tmp$ podman start -l ; podman exec -it -l cat file.txt
+e12a46ee0bbe161541597b6b807b79a86e81fcae59c1bcb614e83af1493d2153
+cat: file.txt: No such file or directory
+```
+
+# Images
+
+- Something we `podman run -it` is an _image_
+  - It is a template that corresponds to many possible pretend computers
+  - I think of them like object oriented class
+  - They define something that could be
+
+# Containers
+
+- Each time we run said command, we have a different _container_
+  - They have different file systems
+  - Things we install don't persist to future `run` instances.
+  - I think of them like objects of a class
+  - Like '1' instead of 'integer'
+  - They are actually existing, running code.
+
+# Reuse
+
+- On Enigma, probably:
+  - You opened a container.
+  - You wrote some code in vim.
+  - You compiled the code.
+  - You ran the executable.
+  - The executable deorbited a space station. /s
+  - You closed the container and went to touch grass.
+
+# Attach
+
+- After touching grass, you
+  - Came back to your PC
+  - Had no graceful way to continue working on the code you wrote.
+- We solve this with attachment and detachment.
+
+# Servers
+
+- One of the most common ways to use containers is web dev.
+- They are easier to think of as:
+  - A program, which
+  - Hosts a webpage, which
+  - Happens to need to run somewhere
+    - That somewhere is a command line
+    - Inside a pretend computer (container).
+    
+# Sample
+
+- Docker maintains a sample container.
+  - Podman is busy being free and open source.
+- Try this:
+```email
+podman run -d -p 8080:80 docker/welcome-to-docker
+```
+- You can probably find it at this link:
+  - [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
+
+# Breakdown
+
+| Command    | Explanation |
+| -------- | ------- |
+| `podman`  | do something with containers   |
+| `run` | run a new container     |
+| `-d`    | detach - we'll cover this next    |
+| `-p`  | This is port forward... |
+| `8080:80` | 80 is where websites usually live
+|           | 8080 is where we went (:8080)
+| `docker/...` | Name of an image |
+
+# Ports
+
+- Ports aren't the point, but
+- We should demystify.
+- Change `8080:80` to `8083:80`
+```email
+podman run -d -p 8083:80 docker/welcome-to-docker
+```
+- Change the link as well.
+  - [http://127.0.0.1:8083/](http://127.0.0.1:8083/)
+  
+# Two pages
+
+- Wait a minute...
+  - There's a webpage at 8080
+  - There's a webpage at 8083
+  - They're both from the same image.
+  - They were started in the same command line (maybe)
+- That is two containers running concurrently.
+  - Enter `-d`
+  
+# Detach
+
+- When we run an image with the `-d` flag, it:
+  - Created and ran as any other container, but
+  - Runs "in the background"
+    - Control does not change to container
+    - It runs only its start command
+    - It's just like a remote web server.
+
+# Detach Dev
+
+- A perhaps nicer way to write code is
+  - Create and detach a container
+  - Leave it running or whatever
+  - Use other `podman` commands to:
+    - Pop into the container and e.g. `vim`
+    - Transfer files in or out
+    - Pause and restart to save resources.
+
+
+# ps
+
+- When fiddling about with containers...
+  - It's good to know who they are (names)
+  - And what they do (command)
+- We can use `podman ps`
+```email
+podman ps
+```
+- We see two servers (nginx) running 
+  
+```email
+CONTAINER ID  IMAGE                                      COMMAND               CREATED        STATUS        PORTS                         NAMES
+7d6af09131b5  docker.io/docker/welcome-to-docker:latest  nginx -g daemon o...  2 minutes ago  Up 2 minutes  0.0.0.0:8080->80/tcp, 80/tcp  confident_darwin
+2e1b9f844dcd  docker.io/docker/welcome-to-docker:latest  nginx -g daemon o...  2 minutes ago  Up 2 minutes  0.0.0.0:8083->80/tcp, 80/tcp  adoring_shamir
+```
+
+# ps -a
+
+- You may also have many containers
+- `podman ps -a` to see old containers.
+```email
+podman ps -a
+```
+- I had many such containers!
+  - 4 GB worth, to be exact
+- Clean them all up with prune
+```email
+podman system prune
+```
+- System = containers, images, everything
+
+# exec -it
+
+- If there's a detached container running
+- We can execute commands in that container.
+- You only have to specify enough of the name or id to be unique.
+  - A server at 8080 beginning with id 7...
+```email
+podman exec -it 7d echo hello
+```
+- This returns hello, directly, without switching into the container.
+
+
+# /bin/sh
+
+- So far, I haven't found a container without `/bin/sh`
+- The Linux command line, more or less
+  - `bash` > `sh`, but sometimes only `sh` available
+- Get an interactive command prompt via
+```email
+podman exec -it 7d /bin/sh
+```
+- This is roughly the same as `run -it`
+  - But on an existing container, not a base image
+
+
+# **NOTE**
+
+- In this example, a webserver is kept running.
+- By default, containers can stop running.
+- If a container isn't under `podman ps`:
+    - Find it with `podman ps -a`
+    - Start it with `podman start` by name
+- Restarts the last container with `vim`:
+```email
+podman start -l ; podman exec -it -l vim 
+```
+
+# vim
+
+- I've adopted a strong preference for just using `vim`
+  - When I exit `vim`, I implicitly exit the container.
+  - Feels better than typing `exit`, to me
+- So if we create an image with vim, we can
+```email
+podman exec -it 𝘪𝘮𝘢𝘨𝘦_𝘯𝘢𝘮𝘦 vim
+```
+- And go from there.
+
+# Today
+
+- Reintroduce the technologies
+  - &check; `podman`
+  - `vim`
+  - `gcc`
+  - `git`
+
+# IDEs
+
+- At some point in time, code started being written in IDEs.
+  - Integrated design environments.
+  - To me, the first one was Eclipse (for Java)
+- That time was shortly before the 2008 financial crises
+  - Don't put in the course evals I blame Eclipse for the Great Recession
+    
+
+# Why Vim fr tho?
+
+- It is a command at command line
+- It can be installed in containers
+
+
+# Containerfile
+- Here's the "Containerfile" I'm using today:
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc vim -y
+```
+
+# Ubuntu
+- I use Ubuntu
+```{.email filename="Containerfile"}
+FROM ubuntu
+```
+- It's a bit annoying Alpine requires separately grabbing libc to print
+
+# apt
+- Ubuntu uses `apt` to manage packages, like `gcc` and `vim`
+- Images are notorious for having out-of-date package listings
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update
+```
+- This tells Ubuntu to look for the latest & greatest
+
+# &&
+- We use && to update and install at once
+- We use `apt install` to... install `gcc` from `apt`
+
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc vim -y
+```
+- This avoids a container updating, going to sleep, and packages falling out of date.
+  - Apparently that actually happens on cloud, somehow
+
+# -y
+- We list whatever other packages we need and also...
+- `-y` as by default `apt` asks us if we're sure
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc
+```
+- Without `-y`, `apt` will wait for us to type
+  - We often use podman in scripts or commands where it gets stuck, so use `-y`
+
+
+
+# Usage
+
+- I usually enter a container via
+```email
+podman exec -it 𝘪𝘮𝘢𝘨𝘦_𝘯𝘢𝘮𝘦 vim
+```
+- Or often with a filename
+```email
+podman exec -it 𝘪𝘮𝘢𝘨𝘦_𝘯𝘢𝘮𝘦 vim samp.c
+```
+- From there I do a few things...
+
+# First window
+- It looks like this:
+```email
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+"samp.c" [New]                       0,0-1         All
+```
+
+
+# Insert mode
+- Press `i` to enter "insert mode"
+```email
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+-- INSERT --                         0,1           All
+```
+
+# Write some code
+- Type every letter perfectly on the first try.
+```email
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+        if (argc) {
+                printf("%s\n", argv[1]);
+        }
+        return 0;
+}                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+-- INSERT --                         8,2           All
+```
+
+# :term
+- Open the `vim` terminal emulator
+  - Press ESC
+  - Type `:term`
+  - Press ENTER
+  - We'll go step by step
+  
+# Press ESC
+- Looks like this (mostly INSERT is gone)
+```email
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+        if (argc) {
+                printf("%s\n", argv[1]);
+        }
+        return 0;
+}                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+                                     8,1           All 
+```
+
+# Type ":term"
+- The colon `:` is meaningful in `vim`
+```C
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+        if (argc) {
+                printf("%s\n", argv[1]);
+        }
+        return 0;
+}                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+~                                                      
+:term                                                  
+```
+
+# Press ENTER
+- All kinds of colors could happen here too:
+```C
+#
+
+
+
+
+
+!sh [running]                        0,0-1          All
+int main(int argc, char **argv) {
+        if (argc) {                                                    
+                printf("%s\n", argv[1]);                       
+        }                                                      
+        return 0;                                      
+}                                                      
+samp.c [+]                           8,1            Bot
+:term                                                  
+```
+
+# Use terminal
+- Let's compile with `gcc` 
+```email
+# gcc samp.c
+cc1: fatal error: samp.c: No such file or directory
+compilation terminated.
+#                                   
+                                    
+                                    
+!sh [running]                        0,0-1          All
+int main(int argc, char **argv) {
+        if (argc) {                                    
+                printf("%s\n", argv[1]);                       
+        }                                                      
+        return 0;                                      
+}                                                      
+samp.c [+]                           8,1            Bot
+:term                                                  
+```
+
+# Write file
+- We didn't save samp.c, we will:
+    - Use CTRL+`w` to change "window"
+    - We will use any `vim` movement key, like `j`
+      - `j` moves down one "thing" 
+      - usually line, now a window
+    - We will use ESC + `:w` to write the file
+    - Then return to terminal CTRL+`w`+`k`
+
+# That was a lot
+- Should look like this
+```email
+# gcc samp.c
+cc1: fatal error: samp.c: No such file or directory
+compilation terminated.
+# gcc samp.c                        
+#                                   
+                                    
+!sh [running]                        0,0-1          All
+int main(int argc, char **argv) {
+        if (argc) {                                    
+                printf("%s\n", argv[1]);                       
+        }                                                      
+        return 0;                                      
+}                                                      
+samp.c [+]                           8,1            Bot
+:term                                                  
+```
+
+# Breathe
+- You are now all-powerful
+    - You are not beholden to any operating system
+    - Can work on cloud or anywhere with `podman`
+    - If MS charges 10000 USD for VS Code tomorrow?
+      - You are non-impacted 
+    - Everytime you do this you get faster
+
+# Verify Compilation
+- Use `ls` to list files, look for a.out
+```email
+# gcc samp.c                        
+# ls
+a.out  dev   lib    mnt   root    sbin  tmp
+bin    etc   lib64  opt   run     srv   usr
+boot   home  media  proc  samp.c  sys   var
+#   
+!sh [running]                        0,0-1          All
+int main(int argc, char **argv) {
+        if (argc) {                                    
+                printf("%s\n", argv[1]);                       
+        }                                                      
+        return 0;                                      
+}                                                      
+samp.c [+]                           8,1            Bot
+:term                                                  
+```
+
+
+# Run Executable
+- Use `./` prefix to use `a.out` as an executable
+```email
+a.out  dev   lib    mnt   root    sbin  tmp
+bin    etc   lib64  opt   run     srv   usr
+boot   home  media  proc  samp.c  sys   var
+# ./a.out                                              
+Segmentation fault (core dumped)
+#       
+!sh [running]                        0,0-1          All
+int main(int argc, char **argv) {
+        if (argc) {                                    
+                printf("%s\n", argv[1]);                       
+        }                                                      
+        return 0;                                      
+}                                                      
+samp.c [+]                           8,1            Bot
+:term                                                  
+```
+
+# Segfault
+- In "samp.c" to fix off-by-one error, test
+```email                     
+Segmentation fault (core dumped)
+# gcc samp.c
+# ./a.out
+# ./a.out hello
+hello
+#     
+!sh [running]                        0,0-1          All
+int main(int argc, char **argv) {
+        if (argc > 1) {                                    
+                printf("%s\n", argv[1]);                       
+        }                                                      
+        return 0;                                      
+}                                                      
+samp.c [+]                           8,1            Bot
+:term                                                  
+```
+
+# Today
+
+- &check; Introduce the course
+  - &check; The C Programming Language
+  - &check; Cryptography + Cryptocurrency
+- Introduce the technologies
+  - &check; `podman`
+  - &check; `vim`
+  - `gcc`
+  - `git`
+
+# GCC
+
+- Developed for the C language to make an open source operating system in 1987.
+- Mainly around today for the C language to make an open source operating system (Linux)
+- (The C language was invented to write an operating system).
+- `python` is written in GCC C
+```python
+C:\Users\cd-desk>podman run -it python
+Python 3.13.1 (main, Dec  4 2024, 20:40:27) [GCC 12.2.0] on linux
+```
+
+# Great freeware
+
+- Many legendary programs created using GCC:
+  - HTTPD & NGINX, which serve a majority of webtraffic
+  - Every major Linux and FreeBSD distribution
+  - Major browsers like Firefox and Chromium
+    - Firefox is on `clang` now but that's new
+  - GNU Bash and Coreutils, like `cat`, `ls`, `rm`
+  - Bitcoin Core
+  
+# Compilation
+
+- Like `python` or `podman` or `vim`, GCC is a command - `gcc`
+- `gcc` takes at least one argument: a filename, usually of a C file
+- GCC takes this C file and makes an executable 
+  - a program, sort of
+- Executables run as command with `./` prefix
+  - This differs from `python` which runs a script **without** creating a corresponding program.
+
+# .py vs .c
+
+```{mermaid}
+%%| theme: Darkly
+flowchart LR
+  A(Python) --> B[fname.py file]
+  B --> C[python fname.py]
+  C --> D{hello world}
+  E(C) --> F[fname.c  file]
+  F --> G[gcc fname.c -o ename]
+  G --> H[./ename]
+  H --> I{hello world}
+```
+
+- _You only have to compile once to have the executable forever._
+- _Most programs are executables, not scripts._
+
+# Options
+
+- `gcc` has many options
+  - `-o` specifies the name of the output file
+  - `-std` specifies the C version (there's a few)
+  - `-Wall -Wextra -Werror -Wpedantic` set warnings - I use all 4
+  - `-w` stop all warnings.
+  - `-O2` to compile more slowly to make faster code
+
+# C89/99
+
+- I prefer to write C89/99 compliant code
+  - Later code is a bit too unclear for me
+  - C89/99 have everything I need in a systems language
+  - Most latter features I'd just switch to Python anyways
+- It tends to be easier to write compilers for C89 as well...
+
+
+
+# Podracing
+
+- Quickly pop back into our container.
+  - Bookmark this page, save the text in a script, etc.
+
+```email
+podman start -l ; podman exec -it -l vim samp.c
+```
+
+- Pop open `:term` and run
+```email
+gcc samp.c -std=c89
+```
+
+- My code runs fine. Let's break it.
+
+# C++ //
+
+- Many C++ features have been adopted by C
+- Perhaps the most famous is C++ comments.
+
+```{.C filename="samp.c"}
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+        /* This is a C89 style comment */
+        // This is a C++ style comment
+        printf("hi\n");
+        return 0;
+}
+```
+
+# std=c89
+
+- My `vim` window was tiny and I didn't want to resize it
+- I opened a new terminal and tested 
+```
+gcc samp.c --std=c89
+```
+
+```bash
+user@DESKTOP-THMS2PJ:~/crypto/c89_99$ podman exec -it -l gcc samp.c --std=c89
+samp.c: In function 'main':
+samp.c:5:9: error: C++ style comments are not allowed in ISO C90
+    5 |         // This is a C++ style comment
+      |         ^
+samp.c:5:9: note: (this will be reported only once per input file)
+user@DESKTOP-THMS2PJ:~/crypto/c89_99$ podman exec -it -l gcc samp.c
+```
+
+# -Wall etc
+
+- The other flags help "keep you honest"
+  - If we wanted shortcuts, we'd use Python
+  - We want to be percise [sic]
+- Try it:
+```bash
+gcc samp.c --std=c89 -Wall -Wextra -Werror -Wpedantic -O2
+```
+
+# Whoops
+- You don't want to find these problems latter.
+```email
+samp.c: In function 'main':
+samp.c:5:9: error: C++ style comments are not allowed in ISO C90
+    5 |         // This is a C++ style comment
+      |         ^
+samp.c:5:9: note: (this will be reported only once per input file)
+samp.c:3:14: error: unused parameter 'argc' [-Werror=unused-parameter]
+    3 | int main(int argc, char **argv) {
+      |          ~~~~^~~~
+samp.c:3:27: error: unused parameter 'argv' [-Werror=unused-parameter]
+    3 | int main(int argc, char **argv) {
+      |                    ~~~~~~~^~~~
+cc1: all warnings being treated as errors
+```
+- Python needs `-Wall` for intro programming classes!
+
+# Benefits of C89
+
+- In C89, we must declare all variables at the beginning of functions.
+- Every "confused" Enigma I saw had massive variable name proliferation
+- Python lets you do this.
+  - I argue this is Python preventing you from *learning to program*
+- The C89 language standard will protect you from writing bad code.
+
+# Expectation
+
+```{.C filename="cipher.c"}
+#include <stdio.h>
+
+char cipher(char c, int i) {
+    return (c - 'A' + i) % 26 + 'A';
+}
+
+int main(int argc, char **argv) {
+    int i;
+    if (argc < 1) {
+        return 1;
+    }
+    for (i = 0 ; argv[1][i]; i++) {
+        argv[1][i] = cipher(argv[1][i], i);
+    }
+    printf("%s\n", argv[1]);
+    return 0;
+}
+```
+
+# Reality
+
+- These flags **prevent unused variables**
+- These flags **require variable declaration** early.
+  - We have to think, plan etc.
+
+
+# Example
+
+- Variable declared, not used.
+
+```{.C}
+int main(int argc, char **argv) {
+    int i;
+    /* if (argc < 1) {
+        return 1;
+    } */
+    for (i = 0 ; argv[1][i]; i++) {
+        argv[1][i] = cipher(argv[1][i], i);
+    }
+    printf("%s\n", argv[1]);
+    return 0;
+}
+```
+
+- We can segmentation fault from an out-of-bounds error on argv.
+
+# Example
+
+- Variable declaration in function
+```{.C}
+int main(int argc, char **argv) {
+    int i;
+    for (i = 0 ; argv[1][i]; i++) {
+        argv[1][i] = cipher(argv[1][i], i);
+        int i++; 
+    }
+    printf("%s\n", argv[1]);
+    return 0;
+}
+```
+
+- Prevents ill-formed variable changes.
+  - Like .js `const` convention
+
+# Example
+
+- `-Werror=char-subscripts`
+```{.C}
+int main(int argc, char **argv) {
+    char i;
+    for (i = 0 ; argv[1][i]; i++) {
+        argv[1][i] = cipher(argv[1][i], i);
+    }
+    printf("%s\n", argv[1]);
+    return 0;
+}
+```
+- Ensures we can read strings of 255+ chars.
+
+# Example
+
+- Not technically wrong.
+
+```{.C}
+int main(int argc, char **argv) {
+    char i;
+    if (argc < 1) {
+        return 1;
+    }
+    char *input_string = argv[1];
+    for (i = 0 ; argv[1][i]; i++) {
+        argv[1][i] = cipher(argv[1][i], i);
+    }
+    printf("%s\n", argv[1]);
+    return 0;
+}
+```
+
+- But why?
+
+# Example
+
+- Actually wrong - output_string has no size.
+
+```{.C}
+int main(int argc, char **argv) {
+    char i;
+    if (argc < 1) {
+        return 1;
+    }
+    char *output_string;
+    for (i = 0 ; argv[1][i]; i++) {
+        output_string[i] = cipher(argv[1][i], i);
+    }
+    printf("%s\n", argv[1]);
+    return 0;
+}
+```
+
+- C89 catches this, others don't.
+
+# Takeaway
+
+- As a *second* (or latter language)
+- Learn C by turning on compiler flags and writing code.
+  - As a first language, use this little trick called "learn Python instead"
+- With practice, the correspondences will become obvious.
+  - At that time, you will understand computing.
+
+# Practice to Perform
+
+- My take: learn C89 in class
+  - Cultivate a disciplined coding practice
+  - Work on older devices
+  - Understand old code
+  - Understand how computers work
+- Learn modern C via Stack Overflow
+  - Understand how to code in practice
+
+# Today
+
+- Reintroduce the technologies
+  - &check; `podman`
+  - &check; `vim`
+  - &check; `gcc`
+  - `git`
+  
+# Git
+
+<ul>
+<li> Git was invented... to store the C language source code for an open source operating system (Linux)</li>
+<li> It is de facto the only way in the universe to store code other than "on my HDD/SSD"</li>
+<li> It is also a very good way to
+    <ul>
+    <ol>
+    <li>Store Containerfiles</li>
+    <li>Steadily build a codebase</li>
+    </ol>
+    </ul>
+</li>
+
+# As a command
+
+- Git corresponds, like the others, to a command: `git`
+  - It is common now to use other techniques, but the command remains extremely **stable**
+- Quoth GitHub, the first and greatest of the collaboration tools:
+
+<a href="https://docs.github.com/en/get-started/using-github/connecting-to-github"><blockquote>
+If you want a lot of control and flexibility, you can use the command line.
+</blockquote></a>
+
+# Henceforth
+
+- This week: Macros homework
+- This code will be used in the final project
+- Just like all the rest of the code we write this term
+- Store it on one big ole GitHub repo
+
+# Fun fact
+
+- Despite Big Command Line lobbying to get us to use `git`
+- There is no graceful way to set repositories to private at commandline
+  - There's a tactic doing API calls through the GitHub CLI
+  - What are we even doing, open a browser
+- In 2024, browsers are decisively more secure than the commandline
+
+# Private
+
+- I recommend:
+  - Pop in browser
+  - Make a private github repo, like "crypto"
+    - Add me as a collaborator
+  - Name it "crypto"
+  - Probably use a folder per week for hws
+    - Maybe also labs, or just keep those local
+    
+# GitHub x Podman
+
+- Over time, we'll try to operationalize code better and better
+- Eventually, I plan to ask for a container in "ghcr"
+  - GitHub Container Registry
+- In the meantime, I'd just keep a Containerfile at top level in your "crypto" repo.
+
+# Today
+
+- Reintroduce the technologies
+  - &check; `podman`
+  - &check; `vim`
+  - &check; `gcc`
+  - &check; `git`
+  
+# Stinger
+
+```bash
+root@262ad65a08ba:/# vim build.sh
+root@262ad65a08ba:/# ./build.sh
+bash: ./build.sh: Permission denied
+root@262ad65a08ba:/# chmod 777 build.sh
+root@262ad65a08ba:/# ./build.sh
+samp.c: In function 'main':
+samp.c:5:9: error: C++ style comments are not allowed in ISO C90
+    5 |         // This is a C++ style comment
+      |         ^
+samp.c:5:9: note: (this will be reported only once per input file)
+samp.c:3:14: error: unused parameter 'argc' [-Werror=unused-parameter]
+    3 | int main(int argc, char **argv) {
+      |          ~~~~^~~~
+samp.c:3:27: error: unused parameter 'argv' [-Werror=unused-parameter]
+    3 | int main(int argc, char **argv) {
+      |                    ~~~~~~~^~~~
+cc1: all warnings being treated as errors
+root@262ad65a08ba:/# cat build.sh
+#!/bin/sh
+gcc samp.c --std=c89 -Wall -Wextra -Werror -Wpedantic -O2 -o samp
+root@262ad65a08ba:/#
+```

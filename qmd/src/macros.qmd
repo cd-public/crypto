@@ -1,0 +1,600 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: Macros
+subtitle: "HW 0x1: Due Th, Feb 06"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Think about C variables as bits
+- My responsibility
+  - I will provide a reference solution in Python
+    - The reference will differ in the following ways:
+      - They will not use, as there isn't great bit manipulation in Python without libraries.
+      - I will provide an example of a *left* rotate while the assignment requires a *right* rotate.
+  - I will provide an autograder Containerfile
+    - Following the deficiencies of the Python variant, I will also provide a "viewer".
+    - I will provide sample output for the viewer.
+- Your responsibility
+  - You will create a solution in C as an "macros.c" file.
+    - It will contain 3 macros
+      - `CHOICE`
+      - `MEDIAN`
+      - `ROTATE` - a "right" rotate.
+  - You will create a private GitHub repository named "crypto"
+    - I recommend creating a new repository of your own, not forking my repository.
+    - This makes it easier to manage a private repository.
+    - Up to you.
+  - You will create a folder in this repository named "macros"
+  - You will store your "macros.c" file in the "macros" folder.
+  - You will add me as a collaborator through the GitHub web application
+    - - My GitHub account [cd-public](https://github.com/cd-public) is attached to my @wu address.
+  - If you would like to fork an existing repository, use this one:
+    - [https://github.com/cd-c89/crypto](https://github.com/cd-c89/crypto)
+  
+### Topic Areas
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- bits     | - Macros   |
+|- bytes    | - Sizeof   |
+|- operators|            |
+
+
+:::
+
+
+# Podman&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#podman" role="button" aria-expanded="false" aria-controls="podman">Show</a>
+
+::: {#podman .collapse .multi-collapse}
+
+# Setup
+
+- For this lab, I used the following Containerfile
+  - Same as lecture
+  - I didn't even rename it
+
+```{.email filename="Containerfile"}
+FROM ubuntu
+
+RUN apt update && apt install gcc vim
+```
+- I could build with the following, but I already had it built:
+```email
+podman build -t c89_99 .
+```
+- I conducted the full hw within a single container's `vim` instance.
+```email
+podman run -it c89_99 vim macros.c
+```
+ 
+:::
+
+# GitHub&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#github" role="button" aria-expanded="false" aria-controls="github">Show</a>
+
+::: {#github .collapse .multi-collapse}
+
+*[Read this in GitHub Docs](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository)*
+
+### Inviting collaborators to a personal repository
+*You can add unlimited collaborators on public and private repositories.*
+
+#### About collaboration in a personal repository
+
+To collaborate with users in a repository that belongs to your personal account on GitHub, you can invite the users as collaborators.
+
+If you want to grant more granular access to the repository, you can create a repository within an organization. For more information, see [ Access permissions on GitHub](https://docs.github.com/en/get-started/learning-about-github/access-permissions-on-github).
+
+#### Inviting a collaborator to a personal repository
+
+You can send an invitation to collaborate in your repository directly to someone on GitHub, or to the person's email address..
+
+GitHub limits the number of people who can be invited to a repository within a 24-hour period. If you exceed this limit, either wait 24 hours or create an organization to collaborate with more people. For more information, see [Creating a new organization from scratch](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch).
+
+1. Ask for the username of the person you're inviting as a collaborator. If they don't have a username yet, they can sign up for GitHub. For more information, see [Creating an account on GitHub](https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github).
+1. Under your repository name, click **Settings**. If you cannot see the "Settings" tab, select the dropdown menu, then click Settings.
+<img width="100%" src="https://docs.github.com/assets/cb-28260/mw-1440/images/help/repository/repo-actions-settings.webp">
+1. In the "Access" section of the sidebar, click  **Collaborators**.
+1. Click **Add people**.
+1. In the search field, start typing the name of person you want to invite, then click a name in the list of matches.
+1. Click **Add NAME to REPOSITORY**.
+1. The user will receive an email inviting them to the repository. Once they accept your invitation, they will have collaborator access to your repository.
+
+:::
+
+# Sketch&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#rubric" role="button" aria-expanded="false" aria-controls="rubric">Show</a>
+
+::: {#rubric .collapse .multi-collapse}
+
+- The purpose of this homework is to write four (4) bitwise macros
+  - Two trenanry operations
+    - Choice
+    - Median, also called Majority
+  - And two rotations
+    - Right, which sees use, and
+    - Left, as an academic exercise
+- These will see use in the next assignment, SHA256
+- They are logically and historically interesting within cryptography
+- There is no graceful way, to my knowledge, to describe these on bits in Python
+  - I will provide pseudo code over tuples of integers.
+  - I provide conversion functions from strings.
+  - I am aware of plenty non-graceful ways, but 
+    - If you want to show me one you like send me a DM
+- For this homework, you will need some form of bit printing
+  - If your `printb` from lab is struggling, use `%b` in debug
+  - Just remove it before your turn in your work.
+- We next introduce macros.
+  
+:::
+
+# Macros&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#macros" role="button" aria-expanded="false" aria-controls="macros">Show</a>
+
+::: {#macros .collapse .multi-collapse}
+
+- The purpose of this homework is to write four (4) bitwise macros.
+- C macros exist in the "preproprocessor".
+- Here is an example of preprocessor directive you have written already:
+```C
+#include <stdio.h>
+```
+- You probably also have used a define directive
+```C
+#define ABCS "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+```
+- The define directive is used to define something called a macro.
+  - When used to define constants, those are just macros that return a value.
+- We can also define macros that accept arguments, the most famous are `MIN` and `MAX`
+  - I grabbed these from [OpenBSD](https://github.com/openbsd/src/blob/master/sys/sys/param.h)
+  - They have fallen out of favor for a complicated reason.
+  - In general, use functions.
+  - We use macros to learn about them, not to learn to write them.
+  
+```C
+/* Macros for min/max. */
+#define	MIN(a,b) (((a)<(b))?(a):(b))
+#define	MAX(a,b) (((a)>(b))?(a):(b))
+```
+
+- I'd encourage you to play around a bit with these macros.
+  - You don't need to fully understand before diving into choice, median, rotate.
+  - But a little background can help.
+  
+```C
+int x = 50;
+int a = 'a';
+printf("%d\n", MAX(x++,a++))
+```
+
+- In general, you want to use a lot of parens in macros.
+  - Try some things out to try to see why.
+
+:::
+
+# Choice&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#choice" role="button" aria-expanded="choice" aria-controls="choice">Show</a>
+
+::: {#choice .collapse .multi-collapse}
+
+- Here I provide Pythonic boolean choice and bitwise choice, and C boolean choice.
+- You will need C bitwise choice.
+- Choice is sometimes also referred to as the "ternary operator"
+  - Most famously in [.js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator)
+  - This is... potentially confusing.
+  - It is *a* ternary operator.
+  - The Python operator is non-standard and [intentionally ugly](https://mail.python.org/pipermail/python-dev/2005-September/056846.html).
+
+<blockquote style="max-height:10em;overflow-y: scroll;">
+```{.python filename="macros.py"}
+# ref: choice := (e and f) xor ((not e) and g)
+# src: https://en.wikipedia.org/wiki/SHA-2
+
+# We just tell Python the ints are bools
+# We just use "!=" as xor
+
+def _choice(e:bool, f:bool, g:bool) -> bool:
+    return int(f if e else g)
+    # return int((e and f) != ((not e) and g))
+
+import itertools
+
+tester = list(itertools.product([0, 1],repeat=3))
+
+print(" === Boolean Choice === ")
+[print('_choice'+str(test), '->', _choice(*test)) for test in tester]
+
+arrays = (tuple(zip(*tester)))
+
+def choice(e:tuple[bool], f:tuple[bool], g:tuple[bool]) -> tuple[bool]:
+    return tuple(_choice(_e, _f, _g) for _e, _f, _g in zip(e,f,g))
+
+# This was ugly
+# print('choice'+str(arrays), '->', choice(*arrays))
+
+# pretty print
+bitstr = lambda bits : "".join([str(b) for b in bits])
+bsstrs = lambda arrs : str(tuple(bitstr(bits) for bits in arrs))
+print(" === Bitwise Choice === ")
+print('choice'+bsstrs(arrays), '->', "'"+bitstr(choice(*arrays))+"'")
+```
+</blockquote>
+
+- You can run it yourself, but here is the output for reference.
+
+```email
+ === Boolean Choice === 
+_choice(0, 0, 0) -> 0
+_choice(0, 0, 1) -> 1
+_choice(0, 1, 0) -> 0
+_choice(0, 1, 1) -> 1
+_choice(1, 0, 0) -> 0
+_choice(1, 0, 1) -> 0
+_choice(1, 1, 0) -> 1
+_choice(1, 1, 1) -> 1
+ === Bitwise Choice ===
+choice('00001111', '00110011', '01010101') -> '01010011'
+```
+
+- The following defines a macro for boolean choice.
+  - Though not particularly gracefully.
+  
+```C
+/* Macro for boolean choice. */
+#define	CHOICE(e,f,g) ((e)?(f):(g))
+```
+
+- Update the macro to perform bitwise choice.
+  - It should be a single line macro.
+  - It should use bitwise operators.
+
+:::
+
+# Median&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#median" role="button" aria-expanded="median" aria-controls="median">Show</a>
+
+::: {#median .collapse .multi-collapse}
+
+- Here I provide Pythonic boolean median and bitwise median, and C boolean median.
+- You will need C bitwise median.
+- I will take it as given you know what a median is.
+- The following code is appended to "macros.py"
+
+<blockquote style="max-height:10em;overflow-y: scroll;">
+```{.python filename="macros.py" }
+import numpy as np
+
+def _median(e:bool, f:bool, g:bool) -> bool:
+    return int(np.median([e,f,g]))
+
+print(" === Boolean Median === ")
+[print('_median'+str(test), '->', _median(*test)) for test in tester]
+
+def median(e:tuple[bool], f:tuple[bool], g:tuple[bool]) -> tuple[bool]:
+    return tuple(_median(_e, _f, _g) for _e, _f, _g in zip(e,f,g))
+
+print(" === Bitwise Median === ")
+print('median'+bsstrs(arrays), '->', "'"+bitstr(median(*arrays))+"'")
+```
+</blockquote>
+
+- You can run it yourself, but here is the output for reference.
+
+```email
+ === Boolean Median === 
+_median(0, 0, 0) -> 0
+_median(0, 0, 1) -> 0
+_median(0, 1, 0) -> 0
+_median(0, 1, 1) -> 1
+_median(1, 0, 0) -> 0
+_median(1, 0, 1) -> 1
+_median(1, 1, 0) -> 1
+_median(1, 1, 1) -> 1
+ === Bitwise Median ===
+median('00001111', '00110011', '01010101') -> '00010111'
+```
+
+- The following defines a macro for boolean median.
+  - Though not particularly gracefully.
+  - C `!!` is very close to Python `bool()`
+  
+```C
+/* Macro for boolean median. */
+#define MEDIAN(e,f,g) ((!!(e) + !!(f) + !!(g)) > 1)
+```
+
+- Update the macro to perform bitwise median.
+  - It should be a single line macro.
+  - It should use bitwise operators.
+
+:::
+
+# Sizeof&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#sizeof" role="button" aria-expanded="false" aria-controls="sizeof">Show</a>
+
+::: {#sizeof .collapse .multi-collapse}
+
+- You may have noticed something while writing `printb`: 
+  - That not know how many bits you had was annoying.
+- Not to worry, C can help us.
+  - A char is always exactly 8 bits
+    - This is also called one byte
+    - It is trivial to verifying this experimentally.
+  - Everything else is some multiple of char
+  - To find how many char's big something is, use `sizeof`
+- I compile with `-w` to silence an error.
+  - `sizeof` doesn't run an integer, so we shouldn't print with `%d`
+  - More latter.
+
+```sh
+$ cat sizeof.c
+#include <stdio.h>
+
+int main() {
+        char c = 1;
+        int n = 2;
+        char s[8] = {1,2,3,4,5,6,7,8};
+        printf("sizeof(c) = %d, sizeof(n) = %d, sizeof(s) = %d\n",
+                        sizeof(c),
+                        sizeof(n),
+                        sizeof(s)
+              );
+        return 0;
+}
+$ gcc sizeof.c -w
+$ ./a.out
+sizeof(c) = 1, sizeof(n) = 4, sizeof(s) = 8
+```
+
+- To make introducing rotate easier, all examples will be on char
+- Rotate is used in cryptography on things 32 bits in size.
+  - Usually an int is this big, but not always.
+  - There's ways to manage this.
+- I will test your rotate code on the `unsigned int` type, which is usually 32 bits in size.
+  - You can assume 32, for now.
+
+:::
+
+# Rotate&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#rotate" role="button" aria-expanded="false" aria-controls="rotate">Show</a>
+
+::: {#rotate .collapse .multi-collapse}
+
+- We recall cipher rotation.
+
+```email
+ ____________________________
+[ ABCDEFGHIJKLMNOPQRSTUVWXYZ ] # alphabet
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+ ____________________________
+[ DEFGHIJKLMNOPQRSTUVWXYZABC ] # forward(3)
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+ ____________________________
+[ XYZABCDEFGHIJKLMNOPQRSTUVW ] # forward(-3)
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+```
+
+- We understand this as:
+  - Take an array and,
+  - Take a numerical value...
+     - of less than the length of the array.
+  - Maintain all elements of the array, but
+    - Increase their index by the numerical value, and
+    - Indices greater than array length wrap around...
+      - Using modulo array length.
+- We apply this same idea to the notion of boolean arrays.
+  - A unsigned int is a boolean array of some length.
+  - It is possible to determine these lengths.
+- Here is a Python bitwise rotate on boolean arrays of size 8.
+
+<blockquote style="max-height:10em;overflow-y: scroll;">
+```{.python filename="macros.py"}
+def rotleft(a:tuple[bool], n:int) -> tuple[bool]:
+    return a[n:] + a[:n]
+
+print(" === Bitwise Rotleft === ")
+array = (0,0,1,0,1,1,0,1)
+for n in range(len(arrays[0])+1):
+    print('rotleft('+bitstr(array)+','+str(n)+') ->', bitstr(rotate(array,n)))
+```
+</blockquote>
+
+- You can run it yourself, but here is the output for reference.
+
+```email
+ === Bitwise Rotleft ===
+rotleft(00101101,0) -> 00101101
+rotleft(00101101,1) -> 01011010
+rotleft(00101101,2) -> 10110100
+rotleft(00101101,3) -> 01101001
+rotleft(00101101,4) -> 11010010
+rotleft(00101101,5) -> 10100101
+rotleft(00101101,6) -> 01001011
+rotleft(00101101,7) -> 10010110
+rotleft(00101101,8) -> 00101101
+```
+
+- We note that this forms a "backward" or "leftward" rotate.
+  - This is a non-standard rotate, often called `lotate` or `rotleft`
+  - A future assignment will use a "forward" or "rightward" rotate.
+- Without showing code, it would look like this.
+
+```email
+ === Bitwise Rotate ===
+rotate(00101101,0) -> 00101101
+rotate(00101101,1) -> 10010110
+rotate(00101101,2) -> 01001011
+rotate(00101101,3) -> 10100101
+rotate(00101101,4) -> 11010010
+rotate(00101101,5) -> 01101001
+rotate(00101101,6) -> 10110100
+rotate(00101101,7) -> 01011010
+rotate(00101101,8) -> 00101101
+```
+
+#### Note:
+
+- The C language bitwise operations often seem quite unstable.
+  - It is a virtual certainty you will encounter pernicious bugs.
+  - Use `unsigned int` or just `unsigned` to avoid negative shenanigans.
+  - Print everything all the time.
+  - Liberally consult `printf` and C language documentation.
+  - Ask questions early and often.
+
+:::
+
+# Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls="tester">Show</a>
+
+::: {#tester .collapse .multi-collapse}
+
+#### Tester
+
+- I am providing the following Containerfile, which will serve as a minimal autograder
+    - It sets up an Ubuntu container.
+    - It downloads a .c and .sh file and script to test.
+    - It copies in "macros.c" from your system.
+
+```{.email filename="Containerfile"}
+FROM ubuntu 
+
+RUN apt update && apt install gcc curl -y
+
+RUN curl https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/macros/tester.c -o tester.c
+
+RUN curl https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/macros/tester.sh -o tester.sh
+
+COPY macros.c .
+```
+
+#### Usage
+
+- I built my container via:
+
+```email
+podman build -t tester .
+```
+
+- I tested my code via:
+
+```email
+podman run tester /bin/bash tester.sh
+```
+
+- If the above script returns `0` you are done.
+    - Upload your code to your GitHub on which I am a collaborator.
+- I will review the most recent version prior to the due date.
+
+#### Testing
+
+- It may be non-obvious how the tester functions.
+    -   When the container is built, it copies in `macros.c`
+    -   Within the container, `tester.sh`:
+        -   Reads `macros.c` with `grep`
+            -   Finds lines containing the 3 define statements
+            -   Echos these statements to the command line
+        -   Echoes `tester.c` to the command line
+        -   Runs `gcc` over the command line input
+            -   `tester.c` intentionally causes a suppressed error (`-Wno`) 
+            -   The command line code needs its languages specified (`-xc`)
+        -   Runs the output executable
+        -   Echoes the return value via `$?
+    -   A return value of _n_ denotes:
+        0.  Perfect.
+        1.  `CHOICE` is incorrect
+        2.  `MEDIAN` is incorrect but `CHOICE` is correct
+        3.  `ROTATE` is incorrect but `CHOICE` and `MEDIAN` are correct
+  -   It may be the case that `tester.c` runs strangly on your system.
+        -   It assumes an underlying AMD64 device
+        -   [GCP](https://console.cloud.google.com/) cloud console runs on AMD64
+            -   `docker`, installed by default, is an alternative to `podman` on GCP.
+
+
+#### Viewer
+
+- The tester doesn't include `<stdio.h>` so it isn't easy to examine.
+- You can view sample outputs here.
+
+```{.c filename="viewer.c"}
+#include <stdio.h>
+
+/* your code here
+#define CHOICE(x,y,z) 
+#define MEDIAN(x,y,z) 
+#define ROTATE(a,b) */
+
+int main() {
+    /* Various Variables*/
+    unsigned a[4] = {0x11110000, 0x11001100, 0x10101010, 0xABCD0123};
+
+    /* CHOICE */
+    printf("*Rotates use a decimal shift value, but print in hexadecimal:\n");
+    printf("CHOICE(\n%08lX,\n%08lX,\n%08lX) = \n--------\n%08lX\n\n", a[0], a[1], a[2], CHOICE(a[0], a[1], a[2]));
+    printf("MEDIAN(\n%08lX,\n%08lX,\n%08lX) = \n--------\n%08lX\n\n", a[0], a[1], a[2], MEDIAN(a[0], a[1], a[2]));
+    printf("*Rotates use a decimal shift value, but print in hexadecimal:\n");
+    printf("ROTATE(\n%08lX, 04) = \n--------\n%08lX\n\n", a[3], ROTATE(a[3], 4));
+    printf("ROTATE(\n%08lX, 08) = \n--------\n%08lX\n\n", a[3], ROTATE(a[3], 8));
+    printf("ROTATE(\n%08lX, 12) = \n--------\n%08lX\n\n", a[3], ROTATE(a[3], 12));
+    printf("ROTATE(\n%08lX, 02) = \n--------\n%08lX\n\n", 0x1000, ROTATE(0x1000, 2));
+    printf("ROTATE(\n%08lX, 30) = \n--------\n%08lX\n\n", 0x1000, ROTATE(0x1000, 30));
+
+    return 0;
+}
+```
+
+```{.email}
+*Rotates use a decimal shift value, but print in hexadecimal:
+CHOICE(
+11110000,
+11001100,
+10101010) = 
+--------
+11001010
+
+MEDIAN(
+11110000,
+11001100,
+10101010) = 
+--------
+11101000
+
+*Rotates use a decimal shift value, but print in hexadecimal:
+ROTATE(
+ABCD0123,04) = 
+--------
+3ABCD012
+
+ROTATE(
+ABCD0123,08) = 
+--------
+23ABCD01
+
+ROTATE(
+ABCD0123,12) = 
+--------
+123ABCD0
+
+ROTATE(
+00001000,02) = 
+--------
+00000400
+
+ROTATE(
+00001000,30) = 
+--------
+00004000
+```
+
+:::

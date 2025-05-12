@@ -1,0 +1,175 @@
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+<script>
+  [].forEach.call(document.querySelectorAll(".btn[data-bs-toggle='collapse']"), ($btn) => $btn.onmouseup = () => setTimeout(() => $btn.innerText = $btn.attributes["aria-expanded"].value === "true" ? "Hide" : "Show", 0))
+</script>
+
+---
+title: SHAinC
+subtitle: "HW 0x3: Due Th, Feb 13"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Implement SHA-256
+- My responsibility
+  - I will provide 1 week of instruction on SHA-256
+  - I will provide an autograder Containerfile
+- Your responsibility
+  - You will implement SHA-256 in C89 as an "shainc.c" file
+  - You will store your "shainc.c" file in the "shainc" folder on your "crypto" GitHub repository.
+  
+### Topic Areas
+
+|Review:    | Newish:    |
+| --------- | ---------- |
+|- SHA-2    | - C89      |
+
+# Resources
+
+- [The Endian lab](endian.html)
+    - The "Option" exercise formed my starter code.
+- [My SHA256 Slides](sha256.html)
+  - I used this, and its references. Try scroll mode (press 'r')
+  - [Wikipedia Pseudocode](https://en.wikipedia.org/wiki/SHA-2#Pseudocode)
+      - I used this to implement the first chunk.
+  - [Saravanan Vijayakumaran's Slides](https://www.ee.iitb.ac.in/~sarva/courses/EE720/2023/slides/hash-functions.html#/sha-256)
+      - I used to extend my implementation to multiple chunks.
+  - [@manceraio's .js demo](https://sha256algorithm.com/)
+      - I used this to debug my endian transforms.
+- You needn't compute round constants; I provide them below:
+
+:::
+
+# Consts&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#primes" role="button" aria-expanded="false" aria-controls="primes">Show</a>
+
+::: {#primes .collapse .multi-collapse}
+
+- The $k$ values: fractional components of the cube roots of the first 64 primes.
+- The $h$ values: fractional components of the square roots of the first 8 primes.
+- I found it better to use the established constants than risk a difference in implementation of fractions.
+
+- Also available on [GitHub](https://github.com/cd-c89/crypto/blob/main/shainc/shainc.c)
+
+```{.C filename="rounds.c"}
+/* round constants */
+/* network endian */
+uint32_t k[64] = {
+    0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,
+    0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+    0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,
+    0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+    0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,
+    0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+    0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,
+    0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+    0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,
+    0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+    0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,
+    0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+    0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,
+    0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+    0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,
+    0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+};
+```
+
+```{.C filename="hashes.c"}
+/* initial hash values (h_0) */
+/* network endian */
+uint32_t h[8] = {
+    0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,
+    0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19
+};
+```
+
+:::
+
+# Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls="tester">Show</a>
+
+::: {#tester .collapse .multi-collapse}
+
+#### Tester
+
+- I am providing the following Containerfile, which will serve as a minimal autograder
+    - It sets up an Ubuntu container.
+    - It downloads a .sh script to test.
+    - It copies in "shainc.c" from your system.
+
+```{.email filename="Containerfile"}
+FROM ubuntu 
+
+RUN apt update && apt install gcc curl -y
+
+RUN curl https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/shainc/tester.sh -o tester.sh
+
+COPY shainc.c .
+```
+
+- It may be easier to review the test script here than on [GitHub](https://github.com/cd-c89/crypto/blob/main/shainc/tester.sh):
+
+```{.sh filename="tester.sh"}
+gcc shainc.c --std=c89 -Wall -Wextra -Werror -Wpedantic -O2 -o shainc
+echo "15 characters." > 15char.txt
+echo "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." > lipsum.txt
+curl https://github.com/cd-public/books/raw/main/pg1342.txt -o austen.txt 2>/dev/null
+echo " === Finding errors vs. reference implementation. === "
+diff <(sha256sum 15char.txt) <(./shainc 15char.txt)
+diff <(sha256sum lipsum.txt) <(./shainc lipsum.txt)
+diff <(sha256sum austen.txt) <(./shainc austen.txt)
+echo " === Errors printed. No errors denotes \"Perfect!\" === "
+```
+
+#### Usage
+
+- I built my container via:
+
+```email
+podman build -t tester .
+```
+
+- I tested my code via:
+
+```email
+podman run tester /bin/bash tester.sh
+```
+
+- If the above script returns the following you are done:
+    - Upload your code to your GitHub on which I am a collaborator.
+- I will review the most recent version prior to the due date.
+```email
+ === Finding errors vs. reference implementation. === 
+ === Errors printed. No errors denotes "Perfect!" === 
+ ```
+
+#### Testing
+
+-   When the container is built, it copies in `shainc.c`
+-   Within the container, `tester.sh`:
+    -   Compiles `shainc.c` as C89 with appropriate `gcc` flags.
+    -   Creates two (2) small files:
+        -   "15char.txt", a short 15 character text file, and
+        -   "lipsum.txt", a short text file of several hundred characters.
+    -   Downloads a copy of Jane Austen's "Pride and Prejudice"
+        -   "austen.txt", a file of several hundred thousand characters.
+        -   It took ~.08s to hash on my system.
+    -   Hashes all 3 files with:
+        -   The built-in `sha256sum` utility.
+        -   Your compiled `shainc` executable.
+    -   Compares the differences in output.
+    -   Any difference is indicative of a `shainc.c` bug of some kind.
+:::
