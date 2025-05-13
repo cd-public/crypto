@@ -111,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">heap_t</h1>
-            <p class="subtitle lead">HW 0xC: Due Th, 24 Apr</p>
+            <p class="subtitle lead">HW 0x4.1: Due Fri, 08 Aug</p>
                       </div>
   </div>
     
@@ -195,11 +195,12 @@ On Due Dates
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>heap_t heap<span class="op">(</span><span class="dt">size_t</span> ele_size<span class="op">,</span> <span class="dt">bool</span> <span class="op">(*</span>gt<span class="op">)(</span><span class="dt">void</span> <span class="op">*,</span> <span class="dt">void</span> <span class="op">*));</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
-<li>I stack allocated my heap, which you are welcome but not required to do.</li>
+<li>I stack allocated my heap, which are welcome but not required to do.</li>
 <li>My initial heap explicitly contained zero elements.</li>
 </ul>
-<section id="the-heap-struct" class="level3">
-<h3 class="anchored" data-anchor-id="the-heap-struct">The Heap Struct</h3>
+</section>
+<section id="the-heap-struct" class="level2">
+<h2 class="anchored" data-anchor-id="the-heap-struct">The Heap Struct</h2>
 <ul>
 <li>I am requiring the usage of a single internal array, a function pointer, and something to track the size of elements in the array.</li>
 <li>You do not have to maintain <code>capacity</code> and there is no graceful way to avoiding maintaining <code>num_eles</code> (though non-graceful is fine) but it is probably easier to view them as required.</li>
@@ -216,8 +217,8 @@ On Due Dates
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">void</span> <span class="op">*</span>eles<span class="op">;</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> heap_t<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="explanation" class="level3">
-<h3 class="anchored" data-anchor-id="explanation">Explanation</h3>
+<section id="explanation" class="level2">
+<h2 class="anchored" data-anchor-id="explanation">Explanation</h2>
 <ul>
 <li><code>ele_size</code>
 <ul>
@@ -251,7 +252,6 @@ On Due Dates
 </ul></li>
 </ul>
 </section>
-</section>
 </div>
 </section>
 <section id="insert-show" class="level1">
@@ -270,16 +270,17 @@ On Due Dates
 <section id="maxpop-show" class="level1">
 <h1>maxpop&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#maxpop" role="button" aria-expanded="false" aria-controls="maxpop">Show</a></h1>
 <div id="maxpop" class="collapse multi-collapse">
-<section id="pop-the-maximal-element-and-sift-down" class="level2">
-<h2 class="anchored" data-anchor-id="pop-the-maximal-element-and-sift-down">Pop the maximal element and sift down</h2>
+<section id="pop-the-maximal-element" class="level2">
+<h2 class="anchored" data-anchor-id="pop-the-maximal-element">Pop the maximal element</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>maxpop<span class="op">(</span>heap_t <span class="op">*</span>heap<span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>This returns a <em>heap allocated</em> copy of the former maximum value in the heap.</li>
-<li>Separately, this element is removed from the heap.</li>
+<li>Separately, these element is removed from the heap.</li>
 <li>Finally, the heap is rearranged to maintain the heap property using a “SiftDown” operation.</li>
 </ul>
-<section id="sift-down" class="level3">
-<h3 class="anchored" data-anchor-id="sift-down">Sift Down</h3>
+</section>
+<section id="sift-down" class="level2">
+<h2 class="anchored" data-anchor-id="sift-down">Sift Down</h2>
 <ul>
 <li>After a <code>maxpop</code>, the initial index - zero or one - is vacant.</li>
 <li>Overwrite this value at this location with the last element in the heap array - the rightmost leaf in the last layer.</li>
@@ -288,8 +289,8 @@ On Due Dates
 <li>Continue to swap, or “sift down”, this value until it is either in a leaf position or is greater than both of its children.</li>
 </ul>
 </section>
-<section id="visual-demo" class="level3">
-<h3 class="anchored" data-anchor-id="visual-demo">Visual Demo</h3>
+<section id="visual-demo" class="level2">
+<h2 class="anchored" data-anchor-id="visual-demo">Visual Demo</h2>
 <ul>
 <li>Begin with the default heap.</li>
 </ul>
@@ -536,7 +537,6 @@ On Due Dates
 <li>We notice that the heap property is satisfied - all parent nodes are greater than all of their child nodes.</li>
 </ul>
 </section>
-</section>
 </div>
 </section>
 <section id="tester-show" class="level1">
@@ -545,7 +545,7 @@ On Due Dates
 <section id="novel-tester" class="level2">
 <h2 class="anchored" data-anchor-id="novel-tester">Novel Tester</h2>
 <ul>
-<li>Versus other testers this term, I wanted to provide a more concrete file that actually used the heap_t, performed operations, and issued outputs as print statements.</li>
+<li>Versus other testers this term, I wanted to provide a more concrete file that actually used the list_t, performed operations, and issued outputs as print statements.</li>
 <li>I hope that tester is self-documenting, but would love to hear your questions!</li>
 </ul>
 <iframe width="100%" height="500em" src="https://cd-public.github.io/calvinism/?uri=https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/heap_t/tester.c">

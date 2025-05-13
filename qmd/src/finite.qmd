@@ -2,7 +2,7 @@
 title: Finite
 theme: dark
 author: Prof. Calvin
-subtitle: "Week 0x4 ∪ 0x5"
+subtitle: "0x2.0-1"
 institute: Crypto
 format: 
     revealjs: 
@@ -20,7 +20,7 @@ execute:
 ---
 # Announcements
 
-- **Welcome** to variously CS 276/CS 540
+- **Welcome** to Computing Security
   - Composite multi-session lecture.
 - **Action Items**:
   - Broadly supports SHA, RSA, and mixed precision arithmetic, concurrent assignments with this lecture.

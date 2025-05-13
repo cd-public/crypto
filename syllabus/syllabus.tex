@@ -1,0 +1,294 @@
+% Don't touch this %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage[left=1in,top=1in,right=1in,bottom=1in,headheight=3ex,headsep=3ex]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+
+\newcommand{\blankline}{\quad\pagebreak[2]}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Modify Course title, instructor name, semester here %%%%%%%%
+
+\title{CSCI 5300: Computing Security}
+\author{Calvin Deutschbein}
+\date{Summer, 2025}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't touch this %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[sc]{mathpazo}
+\linespread{1.05} % Palatino needs more leading (space between lines)
+\usepackage[T1]{fontenc}
+\usepackage[mmddyyyy]{datetime}% http://ctan.org/pkg/datetime
+\usepackage{advdate}% http://ctan.org/pkg/advdate
+\newdateformat{syldate}{\twodigit{\THEMONTH}/\twodigit{\THEDAY}}
+\newsavebox{\MONDAY}\savebox{\MONDAY}{Mon}% Mon
+\newcommand{\week}[1]{%
+%  \cleardate{mydate}% Clear date
+% \newdate{mydate}{\the\day}{\the\month}{\the\year}% Store date
+  \paragraph*{\kern-2ex\quad #1, \syldate{\today} - \AdvanceDate[4]\syldate{\today}:}% Set heading  \quad #1
+%  \setbox1=\hbox{\shortdayofweekname{\getdateday{mydate}}{\getdatemonth{mydate}}{\getdateyear{mydate}}}%
+  \ifdim\wd1=\wd\MONDAY
+    \AdvanceDate[7]
+  \else
+    \AdvanceDate[7]
+  \fi%
+}
+\usepackage{setspace}
+\usepackage{multicol}
+%\usepackage{indentfirst}
+\usepackage{fancyhdr,lastpage}
+\usepackage{url}
+\pagestyle{fancy}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{amsmath}
+\usepackage{layout}
+\usepackage{csquotes}
+\setlength\parindent{0pt}
+
+\lhead{}
+\chead{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Modify header here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\rhead{\footnotesize Text in header}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Don't touch this %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lfoot{}
+\cfoot{\small \thepage/\pageref*{LastPage}}
+\rfoot{}
+
+\usepackage{array, xcolor}
+\usepackage{color,hyperref}
+\definecolor{clemsonorange}{HTML}{EA6A20}
+\hypersetup{colorlinks,breaklinks,linkcolor=clemsonorange,urlcolor=clemsonorange,anchorcolor=clemsonorange,citecolor=black}
+
+\begin{document}
+
+\maketitle
+
+\blankline
+
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lr}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Modify information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+E-mail: \href{mailto:cdeutschbein@lagrange.edu}{\tt\bf cdeutschbein@lagrange.edu} & Web: \href{https://cd-public.github.io/compute/}{\tt\bf https://cd-public.github.io/compute/}  \\
+
+07/07/25 - 08/08/25 &  Asynchronous \\
+\hline
+\end{tabular*}
+
+\vspace{5 mm}
+
+% Zeroth Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Modality and Credit Hour Compliance}
+
+
+\textbf{Asynchronous} CSCI 5300: Computing Security will be held 07/07/25 - 08/08/25, fully asynchronous.  There will be 1.5 hours of lecture/labwork assigned per day and 15-22.5 hours of homework assigned per week. Students spending less than 30 hours per week for 5 weeks on this course should expect to earn a low grade and learn very little. 
+
+\bigskip
+
+\textbf{Deliverables} Students will be responsible for submitting C course code that passes autograder checks every Monday at 12 midnight AOE following the residency. I will target 15-22.5 hours of effort each across weekly problem sets resulting in a 2-3 hours homework per contact hour ratio in accordance with my understanding of credit hour policy.
+
+% First Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Course Description}
+
+This course provides a graduate-level introduction to computer and network security and privacy. Students successfully completing this class will be able to evaluate works in academic and commercial security and will have rudimentary skills in security research. The course covers four key topic areas: basics of cryptography and crypto protocols, network security, systems security, and privacy. Readings primarily come from seminal papers in the field. 
+
+% Second Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Course Materials}
+
+\begin{itemize}
+\item Course materials at \href{https://cd-public.github.io/crypto/}{\tt\bf https://cd-public.github.io/crypto}
+\item Optional Textbook: The C Programming Language, Brian Kernighan\& Dennis Ritchie
+\item A Graduate Course in Applied Cryptography Dan Boneh \& Victor Shoup
+\item Supplemental Material: \href{https://cd-public.github.io/courses/old/c89s25/index.html/}{\tt\bf The 4 credit hour version of this course.}
+\end{itemize}
+
+% Third Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Prerequisite}
+B.S. Computer Science or equivalent.
+
+% Fourth Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Course Objectives}
+\textbf{\textit{LaGrange College Student Learning Outcomes (LC SLO):}}
+
+\begin{enumerate}
+\item Students will demonstrate \underline{creativity} by approaching complex problems with innovation and from
+\item Students will demonstrate \underline{critical thinking} by acquiring, interpreting, synthesizing, and evaluating
+information to reason out conclusions appropriately.
+\item Students will demonstrate proficiency in \underline{communication} skills that are applicable to any field of
+study.
+\end{enumerate}
+
+\textbf{\textit{Student Learning Outcomes (SLO) for CISC 5100}}
+
+\textit{All learning objectives pursuant to LC SLO \{1,2,3\} and to be assessed by homework assignments.}
+
+\begin{enumerate}
+    \item \textbf{Foundational Programming Concepts and Memory Management}
+        \begin{itemize}
+            \item \textbf{SLO 1:} Explain and apply concepts of pointers and memory safety in programming.
+            \item \textbf{SLO 2:} Design and implement recursive algorithms for problem-solving.
+            \item \textbf{SLO 3:} Develop programs using the C89 standard and manage the build process using Makefiles and shell scripts.
+        \end{itemize}
+    \item \textbf{Data Structures and Modern Development Practices}
+        \begin{itemize}
+            \item \textbf{SLO 4:} Implement and analyze the fundamental operations of various data structures, including lists, stacks, heaps, maps, and trees.
+            \item \textbf{SLO 5:} Utilize automated testing to ensure code and/or software quality.
+        \end{itemize}
+    \item \textbf{Cryptography and Mathematical Foundations}
+        \begin{itemize}
+            \item \textbf{SLO 6:} Explain the principles behind fundamental cryptographic algorithms such as RSA and SHA.
+            \item \textbf{SLO 7:} Apply concepts from number theory, set theory, and graph theory to solve problems in computer science.
+        \end{itemize}
+    \item \textbf{Cybersecurity Principles}
+        \begin{itemize}
+            \item \textbf{SLO 8:} Identify and analyze common cybersecurity threat models and explain the principles of Confidentiality, Integrity, and Availability (CIA).
+        \end{itemize}
+\end{enumerate}
+
+% 4.5th Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Assignments and Assessment}
+
+\begin{itemize}
+    \item Students begin the term with a default grade of "A".
+    \item This course utilizes objective, automated, binary grading on five weekly assignments.
+        \begin{itemize}
+            \item  Every assignments comes furnished with an autograder.
+            \begin{itemize}
+                \item  It is provided to students with the assignment specification.
+                \item  It is documented and preserved under version control.
+                \item There are special allowances for the fourth assignment.
+            \end{itemize}
+            \item  Students submit C language source code that accomplishes the goals of the autograder.
+            \begin{itemize}
+                \item  Students may use any resources but,
+                \item  Students are responsible for knowing the content of the course.
+                \item  We accept the autograder as ground truth.
+            \end{itemize}
+            \item  Automated assessment will score student work.
+            \begin{itemize}
+                \item  Late assignments earn zero points.
+                \item  Assignments that do not fulfill the autograder requirements earn zero points.
+                \item  Students lose one letter grade per failed assignment.
+            \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+% Fifth Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{College Policies}
+
+\subsection*{ADA Statement}
+
+In compliance with Section 504 of the Rehabilitation Act and the Americans with Disabilities Act,
+LaGrange College will provide reasonable accommodation of all medically documented disabilities. If you
+have a disability and would like the College to provide reasonable accommodations of the disability during
+this course, please notify Ms. Lindsay Shaughnessy, Director of the Panther Academic Center for
+Excellence (PACE) and Coordinator of Accessibility Services at \href{mailto:accessability@lagrange.edu}{accessability@lagrange.edu} or 706-880-8652. PACE is located in the Moshell Learning Center \&
+Tutoring Lab in the Lewis Library.
+
+
+\subsection*{Academic Support}
+
+Academic Support
+Academic support at LaGrange is provided through Panther Academic Center for Excellence (PACE), the
+Writing Center, and the advising deans. PACE provides peer tutoring, testing services, accessibility
+services, and other academic support as needed. For more information about PACE, please contact Mr.
+Steve Kenner (skenner@lagrange.edu). The Writing Center gives all writers a space to explore the potential of their ideas via peer review. For information about the Writing Center, contact Dr. Justin Thurman
+(jthurman@lagrange.edu).
+
+\subsection*{Academic Integrity Policy}
+
+Each student is bound by the LaGrange College Honor Code which is stated as follows:
+
+\begin{displayquote}
+As a member of the student body of LaGrange College, I confirm my
+commitment to the ideals of civility, diversity, service, and excellence.
+Recognizing the significance of personal integrity in establishing these ideals
+within our community, I pledge that I will not lie, cheat, steal, nor tolerate these
+unethical behaviors in others.
+\end{displayquote}
+
+The full text of the LaGrange College Honor Code along with policies and procedures in cases of academic
+dishonesty can be found at \url{http://www.lagrange.edu/resources/pdf/honorcode12-13.pdf}.
+
+\subsection*{Academic Integrity Policy}
+
+Email and LaGrange college accounts will be used in accordance with the following student handbook
+statement:
+
+\begin{displayquote}
+“Students are expected to treat their campus [e­mail] accounts as a business account.
+Faculty and administrators rely on these accounts to disseminate important information regarding
+College protocol and events. Therefore, students are responsible for any College information sent
+out over campus e­mail.”
+\end{displayquote}
+
+Consequently, personal email addresses will not be used for instructor/student email contact except in event a service interruption. The preferred
+method of contact will instead be by the official campus email. I target a 24 hour maximum response time on school days and 48 hours maximum response time on all emails while the course is active.
+
+As an adjunct, my LaGrange email may not persistent indefinitely. I maintain a persistent professional email at \href{calvindeu@gmail.com}{mailto:calvindeu@gmail.com} which can also be used in event service interrupts to the campus network or for professional references after the conclusion of the course.
+
+\subsection*{Netiquette}
+
+When leaving comments or asking questions in the forums of an online course, one is reminded to observe
+a few rules of internet etiquette:
+
+\begin{itemize}
+\item All caps locks and/or multiple exclamation points typically imply anger. You should not use such
+emphases unless it accomplishes a learning objective.
+\item Vulgarity, rudeness, and/or disrespect are complete unacceptable and will not be tolerated.
+\item Emoticons (such as ‘:)’ for a ‘smiley face’) are fine for use in relaxed submissions (forum threads
+and posts).
+\item In general, do your best to use proper spelling, grammar, and punctuation. Writing correctly
+works to ensure that your meaning is conveyed.
+\end{itemize}
+
+\subsubsection*{Technology Requirements}
+
+It is technically possible to complete the assessed work on this course working fully within a web-browser through a combination of cloud services and other technologies, the methodologies for which are left to the interested student as an exercise. That said, I recommend each student utilize the following technology stack:
+
+\begin{itemize}
+\item A local installation of Python, at least 3.8, ideally more recent.
+\item A local installation of VS Code.
+\item A local installation of Quarto.
+\item A local installation of a version control client compatible with GitHub.
+\item A local installation of major desktop webbrowser, likely Firefox, Chrome, Safari, or Edge.
+\item A remote GitHub account affilitated with an official LaGrange.edu email address.
+\end{itemize}
+
+\subsubsection*{Technical Support}
+
+I will independently offer technology support for the technology stack used to support this course. Contact me directly unless you have technical issues arising within LaGrange.edu realms, in which case you should reach out via email to \href{support@lagrange.edu}{mailto:support@lagrange.edu} or call 706.880.8053.
+
+Precise technical writing is a core learning objective (LC SLO 3) for this course, and should be modeled in all technical support interactions.
+
+\subsubsection*{Agreement by Continued Enrollment}
+
+By remaining enrolled in the course, each student agrees to the terms of the syllabus as a binding contract between the student, the instructor, and LaGrange College.
+
+\subsubsection*{Note on attending asynchronous attendance:}
+
+I am confident I have formulated the assessment tools such that attendance or non-attendance by individuals, as measured by viewing of asynchronous lectures, will be obvious to me as an instructor. As such, I have folded my attendance considerations into the assessment formulation.
+
+It is trivial as an instructor to assess the level of engagement with asynchronous learning resources, and you should regard it as more, not less, clear what a student's level of participation is for asynchronous instruction.
+
+\subsubsection*{J1 Retention}
+
+J1 Retention is a tool used by LaGrange College faculty and staff to promote student academic and extra-curricular success. Expect us to use it to report information about attendance, engagement, or academic performance on specific assignments throughout the semester. Faculty and staff, such as coaches, the PACE Director, and advising deans, will be notified of relevant concerns. Based on provided information, you may receive automated messages from J1 Retention, referrals to the Tutoring or Writing Centers, or request to meet with your advising dean or the PACE director if there are indicators that you might benefit from additional support. 
+
+
+\end{document}

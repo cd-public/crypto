@@ -2,155 +2,49 @@
 <html lang="en-US">
 
 <head>
-	<title>Crypto</title>
+	<title>Computing Security</title>
 
 	<!-- CSS Files -->
-	<style>
-    
-/**
- * Tabs Block
- */
-.tabs-block {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-/**
- * Tabs
- */
-.tabs {
-	display: flex;
-	flex-wrap: wrap;
-	width: 100%;
-}
-
-.tabs label {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 1rem 2rem;
-	margin-right: 0.0625rem;
-	cursor: pointer;
-	background-color: #000;
-	color: #fff;
-	font-family: Roboto, sans-serif;
-	font-size: 1.2rem;
-	font-weight: 700;
-	transition: background-color ease 0.3s;
-}
-
-.tabs .tab {
-	flex-grow: 1;
-	width: 100%;
-	height: 100%;
-	display: none;
-	padding: 1rem 2rem;
-	color: #000;
-	background-color: #fff;
-	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
-}
-
-.tabs .tab > *:not(:last-child) {
-	margin-bottom: 0.8rem;
-}
-
-.tabs [type=radio] {
-	display: none;
-}
-
-.tabs [type=radio]:checked + label {
-	background-color: #fff;
-	color: #0067b8;
-	border-top: 4px solid #0067b8;
-	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.4);
-}
-
-.tabs [type=radio]:checked + label + .tab {
-	display: block;
-}
-@media (min-width: 768px) {
-
-	body {
-		font-size: 1.125rem;
-	}
-
-	.tabs-container {
-		padding: 4rem 4rem;
-	}
-
-	.tabs label {
-		order: 1;
-		width: auto;
-	}
-
-	.tabs .tab {
-		order: 9;
-	}
-
-	.tabs [type=radio]:checked + label {
-		border-bottom: none;
-	}
-}
-@media (min-width: 992px) {
-
-	.tabs {
-		width: 800px;
-	}
-}
-</style>
+	<link rel="stylesheet" href="https://cd-public.github.io/css/tabs.css" type="text/css" media="all">
 </head>
 
 <body>
 	<div class="tabs" style="width:100%">
-    <input type="radio" name="tabs" id="tab0">
-		<label for="tab0">CS 276</label>
-		<div class="tab">
-			<h4>CS 276: Cryptographics Systems</h4>
-			<p>Spring 2025, Willamette College, Salem
-			<p>TTh 1450-1620, Ford 102 | YouTube Live
-			<p><a href="cs276.html">Syllabus</a>
-			<h4>Instructor</h4>
-			<p><a href="https://cd-public.github.io/">Calvin Deutschbein</a>
-			<p><a href="mailto:ckdeutschbein@willamette.edu">ckdeutschbein@willamette.edu</a>
-			<p>Ford 3rd Floor
-			<h4>Course Description</h4>
-			<p>A semester-long study of topics in Computer Science that specifically includes a collaborative programming project that applies or extends the content of CS 152 or more advanced classes.
-            <p>Systems research joins together the theory and the practice of computing, and cryptography is a perfect microcosm of this dynamic. As a guided study of low-level implementation of computer systems, this course will study the RSA and SHA cryptographic at once in theory and practice, and then build these cryptographic elements into emergent systems using data structures and algorithms such as Merkle trees and blockchains.
-		</div>
 		<input type="radio" name="tabs" id="tab1">
-		<label for="tab1">CS 540</label>
+		<label for="tab1">Home</label>
 		<div class="tab">
-			<h4>CS 540: Cybersecurity</h4>
-			<p>Spring 2025, School of Computing and Information Sciences, Portland
-			<p>Th 1800-2100 GPC 212 | YouTube Live
-			<p><a href="cs540.html">Syllabus</a>
+			<h4>CSCI 5300: Computing Security</h4>
+			<p><a href="syllabus/syllabus.pdf">Syllabus</a> [<a href="syllabus/syllabus.tex">.tex</a>]
 			<h4>Instructor</h4>
 			<p><a href="https://cd-public.github.io/">Calvin Deutschbein</a>
-			<p><a href="mailto:ckdeutschbein@willamette.edu">ckdeutschbein@willamette.edu</a>
-			<p>Ford 3rd Floor
+			<p><a href="cdeutschbein@lagrange.edu">cdeutschbein@lagrange.edu</a>
+            
+			<h4>Modality</h4>
+            <p>CSCI 5300: Computing Security will be held 07/07/25 - 08/08/25, fully asynchronous. 
+            <p>There will be 1.5 hours of lecture assigned per day and 15-22.5 hours of homework assigned per week. 
+            <p>Students spending less than 30 hours per week for 5 weeks on this course should expect to earn a low grade and learn very little. 
 			<h4>Course Description</h4>
-			<p>Cybersecurity can be understood as a mindset or approach rather than a subfield of computer science, such as secure mobile computing, network and operating system security, secure data bases, and secure cryptography algorithms. This course prepares a general audience to incorporate security concepts and ethics into their daily lives and offers some basic familiarity with writing security oriented code.
-		</div>
-		<input type="radio" name="tabs" id="tab15">
-		<label for="tab15">Letter</label>
-		<div class="tab">
+			<p>This course provides a graduate-level introduction to computer and network security and privacy. Students successfully completing this class will be able to evaluate works in academic and commercial security and will have rudimentary skills in security research. The course covers four key topic areas: basics of cryptography and crypto protocols, network security, systems security, and privacy. Readings primarily come from seminal papers in the field.
+            
+            
+<h4>Letter to Students</h4>
+
+<blockquote style="font-family:sans-serif;background-color:#00D0D0;width:50%;overflow:wrap">
 
 <p>Students,
 
-<p>All lectures and supplementary talks will be recorded and broadcast via YouTube Live through user @cd-public, for which there is a course specific playlist.
+<p>All lectures and supplementary talks have been recorded and broadcast via YouTube Live through user @cd-public, for which there is a course specific playlist.
 
 <ul>
 <li>General: <a href="https://youtube.com/@cd-public/streams">https://youtube.com/@cd-public/streams</a>
 <li>Course: <a href="https://youtube.com/playlist?list=PLu3KAnn4RkATQ94mEk4PPc0jg6Seu9kKY">https://youtube.com/playlist?list=PLu3KAnn4RkATQ94mEk4PPc0jg6Seu9kKY</a>
 </ul>
 
+
 <p>All course material will be hosted via GitHub pages at the following url, for which this is a course specific page.
 
 <ul>
-<li>General: <a href="https://cd-public.github.io/courses/">https://cd-public.github.io/courses/</a>
-<li>Course: <a href="https://cd-public.github.io/courses/c89s25/index.html">https://cd-public.github.io/courses/c89s25/index.html</a>
+<li>GitHub Page: <a href="https://cd-public.github.io/crypto/">https://cd-public.github.io/crypto/</a>
 </ul>
 
 <p>In addition to office hours by appointment, as a collaboration and student support tool I will host a course Discord. Discord is not required, but I will use it a lot.
@@ -166,11 +60,11 @@
 <li><a href="https://toc.cryptobook.us/book.pdf">A Graduate Course in Applied Cryptography</a></i> Dan Boneh &amp; Victor Shoup</p>
 </ul>
 
-<p>There is a strong trend in academia toward learning management systems like Canvas and toward maintaining student visible gradebooks, which have strong benefits for other courses but not, I think, for mine. I note that:
+<p>There is a strong trend in academia toward learning management systems like Brightspace and toward maintaining student visible gradebooks, which have strong benefits for other courses but not, I think, for mine. I note that:
 
 <ol>
-<li>I do not use LMS systems, which I find difficult to integrate with the technology stacks used within courses in the computational sciences.
-<li>I do not use a student visible gradebook because I use ungrading, wherein students have a good grade unless informed privately.
+<li>I do not use LMS systems, which I find difficult to integrate with the technology stacks that achieve core instructional goals for courses within the computational sciences.
+<li>I do not use a student visible gradebook because I use ungrading, which I have found to be associated with stronger achievement from students in demanding courses.
 </ol>
 
 <p>Reach out via email or Discord if you want a grade check or cannot find some course materials. 
@@ -179,7 +73,9 @@
 
 <p>-c
 
-			<p>P.S.: Resources
+</blockquote>
+            
+            <p>P.S.: Resources
             <p>"Cheat Sheets":
             <ul>
                 <li><a href="img/docker.png">podman</a>
@@ -204,185 +100,81 @@
                 <li><a href="https://vim-adventures.com/">Vim adventures</a>
                 <li><a href="https://www.vim-hero.com/">Vim hero</a>
             </ul>
-
+            
 		</div>
-		<input type="radio" name="tabs" id="tab2" checked="checked">
+		<input type="radio" name="tabs" id="tab2"  checked="checked">
 		<label for="tab2">Schedule</label>
+		
 		<div class="tab">
-			<table style="width:100%;background-color:#A0A0A0;font-family:monospace;text-align:center;font-size:2em">
+        
+            <p>CSCI 5300: Computing Security will be held 07/07/25 - 08/08/25, fully asynchronous. 
+            <p>There will be 1.5 hours of lecture assigned per day and 15-22.5 hours of homework assigned per week. 
+            <p>Students spending less than 30 hours per week for 5 weeks on this course should expect to earn a low grade and learn very little. 
+        
+        <ul>
+            <li>Lectures will be denoted with [s] for Slides and [v] for Video.
+            <li>Lab exercises and homeworks will denoted with [p] for web Page and [c] for source Code.
+        </ul>
+        
+        <table style="width:100%;background-color:#A0A0A0;font-family:monospace;text-align:center;font-size:1.5em;table-layout: fixed">
 				<tbody>
 					<tr style="background-color:#00BBBB">
-						<th style="width:17%"><b>Week</b></th>
-						<th style="width:16%"><b>Talk</b></th>
-                        <th style="width:17%"><b>VoDs</b></th>
-						<th style="width:17%"><b>Demo</b></th>
-						<th style="width:16%"><b>MSCS</b></th>
-						<th style="width:17%"><b>HW's</b></th>
-					</tr>
-					<tr style="background-color:#00AAAA">
-						<td colspan="6">Part 0</td>
+						<th style="width:15%"><b>Week</b></th>
+						<th style="width:14%"><b>Mon</b></th>
+                        <th style="width:14%"><b>Tue</b></th>
+						<th style="width:14%"><b>Wed</b></th>
+						<th style="width:14%"><b>Thr</b></th>
+						<th style="width:14%"><b>Fri</b></th>
+						<th style="width:15%"><b>HW</b></th>
 					</tr>
 					<tr style="background-color:#00DDDD">
-						<td>0x0 (13 Jan)</td>
-						<td><a href="qmd/podman.html">Podman</a></td> <!-- syllabus, podman, gcc, vim, git -->
-						<td><a href="https://youtube.com/watch?v=XQkeKj_8KoY&list=PLu3KAnn4RkATQ94mEk4PPc0jg6Seu9kKY&index=1">SLM</a>PDX</td>
-						<td><a href="qmd/alpine.html">Alpine</a></td> <!-- containerfiles -->
-						<td><a href="vod/cipher.html">Cipher</a></td> <!-- shannon ciphers from textbook -->
-						<td><a href="qmd/enigma.html">Enigma</a></td> <!-- i/o processing -->
-					</tr>
-                    <!-- start: cryptography (6 weeks) -->
-					<tr style="background-color:#00AAAA">
-						<td colspan="6">Part 1: Cryptographic Algorithms</td>
+						<td>0x0 (07 Jul)</td>
+						<td>Podman [<a href="qmd/podman.html">s</a>][<a href="https://www.youtube.com/watch?v=XQkeKj_8KoY">v</a>]</td>
+						<td>Alpine [<a href="qmd/alpine.html">p</a>][<a href="https://github.com/cd-c89/alpine">c</a>]</td>
+						<td>Cipher [<a href="vod/cipher.html">s</a>][<a href="https://www.youtube.com/watch?v=fDjcZIT0qCc">v</a>]</td>
+                        <td>C89/99 [<a href="qmd/c89_99.html">s</a>][v]</td>
+                        <td>Printb [<a href="qmd/printb.html">p</a>][c]</td>
+						<td>Enigma [<a href="qmd/enigma.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/enigma">c</a>]</td>
 					</tr>
 					<tr style="background-color:#00DDDD">
-						<td>0x1 (20 Jan)</td>
-						<td><a href="qmd/c89_99.html">C89/99</a></td> <!-- C Syntax + why -->
-						<td>SLMPDX</td>
-						<td><a href="qmd/printb.html">Printb</a></td> <!-- bit packing -->
-						<td><a href="https://youtube.com/watch?v=N1GHFyYPxTs">x86-64</a></td> 
-						<td><a href="qmd/macros.html">Macros</a></td> <!-- SHAOps -->
+						<td>0x1 (14 Jul)</td>
+                        <td>Encode [<a href="qmd/encode.html">s</a>][<a href="https://youtube.com/live/vgfHcsLU1-I">v</a>]</td>
+						<td>Macros [<a href="qmd/macros.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/macros">c</a>]</td>
+						<td>x86-64 [s][<a href="https://www.youtube.com/watch?v=N1GHFyYPxTs">v</a>]</td>
+                        <td>SHA256 [<a href="qmd/sha256.html">s</a>][v]</td>
+                        <td>Endian [<a href="qmd/Endian.html">p</a>][c]</td>
+						<td>SHAinC [<a href="qmd/shainc.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/shainc">c</a>]</td>
 					</tr>
 					<tr style="background-color:#00DDDD">
-						<td>0x2 (27 Jan)</td>
-						<td><a href="qmd/encode.html">Encode</a></td> <!-- one way hashes + spec -->
-						<td><a href="https://youtube.com/live/vgfHcsLU1-I">SLM</a><s>PDX</s></td>
-						<td style="background-color:#DDDDDD">Travel</td>
-						<td><a href="https://youtube.com/live/vgfHcsLU1-I">Encode</a></td><!--<a href="https://youtube.com/watch?v=vm88O4DVMdw">Primes</a></td>-->
-						<td style="background-color:#DDDDDD">Travel</td>
+						<td>0x2 (21 Jul)</td>
+                        <td>Finite [<a href="qmd/finite.html">s</a>][<a href="https://www.youtube.com/live/uKLFt8sCl5I">v</a>]</td>
+						<td>BigNum [<a href="qmd/finite.html">s</a>][<a href="https://www.youtube.com/live/LrbtK6p9VPo">v<a>]</td>
+						<td>BigAdd [<a href="qmd/bigadd.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/4096_t">c</a>]</td>
+                        <td>LibGMP [s][<a href="https://www.youtube.com/live/jEVIdGabjEk">v</a>]</td>
+                        <td>4bytes [<a href="qmd/4bytes.html">p</a>][<a href="https://www.youtube.com/watch?v=ddZjuwji4MY">c</a>]</td> 
+                        <td>4096_t [<a href="qmd/4096_t.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/4096_t">c</a>]</td>
 					</tr>
 					<tr style="background-color:#00DDDD">
-						<td>0x3 (03 Feb)</td>
-						<td><a href="qmd/sha256.html">SHA256</a></td> <!-- one way hashes + spec -->
-						<td><a href="https://youtube.com/live/hWGVdsgpuA0">SLM</a><a href="https://youtube.com/watch?v=3Du0sMBC6Ns">PDX</a></td>
-						<td><a href="qmd/endian.html">Endian</a></td> <!-- calc constants -->
-						<td rowspan="2"><a href="https://lists.pdxlinux.org/pipermail/plug-announce/2025q1/001228.html">Atomic</a></td><!--<a href="https://youtube.com/watch?v=vm88O4DVMdw">Primes</a></td>-->
-						<td rowspan="2"><a href="qmd/shainc.html">SHAinC</a></td> <!-- implement sha256 -->
+						<td>0x3 (28 Jul)</td>
+                        <td>Fermat [<a href="qmd/fermat.html">s</a>][<a href="https://www.youtube.com/live/kCGuaOuHNuQ">v</a>]</td>
+						<td>KeyGen [<a href="qmd/keygen.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/rsainc">c<a>]</td>
+						<td>RSAinC [<a href="qmd/rsainc.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/rsainc">c</a>]</td>
+                        <td>Euclid [<a href="qmd/fermat.html">s</a>][<a href="https://www.youtube.com/live/dCGOGJM_y5E">v</a>]</td>
+                        <td>Ops_ui [<a href="qmd/ops_ui.html">p</a>][<a href="https://github.com/cd-c89/crypto/tree/main/ops_ui">c</a>]</td> 
+                        <td>BigRSA [<a href="qmd/4096_t.html">p</a>][c]</td>
 					</tr>
 					<tr style="background-color:#00DDDD">
-						<td>0x4 (10 Feb)</td>
-						<td rowspan="2"><a href="qmd/finite.html">Finite</a></td> <!-- implement -->
-						<td><a href="https://youtube.com/live/uKLFt8sCl5I">SLM</a><a href="https://youtube.com/live/sB6-HQAnUCk">PDX</a></td>
-						<td style="background-color:#FF0000"><a href="https://my.willamette.edu/site/safety/policies/weather">Hazard</a></td> 
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0x5 (17 Feb)</td>
-						<td><a href="https://youtube.com/live/LrbtK6p9VPo">SLM</a><a href="https://youtube.com/live/sB6-HQAnUCk?t=10250">PDX</a></td>
-						<td><a href="qmd/bigadd.html">BigAdd</a></td> 
-						<td><a href="https://youtube.com/live/jEVIdGabjEk">LibGMP</a></td> 
-						<td><a href="qmd/4096_t.html">4096_t</a></td>
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0x6 (24 Feb)</td>
-						<td><a href="qmd/fermat.html">Fermat</a></td> <!-- theory -->
-						<td><a href="https://youtube.com/live/kCGuaOuHNuQ">SLM</a><a href="https://youtube.com/live/ON-EbqSpKmI">PDX</a></td>
-						<td><a href="qmd/keygen.html">KeyGen</a></td> <!-- implement -->
-						<td><a href="qmd/4bytes.html">4bytes</a></td> 
-						<td><a href="qmd/rsainc.html">RSAinC</a></td>
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0x7 (03 Mar)</td>
-						<td><a href="qmd/euclid.html">Euclid<a/></td> <!-- 1way, 2way, sym -->
-						<td><a href="https://youtube.com/live/dCGOGJM_y5E">SLM</a><a href="https://www.youtube.com/live/Ah4f9sCDwh4d">PDX</a></td>
-						<td><a href="qmd/ops_ui.html">Ops_ui<a/></td> <!-- 1way, 2way, sym -->
-						<td style="background-color:#DDDDDD"></td>
-						<td rowspan="4"><a href="qmd/bigrsa.html">BigRSA</a></td> 
-					</tr>
-					<tr style="background-color:#00FFFF">
-						<td>0x8 (10 Mar)</td>
-                        <td colspan="4">BASEDterm</td>
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0x9 (17 Mar)</td>
-						<td><a href="qmd/mounts.html">Mounts</a></td> <!-- podman mount -->
-						<td><a href="https://youtube.com/live/rnZ0YISm_9U">SLM</a><a href="https://youtube.com/live/lsGA9fuQS_Y">PDX</a></td>
-						<td><a href="qmd/action.html">Action</a></td> <!-- github action - can we fit cmake in here? -->
-						<td style="background-color:#DDDDDD"></td> <!-- rerun qmdo in cpp -->
-					</tr>
-					<tr style="background-color:#DDDDDD">
-						<td>0xX (24 Mar)</td>
-						<td>Spring</td>
-						<td>break;</td>
-						<td>Spring</td> <!-- just do the paper -->
-						<td>break;</td>
-					</tr>
-					<tr style="background-color:#00AAAA">
-						<td colspan="6">Part 2: Cryptographic Systems</td>
-					</tr>
-                    <tr style="background-color:#00BBBB">
-						<th style="width:17%"><b>Week</b></th>
-						<th style="width:16%"><b>Talk</b></th>
-                        <th style="width:17%"><b>VoDs</b></th>
-						<th style="width:17%"><b>Talk</b></th>
-						<th style="width:16%"><b>Read</b></th>
-						<th style="width:17%"><b>HW's</b></th>
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0xA (31 Mar)</td>
-						<td><a href="qmd/stream.html">stream</a></td> <!-- just do the paper -->
-						<td><a href="https://youtube.com/live/P-zCgJ3eSjM">S</a>L<a href="https://youtube.com/live/ZkRj6jobBho">M</a><a href="https://youtube.com/live/21FGRGQWXzc">PDX</a></td>
-						<td><a href="qmd/malloc.html">malloc</a></td> <!-- c header -->
-						<td><a href="https://www.wisdom.weizmann.ac.il/~naor/PAPERS/pvp.pdf">PoW'92</td>
-						<td rowspan="2"><a href="qmd/list_t.html">list_t</a></td> <!-- old pythonic list assignment -->
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0xB (07 Apr)</td>
-						<td><a href="qmd/struct.html">struct</a></td> <!-- c header -->
-						<td><a href="https://youtube.com/live/-h4uCm9C1M8">S</a>L<a href="https://youtube.com/live/nmIrJJ4SRww">M</a><a href="https://youtube.com/live/VOFUs0KxN8s">PDX</a></td>
-						<td><a href="qmd/bchain.html">bchain</a></td> <!-- c header -->
-						<td><a href="https://bitcoin.org/bitcoin.pdf">BTC'08</td>
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0xC (14 Apr)</td>
-						<td><a href="qmd/graphs.html">Graphs</a></td>
-						<td><a href="https://youtube.com/live/390TjSxOq6g">S</a>L<a href="https://youtube.com/live/3IdQXJFrruo">M</a><a href="https://youtube.com/live/yKVLO-hhpks">PDX</a></td>
-						<td><a href="qmd/merkle.html">Merkle</a></td> <!-- or: avl -->
-						<td><a href="https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf">FLP'85</td>
-						<td rowspan="2"><a href="qmd/heap_t.html">heap_t</a></td> <!-- old pythonic list assignment -->
-                        
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0xD (21 Apr)</td>
-						<td><a href="qmd/logics.html">Threat</a></td>
-						<td>SLMPDX</td>
-						<td><a href="qmd/logics.html#/today-3">Logics</a></td>
-						<td><a href="https://www.joelonsoftware.com/2004/06/13/how-microsoft-lost-the-api-war/">API'04</a></td> <!-- iranian nuclear -->
-					</tr>
-					<tr style="background-color:#00DDDD">
-						<td>0xE (28 Apr)</td>
-                        <td colspan="1" style="background-color:#DDDDDD"><a href="https://www.youtube.com/watch?v=kpyElLd_Neg">Cinema</a></td>
-                        <td colspan="3" style="background-color:#A0A0A0">
-						<td><a href="qmd/btcinc.html">BTCinC</a></td>
-                        
+						<td>0x4 (04 Aug)</td>
+                        <td>Malloc [<a href="qmd/malloc.html">s</a>][<a href="https://youtube.com/live/ZkRj6jobBho">v</a>]</td>
+						<td>Struct [<a href="qmd/struct.html">s</a>][<a href="https://youtube.com/live/-h4uCm9C1M8">v<a>]</td>
+						<td>bchain [<a href="qmd/bchain.html">s</a>][<a href="https://youtube.com/live/nmIrJJ4SRww">v</a>]</td>
+                        <td>Graphs [<a href="qmd/graphs.html">s</a>][<a href="https://youtube.com/live/390TjSxOq6g">v</a>]</td>
+                        <td>Merkle [<a href="qmd/merkle.html">s</a>][<a href="https://youtube.com/live/3IdQXJFrruo">v</a>]</td> 
+                        <td>BTCinC [<a href="qmd/btcinc.html">p</a>][c]</td>
 					</tr>
 				</tbody>
 			</table>
-        <div style="width:100%"><center><img width="35%" src="https://mermaid.ink/svg/pako:eNpNj81qwzAQBl9FLITKkECPQYeCf5NA00PcU9FlsTexsSUZRaYU1-9ee9vS3uYbBpadoHI1gYLN5lOEhgwpkaHvtL327r1q0AfxfNFWiFiKSOx2TyKR5TGOWPFO5aX8vzMZ5yXvjPdxOrd1IG_m1SXscpn0rupE2mBruU3ZF_JMvutJvHqi6K8vVswZD_IFOzQuuIfHPSfFt1_xwHiSMsXhHpylKIItmOU4tvXy5bRGGvhRDWrBen0WtJ2XDsfgyg9bgQp-pC14N94aUFfs78sahxoDZS3ePJrfZED75pz5ieYvj6ZigQ"></div><!--
-			<h2>Fall Finals</h2>
-			<table style="width:100%;background-color:#A0A0A0;font-family:monospace">
-					<tr style="background-color:#00BBBB">
-				<tbody>
-						<th><b>Section</b></th>
-						<th><b>Class Time</b></th>
-						<th><b>Final Exam Day</b></th>
-						<th><b>Final Exam Date</b></th>
-						<th><b>Final Exam Time</b></th>
-					</tr>
-					<tr style="background-color:#00CCFF">
-						<td>1</td>
-						<td>09:10 AM</td>
-						<td>Wednesday</td>
-						<td>11 Dec</td>
-						<td>8:00AM - 11:00AM</td>
-					</tr>
-					<tr style="background-color:#00FFCC">
-						<td>2</td>
-						<td>10:20 AM</td>
-						<td>Thursday</td>
-						<td>12 Dec</td>
-						<td>8:00AM - 11:00AM</td>
-					</tr>
-			</table>-->
-			</section>
+        
 		</div>
 
 </body>

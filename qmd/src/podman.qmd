@@ -1,7 +1,7 @@
 ---
 title: Podman
 author: Prof. Calvin
-subtitle: "Week 0x0"
+subtitle: "0x0.0"
 institute: Crypto
 format: 
     revealjs: 
@@ -20,11 +20,11 @@ execute:
 
 # Announcements
 
-- **Welcome** to variously CS 276/CS 540
+- **Welcome** to Computing Security
 
   - What is in point of fact a systems cryptography course.
 - **Action Items**:
-  - Access the [course webpage](https://cd-public.github.io/courses/c89s25)
+  - Access the [course webpage](https://cd-public.github.io/crypto/)
   - Join the Discord!
     - You should have gotten an email...
   - Spin up a GitHub acct if you don't have one.
@@ -32,15 +32,9 @@ execute:
 # Homework
 
 - The first homework, "Enigma", is ready after this class.
-  - Due when class starts Th of Week 0x1
+  - Due Monday, 14 Jul at midnight AOE
   - The infamous CS1 hw, now in a good language!
   - Mostly just get the toolchain working.
-      - This is a calibration assignment
-      - Do whatever you would usually do
-        - ask for help
-        - work together
-        - use the not-technically-plagiarism LLVMs
-
 
 # Enigma
 
@@ -115,17 +109,6 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ # out
 - **Pronouns** 
   - _pronouns or big frowns_ - me
   - they/them 
-
-# Mortal Coil
-
-- Office (Hours)
-  - Technically Ford 3rd Floor, Salem 
-  - Actually Discord 10 AM to 2 AM
-- Email:
-  - [ckdeutschbein@willamette.edu](ckdeutschbein@willamette.edu)
-- Website:
-  - [cd-public.github.io](cd-public.github.io)
-- I'm also on twitch/instagram/bsky/etc
 
 # The Great Work
 
@@ -249,8 +232,6 @@ UnboundLocalError:
 flowchart LR
   A( ) --> B(SHA)
   A --> C(RSA)
-  A --> D(AES)
-  D --> H{Midterm}
   B --> E(Block Chain)
   C --> F(Merkle Tree)
   B --> F
@@ -278,26 +259,6 @@ flowchart LR
   - Data confidentiality.
 - **Learning Objectives:**
   - Reason about numerical computing.
-
-# AES
-
-- **AES Basics:**
-  - Symmetric encryption algorithm.
-  - Operates on fixed-size blocks of data.
-- **Use Cases:**
-  - Data availability vs. RSA.
-- **Learning Objectives:**
-  - Gain technical proficiency in C
-  
-# Midterm
-
-- I will ask about scripting in C
-- I will ask about
-  - Confidentiality
-  - Integrity
-  - Availability
-- Then we move onto cryptocurrency.
-  - As a case of distributed consensus, computing hardest problem.
 
 # RSA + SHA = BTC
 
@@ -335,17 +296,6 @@ flowchart LR
     - Must add some improvement
     - Must conduct evaluative experiments
     - Must document as a whitepaper
-
-# Structure
-
-- Each of these topics gets 2 weeks
-  - One week of enabling technology
-  - One week teaching the thing
-- Each week has 3-4 parts
-  - 1 Lecture, like this
-  - 1 Demo, a live code-along
-  - 1 Homework assignment via gcc/git/vim/podman
-  - 1 Enrichment video, optional for 276
 
 # Today
 
@@ -835,12 +785,3 @@ flowchart LR
   - &check; `vim`
   - &check; `gcc`
   - &check; `git`
-  
-# Action Items
-
-- Access the [course webpage](https://cd-public.github.io/courses/c89s25)
-- Join the Discord!
-  - You should have gotten an email...
-- Spin up a GitHub acct if you don't have one.
-- The first homework, "Enigma", is ready after this class.
-  - Due when class starts Th of Week 0x1

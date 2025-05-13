@@ -18,69 +18,8 @@ format:
 ---
 # BTCinC
 
-*With the completion of the Merkle, you essentially have a working blockchain already. The final project is to make the blockchain look good.*
-
-- MS CS students must select and publish one of the following options by 1 May at 10 PM PT.
-    - If you are anxious about meeting the deadline, the first option with extensive library support is the most manageable option.
-- BS CS students interested in research, engineering, or computer science should choose an appropriate option and publish by 9 May at 3 PM.
-- Undergraduate students in other populations should simply aim to complete all the homeworks, but may wish to pursue an option as an enrichment opportunity in conversation with the course instructor.
-
-## Option: Program product
-### Release via CI/CD a reference blockchain implementation in the C programming language.
-* Utilize libraries from earlier assignments, including SHA, RSA, list_t and Merkle trees.
-    * If you are "stuck" you may use any code you find online (subject to licensing) providing that the code does not, itself, implement blockchain.
-* Implement under version control on GitHub or GitLab.
-* Employ GitHub Actions and workflows or GitLab CI/CD to execute a daily workflow.
-* Extend the chain's length by one within the workflow.
-    * Use a very low proof-of-work to not trigger provisioning guards intended to prevent bitcoin mining within Actions. [Read more.](https://therecord.media/github-investigating-crypto-mining-campaign-abusing-its-server-infrastructure?ref=rehackedhub.com)
-* Save the output as an artifact.
-* Perform necessary work to ensure artifacts can be checked into version control.   
-    * Stack Overflow recommends [git-auto-commit-action](https://github.com/stefanzweifel/git-auto-commit-action)
-* Use these artifacts as the basis for future blocks.
-
-## Option two: Theoretical contribution
-### Produce a theoretical work in computer science.
-* Create a document like the FLP impossibility proof, the Nakamoto'08 paper, and Cynthia Dwork's proof-of-work contribution.
-* Describe your blockchain implementation in the context of these results.
-* Format the description in IEEE or ACM Conference format.
-* Write a product of five to six pages.
-* Format using Quarto or LaTeX for ACM format, or LaTeX only for IEEE format.
-* Place source documentation in `.qmd` or `.tex` files under version control along with the reference codebase on Github.com.
-* Include a compiled PDF or HTML document.
-    * You should likely do both, as done by leading publisher [arXiv](https://info.arxiv.org/about/accessible_HTML.html).
-
-## Option three: Systems research contribution
-### Apply the design patterns from the "stream" lecture to an earlier implemented library.
-* Perform a comparative analysis using the `time` command-line command.
-    * You should do non-zero statistics.
-* Evaluate the performance of your initial implementation.
-* Evaluate the performance of your improved implementation using design patterns.
-* Evaluate the performance of reference implementations like `SHA256sum` or the GMP library.
-    * You have seen me model this in the discussion of my prime generator vs. the GMP prime generator.
-* Format the description in IEEE format.
-* Write a product of five to six pages.
-* Format using LaTeX.
-* Place source documentation in `.tex` files under version control along with the reference codebase on Github.com.
-    * Ensure your codebase contains all source code necessary to reproduce your results.
-    * This should include scripts of some sort, likely `.sh` or `Makefile`  
-* Include a compiled PDF or HTML document.
-    * You should likely do both, as done by leading publisher [arXiv](https://info.arxiv.org/about/accessible_HTML.html)
-
-## Option four: Security research and threat modeling
-### Develop a script that attacks your blockchain implementation.
-* The script should alter either the ownership or the history of a transaction.
-    * Recall that doing so requires constructing a new chain of greater length than the original, attacked chain.
-* The attack need not be feasible.
-* Describe the costs and benefits of the attack.
-* Comment on whether an attacker could justify the expense.
-* Discuss whether other attack vectors.
-    * Think about factors such as plain-text private key storage, are more likely.
-    * The discussion on Snowden (in the RSA lecture) are most informative here.
-* Comment on which technologies used in class are the least secure.
-* Format the assessment as a technical blog post.
-    * You are encouraged to publish within your portfolio or to a social platform such as LinkedIn.
-    * Here is a recent example from [NetSPI](https://www.netspi.com/blog/technical-blog/web-application-pentesting/securing-your-salesforce-organization)
-    * Here is an all-time legendary blogpost from [Joel](https://www.joelonsoftware.com/2004/06/13/how-microsoft-lost-the-api-war/)
-* Use a format similar to homework and lab specifications.
-* Use Quarto markdown rendered to HTML.
-* Include code snippets in C, Python, LaTeX, or equivalent languages like Node.js.
+- Once you implement SHA, RSA, and data structures, implementation of Bitcoin is trivial.
+- Do the following assignments:
+    - [list_t](list_t.html)
+    - [heap_t](heap_t.html)
+- Due Friday, 8 August at midnight AOE.

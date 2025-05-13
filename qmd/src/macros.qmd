@@ -11,7 +11,7 @@
 
 ---
 title: Macros
-subtitle: "HW 0x1: Due Th, Feb 06"
+subtitle: "0x1.1"
 
 format: 
   html:

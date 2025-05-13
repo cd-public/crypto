@@ -2,7 +2,7 @@
 title: Fermat
 theme: dark
 author: Prof. Calvin
-subtitle: "Week 0x6"
+subtitle: "Week 0x3.0"
 institute: Crypto
 format: 
     revealjs: 
@@ -24,12 +24,12 @@ execute:
 
 # Announcements
 
-- **Welcome** to variously CS 276/CS 540
+- **Welcome** to Computing Security
   - We introduce RSA, and 
   - Why it makes sense, courtesy Fermat
 - **Action Items**:
-  - 4096_t due this week
-  - RSAinC due next week
+  - 4096_t due today
+  - BigRSA due next week
   
 # Today
 - New

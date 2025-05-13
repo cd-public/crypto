@@ -2,7 +2,7 @@
 title: malloc
 theme: dark
 author: Prof. Calvin
-subtitle: "Week 0x9 II"
+subtitle: "Week 0x4.0"
 institute: Crypto
 format: 
     revealjs: 
@@ -24,12 +24,10 @@ execute:
 
 # Announcements
 
-- **Welcome** to variously CS 276/CS 540
-  - Passes of storing structured data
-  - Antipatterns no more
+- **Welcome** to Computing Security
+  - Storing structured data
 - **Action Items**:
-  - BigRSA due this week.
-  - list_t *possible* after this
+  - BTCinC
 
 # Data Clump
 

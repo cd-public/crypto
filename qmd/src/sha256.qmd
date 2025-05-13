@@ -1,7 +1,7 @@
 ---
 title: SHA256
 author: Prof. Calvin
-subtitle: "Week 0x3"
+subtitle: "0x1.3"
 institute: Crypto
 format: 
     revealjs: 
@@ -22,10 +22,10 @@ execute:
 
 ## Announcements
 
-- **Welcome** to variously CS 276/CS 540
+- **Welcome** to Computing Security
 - **Action Items**:
   - How was Macros?
-  - Next homework coming out now - SHAinC
+  - Next homework - SHAinC
 
 ## Today
 

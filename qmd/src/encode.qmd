@@ -1,7 +1,7 @@
 ---
 title: Encode
 author: Prof. Calvin
-subtitle: "Week 0x2"
+subtitle: "Week 0x1.0"
 institute: Crypto
 format: 
     revealjs: 
@@ -22,9 +22,10 @@ execute:
 
 ## Announcements
 
-- **Welcome** to CS 276
-- Desynced Lecture
-    - No Class Thursday, 30 Jan
+
+- **Welcome** to Computing Security
+- **Action Items**:
+  - SHAinC assignment
 
 ## Today
 

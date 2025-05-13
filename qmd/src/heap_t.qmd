@@ -1,17 +1,294 @@
-```{r}
-library(tidyverse)
-library(caret)
+<style>
+  * {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+
+---
+title: heap_t
+subtitle: "HW 0x4.1: Due Fri, 08 Aug"
+
+format: 
+  html:
+    theme: vapor
+    mainfont: monospace
+    highlight-style: github
+    title-block-banner: true
+---
+
+# Review&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">Show</a>
+
+::: {#review .collapse .multi-collapse}
+
+### Goal: Implement an data structure based sorting algorithm.
+
+:::{.callout-note title="On Due Dates"}
+
+- I am not allowed to make assignments due during finals.
+- However, I am supportive of "no excuse" late turn-ins up until the final project is due.
+
+:::
+
+- This is the first of two "data structures" assignments, implementing the "Merkle tree" of blockchain.
+- The data stored by the structure is untyped and the heap is provided only with its size.
+  - The same is true of the provided comparison function.
+- It is split over 3 files:
+  - `tester.c` which is an example of how some client could use `heap_t`
+  - `heap_t.h` which the public API you will implement, as with `list_t`
+    - You may not change any lines and must use the array implementation.
+    - This is learning objective of the assignment.
+  - `heap_t.c` where you have some freedom but will be implementing known algorithms.
+  - Additionally, a Makefile is provided.
+
+:::
+
+# heap_t&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#heaper" role="button" aria-expanded="false" aria-controls = "heaper">Show</a>
+
+::: {#heaper .collapse .multi-collapse}
+
+## Initialize or construct a new heap.
+
+- You may not change the type but may change the names.
+- Implement a max heap, wherein the maximum element per the comparison function called `gt` below is in the initial position.
+- You may 1-index or 0-index.
+
+```{.c}
+heap_t heap(size_t ele_size, bool (*gt)(void *, void *));
+```
+- I stack allocated my heap, which are welcome but not required to do.
+- My initial heap explicitly contained zero elements.
+
+## The Heap Struct
+
+- I am requiring the usage of a single internal array, a function pointer, and something to track the size of elements in the array.
+- You do not have to maintain `capacity` and there is no graceful way to avoiding maintaining `num_eles` (though non-graceful is fine) but it is probably easier to view them as required.
+
+```{.c}
+#include <stdbool.h>
+
+typedef struct heap_struct {
+    /* These may be changed, but probably are okay */
+    size_t ele_size; /* size of element */
+    size_t num_eles; /* number of elements */
+    size_t capacity; /* current capacity of the heap */
+    bool (*gt)(void *, void *); /* for "greater than" */
+    /* You must store all data elements s.t. reachable from 1 pointer */
+    void *eles;
+} heap_t;
+
 ```
 
-```{r}
-bank <- readRDS(gzcon(url("https://cd-public.github.io/D505/dat/BankChurners.rds")))
+## Explanation
+
+- `ele_size`
+  - This heap implementation allows storage of elements of any `size_t` specifiable size.
+  - For example, it could store hash digests, `4096_t`, fixed length strengths, or `uint24_t`'s.
+  - This is a helpful exercise in reflecting on types and sizes.
+- `num_eles`
+  - A heap must track its size to know where to place the next element on an insert operation.
+- `capacity`
+  - You are not required to keep an internal array precisely large enough to store all elements.
+  - I only change the size of my internal array by doubling, a common rule of thumb.
+  - You can change the size of an array with novel malloc, a memcpy, and a free, or
+  - You can change the size of an array with [`realloc`](https://www.man7.org/linux/man-pages/man3/realloc.3p.html), which is preferred but was not covered in lecture.
+  - You are not required to have a distinct `num_eles` and `capacity`, but are sufficiently encouraged to do so I made both fields mandatory.
+- `gt`
+  - This is just the comparison function, without which the sorting regime of the heap is unclear and should be maintained within the data structure.
+  - I separately wanted you to see a struct with a function in it!
+- `eles`
+  - This is the entries of the heap.
+  - It must satisfy the heap property of the element at the initial location being the maximum.
+  - All elements must be stored linearly in a single contigious memory block.
+  - You may index to zero `0` or one `1` at your discretion, I used zero indexing which seemed unexpectedly easier when writing the code.
+
+
+:::
+
+# insert&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#header" role="button" aria-expanded="false" aria-controls = "header">Show</a>
+
+::: {#header .collapse .multi-collapse}
+
+## Insert an element
+
+```{.c}
+void insert(heap_t *heap, void *ele_ptr);
 ```
 
-```{r}
-train(Churn ~ .,
-      data = bank |> select(1,2,3,4,5,grep("Churn", colnames(bank))), 
-      trControl = trainControl(method = "cv", number = 5),
-      method = "glm",
-      family = "binomial",
-      maxit = 5)$results['Kappa']
+- Given the pointer to some element of appropriate size to be stored in the heap, place it in the first available location in the heap array then perform the heapify operation.
+- Consult the slides if you are unclear on what heapify is.
+
+:::
+
+
+
+# maxpop&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#maxpop" role="button" aria-expanded="false" aria-controls = "maxpop">Show</a>
+
+::: {#maxpop .collapse .multi-collapse}
+
+## Pop the maximal element
+
+```{.c}
+void *maxpop(heap_t *heap);
 ```
+
+- This returns a *heap allocated* copy of the former maximum value in the heap.
+- Separately, these element is removed from the heap.
+- Finally, the heap is rearranged to maintain the heap property using a "SiftDown" operation.
+
+## Sift Down
+
+- After a `maxpop`, the initial index - zero or one - is vacant.
+- Overwrite this value at this location with the last element in the heap array - the rightmost leaf in the last layer.
+- Compare this value, now at the initial position, which each of its children.
+- Swap it with the greatest of its children.
+- Continue to swap, or "sift down", this value until it is either in a leaf position or is greater than both of its children.
+
+## Visual Demo
+
+- Begin with the default heap.
+
+```{.c}
+{224, 160, 192, 64, 96, 128}
+```
+
+```{dot}
+//| echo: false
+//| fig-width: 45%
+digraph finite_automata {
+  rankdir=TD;
+  bgcolor="transparent"
+
+  node [
+      fontcolor = "#32fbe2",
+      color = "#32fbe2",
+      shape=circle
+  ]
+
+  edge [
+      color = "#32fbe2",
+      fontcolor = "#32fbe2"
+  ]
+
+  1 [label="224"]
+  2 [label="160"]
+  3 [label="192"] 
+  4 [label="064"]
+  5 [label="096"]
+  6 [label="128"]
+
+  1 -> 2
+  1 -> 3
+  2 -> 4
+  2 -> 5
+  3 -> 6
+
+}
+```
+
+- Heap allocate a space for `224` to be returned to the client (and freed by the client).
+- Overwrite 224 with the rightmost leaf of the final layer.
+  - In this case, I also just leave this value in the array (why not?)
+  - I just won't look at it due to it being outside of the number of elements, and it will be freed eventually.
+
+```{.c}
+{128, 160, 192, 64, 96}
+```
+
+
+```{dot}
+//| echo: false
+//| fig-width: 45%
+digraph finite_automata {
+  rankdir=TD;
+  bgcolor="transparent"
+
+  node [
+      fontcolor = "#32fbe2",
+      color = "#32fbe2",
+      shape=circle
+  ]
+
+  edge [
+      color = "#32fbe2",
+      fontcolor = "#32fbe2"
+  ]
+
+  1 [label="128"]
+  2 [label="160"]
+  3 [label="192"] 
+  4 [label="064"]
+  5 [label="096"]
+
+  1 -> 2
+  1 -> 3
+  2 -> 4
+  2 -> 5
+
+}
+```
+
+- I check both of `128`s children, find the maximum, and compare that to `128`
+  - The maximum is `192`
+  - That is greater than `128`
+  - So, swap.
+
+
+```{.c}
+{192, 160, 128, 64, 96}
+```
+
+
+```{dot}
+//| echo: false
+//| fig-width: 45%
+digraph finite_automata {
+  rankdir=TD;
+  bgcolor="transparent"
+
+  node [
+      fontcolor = "#32fbe2",
+      color = "#32fbe2",
+      shape=circle
+  ]
+
+  edge [
+      color = "#32fbe2",
+      fontcolor = "#32fbe2"
+  ]
+
+  1 [label="192"]
+  2 [label="160"]
+  3 [label="128"] 
+  4 [label="064"]
+  5 [label="096"]
+
+  1 -> 2
+  1 -> 3
+  2 -> 4
+  2 -> 5
+
+}
+```
+
+- If `128` had child nodes, I would recurse, but in the case the process terminates here as the `128` is a leaf.
+- We notice that the heap property is satisfied - all parent nodes are greater than all of their child nodes.
+
+:::
+
+# Tester&nbsp;<a class="btn btn-primary" data-bs-toggle="collapse" href="#tester" role="button" aria-expanded="false" aria-controls = "tester">Show</a>
+
+::: {#tester .collapse .multi-collapse}
+
+## Novel Tester
+
+- Versus other testers this term, I wanted to provide a more concrete file that actually used the list_t, performed operations, and issued outputs as print statements.
+- I hope that tester is self-documenting, but would love to hear your questions!
+
+<iframe width="100%" height="500em" src="https://cd-public.github.io/calvinism/?uri=https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/heap_t/tester.c"></iframe>
+
+- For reference, here is `heap_t.h`
+
+<iframe width="100%" height="200em" src="https://cd-public.github.io/calvinism/?uri=https://raw.githubusercontent.com/cd-c89/crypto/refs/heads/main/heap_t/heap_t.h"></iframe>
+
+:::

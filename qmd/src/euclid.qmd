@@ -2,7 +2,7 @@
 title: Euclid
 theme: dark
 author: Prof. Calvin
-subtitle: "Week 0x7"
+subtitle: "Week 0x3.3"
 institute: Crypto
 format: 
     revealjs: 
@@ -24,12 +24,10 @@ execute:
 
 # Announcements
 
-- **Welcome** to variously CS 276/CS 540
+- **Welcome** to Computing Security
   - We introduce an algorithm that makes key generation viable.
 - **Action Items**:
-  - RSAinC due this week
-  - BigRSA due 31 Mar
-  - Midterm next week
+  - BigRSA ongoing.
   
 # Today
 - Euclidean division

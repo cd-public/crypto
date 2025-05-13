@@ -2,7 +2,7 @@
 title: C89/99
 theme: dark
 author: Prof. Calvin
-subtitle: "Week 0x1"
+subtitle: "Week 0x0.3"
 institute: Crypto
 format: 
     revealjs: 
@@ -20,18 +20,16 @@ execute:
 ---
 # Announcements
 
-- **Welcome** to variously CS 276/CS 540
+- **Welcome** to Computing Security
 - **Action Items**:
-  - Get out our feelings on the Enigma assignment
-    - We are learning by doing.
-  - Next homework coming out now - Macros
+  - Enigma assignment
 
 # Homework
 
-- The first homework, "Enigma", is due when class starts Th of Week 0x1
-- The next homework, "Macros", is ready at any time
-  - Fiddling with bits, building on the lab, etc.
-  - Applies our learnings from today.
+- The first homework, "Enigma", is ready after this class.
+  - Due Monday, 14 Jul at midnight AOE
+  - The infamous CS1 hw, now in a good language!
+  - Mostly just get the toolchain working.
   
 # Today
 

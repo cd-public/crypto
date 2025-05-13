@@ -7,7 +7,7 @@
 
 ---
 title: list_t
-subtitle: "HW 0xA: Due Th, 17 Apr"
+subtitle: "HW 0x4.0: Due Fri, 08 Aug"
 
 format: 
   html:

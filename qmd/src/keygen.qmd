@@ -11,7 +11,7 @@
 
 ---
 title: KeyGen
-subtitle: "Lab 0x6"
+subtitle: "0x3.1"
 
 format: 
   html:

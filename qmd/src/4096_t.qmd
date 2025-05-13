@@ -11,7 +11,7 @@
 
 ---
 title: 4096_t
-subtitle: "HW 0x5: Due Th, Feb 27"
+subtitle: "HW 0x2: Due Mon, 28 Jul"
 
 format: 
   html:

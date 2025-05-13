@@ -11,7 +11,7 @@
 
 ---
 title: RSAinC
-subtitle: "HW 0x6: Due Th, Mar 06"
+subtitle: "0x3.2"
 
 format: 
   html:
