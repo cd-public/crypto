@@ -480,7 +480,7 @@
     "href": "heap_t.html#novel-tester",
     "title": "heap_t",
     "section": "Novel Tester",
-    "text": "Novel Tester\n\nVersus other testers this term, I wanted to provide a more concrete file that actually used the list_t, performed operations, and issued outputs as print statements.\nI hope that tester is self-documenting, but would love to hear your questions!\n\n\n\n\nFor reference, here is heap_t.h"
+    "text": "Novel Tester\n\nVersus other testers this term, I wanted to provide a more concrete file that actually used the heap_t, performed operations, and issued outputs as print statements.\nI hope that tester is self-documenting, but would love to hear your questions!\n\n\n\n\nFor reference, here is heap_t.h"
   },
   {
     "objectID": "endian.html",
