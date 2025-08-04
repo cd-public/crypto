@@ -27,7 +27,7 @@ execute:
 - **Welcome** to Computing Security
   - Data Structures
   - Actual physical structures in C
-    - Albeit in programable logic
+    - Albeit in programmable logic
 - **Action Items**:
   - BTCinC
 
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
 void print_argv(void **both) {
     /* back to int */
     int i, argc = (int)both[0];
-    /* Pretend both[2] is a vector of strings */
+    /* Pretend both[1] is a vector of strings */
     char **argv = (char **)both[1];
     for (i = 0; i < argc; i++) {
         printf("argv[%d] = %s\n", i, argv[i]);
@@ -253,7 +253,7 @@ struct argv_struct {
 
 *   Introduce term "**define**"
 *   Values defined via "single equals assignments"
-*   Functions and loops via parenthesize code blocks.
+*   Functions and loops via parenthesized code blocks.
 *   In this case we specify:
     *   A series of actions, possibly including 
     *   Other declarations and 
@@ -291,7 +291,7 @@ str = "defined";
 
 # Classes
 
-*   In lesser (object oriented) languages, class implement data structures.
+*   In lesser (object oriented) languages, classes implement data structures.
     *   Classes may lack both data and structure, 
     *   They are, perhaps, "computation structures"?
 ```{.py}
@@ -373,7 +373,7 @@ argv[3] = three
 ```
 - The struct and the first entry in the struct have the same location
     - Like an array
-- The first entry is of size 4 but the next entry is 8 bits latter
+- The first entry is of size 4 but the next entry is 8 bits later
 
 # Examine
 
@@ -392,7 +392,7 @@ argv[3] = three
 
 # Takeaways
 
-- Structs can be though of as arrays with names and types.
+- Structs can be thought of as arrays with names and types.
     - This is "record" theoretical type
     - Increasingly implemented with `.json` instead of types, which is a whole thing
 - Structs are defined at compile time, and versus e.g. Python objects, cannot be altered by running code.
@@ -584,7 +584,7 @@ public class PrivatePair {
 # That said
 
 - We love encapsulation
-- We don't for example, want to expose `4096_t` internal integer fields.
+- We don't, for example, want to expose `4096_t` internal integer fields.
     - I wrote code assuming endianness, which will be hard to maintain.
 - So we need private fields somehow.
 - We use header files.
@@ -630,7 +630,7 @@ struct pair newp();
 
 :::{.column width=33%}
 
-```{.c filename="pair.h"}
+```{.c filename="pair.c"}
 #include "pair.h" 
 
 struct pair newp() { 
@@ -690,7 +690,7 @@ struct pair *newp();
 
 :::{.column width=33%}
 
-```{.c filename="pair.h"}
+```{.c filename="pair.c"}
 
 #include "pair.h" 
 
