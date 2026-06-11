@@ -1,0 +1,12 @@
+---
+title: BTCinC
+subtitle: "Final Product"
+format: html
+---
+# BTCinC
+
+- Once you implement SHA, RSA, and data structures, implementation of Bitcoin is trivial.
+- Do the following assignments:
+    - [list_t](list_t.html)
+    - [heap_t](heap_t.html)
+- Due Friday, 8 August at midnight AOE.

@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Prof.&nbsp;Calvin">
+
+<title>Fermat – AI 101</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./finite.html" rel="next">
+<link href="./euclid.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a4a11d514c7d463668e07712114998e6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-70c9a4798e5f6abb0636bcdc3eed0e90.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./fermat.html">Fermat</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">AI 101</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4096_t.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4096_t</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4bytes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4bytes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./alpine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Alpine</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bchain.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">bchain</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bigadd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BigAdd</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bignum.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BigNum</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bigrsa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BigRSA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./btcinc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BTCinC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c89_99.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C89/99</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./encode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Encode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./endian.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Endian</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./enigma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Enigma</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./euclid.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Euclid</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fermat.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Fermat</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./finite.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finite</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Graphs</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heap_t.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">heap_t</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./keygen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">KeyGen</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./list_t.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">list_t</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./macros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Macros</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./malloc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">malloc</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./merkle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Merkle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ops_ui.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ops_ui</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./podman.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Podman</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./printb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">format: html</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rsainc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RSAinC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sha256.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SHA256</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./shainc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SHAinC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">struct</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#announcements" id="toc-announcements" class="nav-link active" data-scroll-target="#announcements">Announcements</a></li>
+  <li><a href="#today" id="toc-today" class="nav-link" data-scroll-target="#today">Today</a></li>
+  <li><a href="#public-key-cryptography" id="toc-public-key-cryptography" class="nav-link" data-scroll-target="#public-key-cryptography">Public Key Cryptography</a></li>
+  <li><a href="#motivating-example" id="toc-motivating-example" class="nav-link" data-scroll-target="#motivating-example">Motivating Example</a></li>
+  <li><a href="#reads-cryptobook" id="toc-reads-cryptobook" class="nav-link" data-scroll-target="#reads-cryptobook">Reads Cryptobook</a></li>
+  <li><a href="#reads-cryptobook-1" id="toc-reads-cryptobook-1" class="nav-link" data-scroll-target="#reads-cryptobook-1">Reads Cryptobook</a></li>
+  <li><a href="#set-the-stage" id="toc-set-the-stage" class="nav-link" data-scroll-target="#set-the-stage">Set the Stage</a></li>
+  <li><a href="#first-contact" id="toc-first-contact" class="nav-link" data-scroll-target="#first-contact">First Contact</a></li>
+  <li><a href="#initialization" id="toc-initialization" class="nav-link" data-scroll-target="#initialization">Initialization</a></li>
+  <li><a href="#securedrop" id="toc-securedrop" class="nav-link" data-scroll-target="#securedrop">SecureDrop</a></li>
+  <li><a href="#safety-note" id="toc-safety-note" class="nav-link" data-scroll-target="#safety-note">Safety Note</a></li>
+  <li><a href="#step-2" id="toc-step-2" class="nav-link" data-scroll-target="#step-2">Step 2</a></li>
+  <li><a href="#step-3" id="toc-step-3" class="nav-link" data-scroll-target="#step-3">Step 3</a></li>
+  <li><a href="#its-that-simple" id="toc-its-that-simple" class="nav-link" data-scroll-target="#its-that-simple">It’s that simple</a></li>
+  <li><a href="#today-1" id="toc-today-1" class="nav-link" data-scroll-target="#today-1">Today</a></li>
+  <li><a href="#fermats-little-theorem" id="toc-fermats-little-theorem" class="nav-link" data-scroll-target="#fermats-little-theorem">Fermat’s Little Theorem</a></li>
+  <li><a href="#numbers" id="toc-numbers" class="nav-link" data-scroll-target="#numbers">Numbers</a></li>
+  <li><a href="#theorem" id="toc-theorem" class="nav-link" data-scroll-target="#theorem">Theorem</a></li>
+  <li><a href="#strategy" id="toc-strategy" class="nav-link" data-scroll-target="#strategy">Strategy</a></li>
+  <li><a href="#proof" id="toc-proof" class="nav-link" data-scroll-target="#proof">Proof</a></li>
+  <li><a href="#necklaces" id="toc-necklaces" class="nav-link" data-scroll-target="#necklaces">Necklaces</a></li>
+  <li><a href="#simplification" id="toc-simplification" class="nav-link" data-scroll-target="#simplification">Simplification</a></li>
+  <li><a href="#simplification-1" id="toc-simplification-1" class="nav-link" data-scroll-target="#simplification-1">Simplification</a></li>
+  <li><a href="#strings" id="toc-strings" class="nav-link" data-scroll-target="#strings">Strings</a></li>
+  <li><a href="#necklaces-1" id="toc-necklaces-1" class="nav-link" data-scroll-target="#necklaces-1">Necklaces</a></li>
+  <li><a href="#friends-5gether" id="toc-friends-5gether" class="nav-link" data-scroll-target="#friends-5gether">Friends 5gether</a></li>
+  <li><a href="#aside" id="toc-aside" class="nav-link" data-scroll-target="#aside">Aside</a></li>
+  <li><a href="#counting-friends" id="toc-counting-friends" class="nav-link" data-scroll-target="#counting-friends">Counting Friends</a></li>
+  <li><a href="#strategy-1" id="toc-strategy-1" class="nav-link" data-scroll-target="#strategy-1">Strategy</a></li>
+  <li><a href="#today-2" id="toc-today-2" class="nav-link" data-scroll-target="#today-2">Today</a></li>
+  <li><a href="#new-goal" id="toc-new-goal" class="nav-link" data-scroll-target="#new-goal">New Goal</a></li>
+  <li><a href="#insight" id="toc-insight" class="nav-link" data-scroll-target="#insight">Insight</a></li>
+  <li><a href="#rsa" id="toc-rsa" class="nav-link" data-scroll-target="#rsa">RSA</a></li>
+  <li><a href="#p-q" id="toc-p-q" class="nav-link" data-scroll-target="#p-q">1. <span class="math inline">\(p\)</span>, <span class="math inline">\(q\)</span></a></li>
+  <li><a href="#n" id="toc-n" class="nav-link" data-scroll-target="#n">2. <span class="math inline">\(n\)</span></a></li>
+  <li><a href="#lambdan" id="toc-lambdan" class="nav-link" data-scroll-target="#lambdan">3. <span class="math inline">\(\lambda(n)\)</span></a></li>
+  <li><a href="#aside-lcm" id="toc-aside-lcm" class="nav-link" data-scroll-target="#aside-lcm">Aside: lcm</a></li>
+  <li><a href="#e" id="toc-e" class="nav-link" data-scroll-target="#e">4. <span class="math inline">\(e\)</span></a></li>
+  <li><a href="#aside-hamming-weight" id="toc-aside-hamming-weight" class="nav-link" data-scroll-target="#aside-hamming-weight">Aside: Hamming weight</a></li>
+  <li><a href="#d" id="toc-d" class="nav-link" data-scroll-target="#d">5. <span class="math inline">\(d\)</span></a></li>
+  <li><a href="#today-3" id="toc-today-3" class="nav-link" data-scroll-target="#today-3">Today</a></li>
+  <li><a href="#using-rsa" id="toc-using-rsa" class="nav-link" data-scroll-target="#using-rsa">Using RSA</a></li>
+  <li><a href="#lets-make-a-secret" id="toc-lets-make-a-secret" class="nav-link" data-scroll-target="#lets-make-a-secret">Let’s make a secret</a></li>
+  <li><a href="#prime-checker" id="toc-prime-checker" class="nav-link" data-scroll-target="#prime-checker">Prime checker</a></li>
+  <li><a href="#two-primes" id="toc-two-primes" class="nav-link" data-scroll-target="#two-primes">Two primes</a></li>
+  <li><a href="#confusingly-named" id="toc-confusingly-named" class="nav-link" data-scroll-target="#confusingly-named">Confusingly Named</a></li>
+  <li><a href="#public-key" id="toc-public-key" class="nav-link" data-scroll-target="#public-key">Public Key</a></li>
+  <li><a href="#d-decryptor" id="toc-d-decryptor" class="nav-link" data-scroll-target="#d-decryptor"><span class="math inline">\(d\)</span> (decryptor)</a></li>
+  <li><a href="#the-process" id="toc-the-process" class="nav-link" data-scroll-target="#the-process">The Process</a></li>
+  <li><a href="#too-big" id="toc-too-big" class="nav-link" data-scroll-target="#too-big">Too Big</a></li>
+  <li><a href="#encrypt" id="toc-encrypt" class="nav-link" data-scroll-target="#encrypt">Encrypt</a></li>
+  <li><a href="#decrypt" id="toc-decrypt" class="nav-link" data-scroll-target="#decrypt">Decrypt</a></li>
+  <li><a href="#is-it-good" id="toc-is-it-good" class="nav-link" data-scroll-target="#is-it-good">Is it good?</a></li>
+  <li><a href="#all" id="toc-all" class="nav-link" data-scroll-target="#all">All</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="fermat.rjs.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Fermat</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i></button></div></div>
+<p class="subtitle lead">Week 0x6</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Prof.&nbsp;Calvin </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Crypto
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="announcements" class="level1">
+<h1>Announcements</h1>
+<ul>
+<li><strong>Welcome</strong> to variously CS 276/CS 540
+<ul>
+<li>We introduce RSA, and</li>
+<li>Why it makes sense, courtesy Fermat</li>
+</ul></li>
+<li><strong>Action Items</strong>:
+<ul>
+<li>4096_t due this week</li>
+<li>RSAinC due next week</li>
+</ul></li>
+</ul>
+</section>
+<section id="today" class="level1">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>Public Key Cryptography</li>
+<li>Fermat’s little theorem</li>
+<li>RSA</li>
+</ul></li>
+</ul>
+</section>
+<section id="public-key-cryptography" class="level1">
+<h1>Public Key Cryptography</h1>
+</section>
+<section id="motivating-example" class="level1">
+<h1>Motivating Example</h1>
+<ul>
+<li>Canonical Example is Snowden x Greenwald 2013
+<ul>
+<li>Snowden wished to communicate a secret to Greenwald</li>
+<li>Snowden and Greenwald had never met</li>
+<li>Snowden could not transmit the secret in plain text</li>
+</ul></li>
+<li>Vs enigma, no prior agreement on how to encrypt/decrypt</li>
+</ul>
+</section>
+<section id="reads-cryptobook" class="level1">
+<h1>Reads <a href="https://toc.cryptobook.us/book.pdf">Cryptobook</a></h1>
+<blockquote class="blockquote">
+<p>A key exchange protocol <span class="math inline">\(P\)</span> is a pair of probabilistic machines <span class="math inline">\((A, B)\)</span> that take turns in sending messages to each other. At the end of the protocol, when both machines terminate, they both obtain the same value <span class="math inline">\(k\)</span>. A protocol transcript <span class="math inline">\(T_P\)</span> is the sequence of messages exchanged between the parties in one exe- cution of the protocol.</p>
+</blockquote>
+</section>
+<section id="reads-cryptobook-1" class="level1">
+<h1>Reads <a href="https://toc.cryptobook.us/book.pdf">Cryptobook</a></h1>
+<blockquote class="blockquote">
+<p>Since <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are probabilistic machines, we obtain a different transcript every time we run the protocol. Formally, the transcript <span class="math inline">\(T_P\)</span> of protocol <span class="math inline">\(P\)</span> is a random variable, which is a function of the random bits generated by <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. The eavesdropping adversary <span class="math inline">\(E\)</span> sees the entire transcript <span class="math inline">\(T_P\)</span> and its goal is to figure out the secret <span class="math inline">\(k\)</span>.</p>
+</blockquote>
+</section>
+<section id="set-the-stage" class="level1">
+<h1>Set the Stage</h1>
+<ul>
+<li>Snowden has e.g.&nbsp;files on a harddrive
+<ul>
+<li>The files contain keywords that cannot be safely transmitted over US-based internet connections.</li>
+<li>Snowden is based in Hawai’i with no access to non-US-based connections.</li>
+<li>Snowden needs to encrypt the files in such as a way that <em>only</em> a trusted destination may read them.</li>
+</ul></li>
+</ul>
+</section>
+<section id="first-contact" class="level1">
+<h1>First Contact</h1>
+<ul>
+<li>Snowden contacts Greenwald to agree to use a secure messaging protocol
+<ul>
+<li>Use of such protocols is relatively non-suspicious, used for banking etc.</li>
+<li>It was enough to raise alarms for Snowden, but not quickly enough to stop him.</li>
+</ul></li>
+<li>Greenwald agrees to a recommended protocol</li>
+</ul>
+</section>
+<section id="initialization" class="level1">
+<h1>Initialization</h1>
+<ul>
+<li>Greenwald generates a combination of numerical values on a local computing device.
+<ul>
+<li>One of these is the public-key, which Greenwalk may circulate broadly.</li>
+</ul></li>
+<li>We see an example of such a technology on the next slide.</li>
+</ul>
+</section>
+<section id="securedrop" class="level1">
+<h1>SecureDrop</h1>
+<ul>
+<li>Embed doesn’t work for what are likely obvious reasons:</li>
+<li><a href="https://theintercept.com/source/">Link</a></li>
+</ul>
+<iframe id="source" title="source" width="70%" height="70%" src="https://theintercept.com/source/">
+</iframe>
+</section>
+<section id="safety-note" class="level1">
+<h1>Safety Note</h1>
+<ul>
+<li>Probably dropping to <em>The Intercept</em> is not recommended.</li>
+<li>Reality Winner is currently incarcerated due to a leak fumbled by <em>The Intercept</em></li>
+<li><a href="https://www.google.com/search?client=firefox-b-1-d&amp;q=reality+winner">Read more</a></li>
+</ul>
+</section>
+<section id="step-2" class="level1">
+<h1>Step 2</h1>
+<ul>
+<li>Greenwald &amp; co. hold in reserve a <em>private-key</em></li>
+<li>They defend it like lives depend on it, as they did for Winner and Snowden.</li>
+<li>So: not stored in plaintext on a hard-drive</li>
+<li>So: if on a hard-drive, hard-drive is in a secure site from e.g.&nbsp;federal law enforcement.</li>
+</ul>
+</section>
+<section id="step-3" class="level1">
+<h1>Step 3</h1>
+<ul>
+<li>Snowden, and hopefully enough others to avoid suspicion, use the public key to encrypt their payload.</li>
+<li>In addition to e.g.&nbsp;top secret documents, concerned community members could send in less-secret materials such as analysis of policing data with which they would rather not be affiliated.</li>
+<li>Journalists sift through the inputs.</li>
+</ul>
+</section>
+<section id="its-that-simple" class="level1">
+<h1>It’s that simple</h1>
+<ul>
+<li>Okay but like how do we do that:
+<ul>
+<li>Any eaves-dropping adversary can see the public key.</li>
+<li>One-to-one communication of a key is already dangerous</li>
+<li>All this encryption/decryption needs to be managable by e.g.&nbsp;non-computing specialized journalists.</li>
+</ul></li>
+</ul>
+</section>
+<section id="today-1" class="level1">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>✓ Public Key Cryptography</li>
+<li>Fermat’s little theorem</li>
+<li>RSA</li>
+</ul></li>
+</ul>
+</section>
+<section id="fermats-little-theorem" class="level1">
+<h1>Fermat’s Little Theorem</h1>
+</section>
+<section id="numbers" class="level1">
+<h1>Numbers</h1>
+<ul>
+<li>We have already learned from SHA and others, that if ‘its in’ a computer we can say it’s a number.</li>
+<li>We have already learned, from 4096_t and others, that numbers of arbitrarily large sizes can undertake operations in a computer.</li>
+<li>We find a numerical operation that scrambles bits given a public key that is reversible only with a private key.</li>
+</ul>
+</section>
+<section id="theorem" class="level1">
+<h1>Theorem</h1>
+<p><span class="math display">\[
+\exists e, d, p, q \in \mathbb{N} : \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(m\)</span> : message, such as top secret documents or your credit card number.</li>
+<li><span class="math inline">\(e\)</span> : encryptor, the public key, that Greenwald or bandcamp post pubicly</li>
+<li><span class="math inline">\(d\)</span> : decryptor, the private key, that Greenwald stores in a bombproof safe or a dubiously secure AWS instance.</li>
+</ul>
+</section>
+<section id="strategy" class="level1">
+<h1>Strategy</h1>
+<ul>
+<li>We show Fermat’s little theorem.</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+\forall a \in \mathbb{N}, p \in \mathbb{P} : \gcd(p,a) = 1 \implies a^{p-1} \equiv 1 \pmod{p} \\
+\end{align}
+\]</span></p>
+<ul>
+<li>That is, there’s a prime you can raise a number to in order to get <code>1</code> mod that prime.</li>
+</ul>
+</section>
+<section id="proof" class="level1">
+<h1>Proof</h1>
+<ul>
+<li>This is called “combinatorics”
+<ul>
+<li>Look, I thought it was gonna be a CS class too.</li>
+</ul></li>
+<li>We go live to a proof I never learned but love, “counting necklaces”
+<ul>
+<li>Wikipedia is my legal guardian.</li>
+</ul></li>
+</ul>
+</section>
+<section id="necklaces" class="level1">
+<h1>Necklaces</h1>
+<ul>
+<li>Simplest known proof.</li>
+<li>Combinatorial proof.</li>
+<li>Adapted from <a href="https://en.wikipedia.org/wiki/Solomon_W._Golomb">Golomb</a>’s proof.
+<ul>
+<li>Golomb is an electrical engineer who allegedly invented Tetris</li>
+<li>A lot of people allegedly did that though.</li>
+</ul></li>
+</ul>
+</section>
+<section id="simplification" class="level1">
+<h1>Simplification</h1>
+<ul>
+<li>Assume: <span class="math display">\[
+0 \leq a \leq p - 1
+\]</span></li>
+<li>Consequence of modular arithmetic. <span class="math display">\[
+a^p \pmod{p} \lt p.
+\]</span></li>
+</ul>
+</section>
+<section id="simplification-1" class="level1">
+<h1>Simplification</h1>
+<ul>
+<li>We note the following expressions are logicially equivalent.</li>
+</ul>
+<p><span class="math display">\[
+a^{p-1} \equiv 1 \pmod{p}
+\]</span></p>
+<ul>
+<li>Multiply by <span class="math inline">\(a\)</span></li>
+</ul>
+<p><span class="math display">\[
+a^p \equiv a \pmod{p}
+\]</span></p>
+</section>
+<section id="strings" class="level1">
+<h1>Strings</h1>
+<ul>
+<li>Consider strings/necklaces of length <span class="math inline">\(p\)</span>.</li>
+<li>Alphabet with <span class="math inline">\(a\)</span> symbols.
+<ul>
+<li>Jeweler with <span class="math inline">\(a\)</span> gemstones</li>
+</ul></li>
+<li>Total number of strings is <span class="math inline">\(a^p\)</span>.</li>
+<li>Take <span class="math inline">\(p = 5, a = 2\)</span> say “amethyst” and “beryl”</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>necklaces <span class="op">=</span> [</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="st">"AAAAA"</span>, <span class="st">"AAAAB"</span>, <span class="st">"AAABA"</span>, <span class="st">"AAABB"</span>, <span class="st">"AABAA"</span>, <span class="st">"AABAB"</span>, <span class="st">"AABBA"</span>, <span class="st">"AABBB"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="st">"ABAAA"</span>, <span class="st">"ABAAB"</span>, <span class="st">"ABABA"</span>, <span class="st">"ABABB"</span>, <span class="st">"ABBAA"</span>, <span class="st">"ABBAB"</span>, <span class="st">"ABBBA"</span>, <span class="st">"ABBBB"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="st">"BAAAA"</span>, <span class="st">"BAAAB"</span>, <span class="st">"BAABA"</span>, <span class="st">"BAABB"</span>, <span class="st">"BABAA"</span>, <span class="st">"BABAB"</span>, <span class="st">"BABBA"</span>, <span class="st">"BABBB"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="st">"BBAAA"</span>, <span class="st">"BBAAB"</span>, <span class="st">"BBABA"</span>, <span class="st">"BBABB"</span>, <span class="st">"BBBAA"</span>, <span class="st">"BBBAB"</span>, <span class="st">"BBBBA"</span>, <span class="st">"BBBBB"</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="necklaces-1" class="level1">
+<h1>Necklaces</h1>
+<ul>
+<li>Strings as necklaces.</li>
+<li>Regard rotationally related necklaces as friends.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> friends(n, m):</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="cf">return</span> <span class="bu">any</span>([n <span class="op">==</span> m[i:] <span class="op">+</span> m[:i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(m))])</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="cf">assert</span>(friends(<span class="st">"AAABB"</span>, <span class="st">"BBAAA"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="friends-5gether" class="level1">
+<h1>Friends 5gether</h1>
+<ul>
+<li>Get it? Not 2gether?</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>friends <span class="op">=</span> [</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    [<span class="st">"AAAAB"</span>, <span class="st">"AAABA"</span>, <span class="st">"AABAA"</span>, <span class="st">"ABAAA"</span>, <span class="st">"BAAAA"</span>],</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    [<span class="st">"AAABB"</span>, <span class="st">"AABBA"</span>, <span class="st">"ABBAA"</span>, <span class="st">"BBAAA"</span>, <span class="st">"BAAAB"</span>],</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    [<span class="st">"AABAB"</span>, <span class="st">"ABABA"</span>, <span class="st">"BABAA"</span>, <span class="st">"ABAAB"</span>, <span class="st">"BAABA"</span>],</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    [<span class="st">"AABBB"</span>, <span class="st">"ABBBA"</span>, <span class="st">"BBBAA"</span>, <span class="st">"BBAAB"</span>, <span class="st">"BAABB"</span>],</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    [<span class="st">"ABABB"</span>, <span class="st">"BABBA"</span>, <span class="st">"ABBAB"</span>, <span class="st">"BBABA"</span>, <span class="st">"BABAB"</span>],</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    [<span class="st">"ABBBB"</span>, <span class="st">"BBBBA"</span>, <span class="st">"BBBAB"</span>, <span class="st">"BBABB"</span>, <span class="st">"BABBB"</span>],</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    [<span class="st">"AAAAA"</span>],</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    [<span class="st">"BBBBB"</span>]</span>
+<span id="cb3-10"><a href="#cb3-10"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="aside" class="level1">
+<h1>Aside</h1>
+<ul>
+<li>We note this suffices as a proof that:</li>
+</ul>
+<p><span class="math display">\[
+2^5 = 32 \equiv 2 \pmod{5}
+\]</span></p>
+</section>
+<section id="counting-friends" class="level1">
+<h1>Counting Friends</h1>
+<ul>
+<li>We note:
+<ul>
+<li>There are exactly the same number of unique rotations as the length of the necklace
+<ul>
+<li>After that we repeat.</li>
+<li>So… <span class="math inline">\(p \equiv 0 \pmod{p}\)</span> and <span class="math inline">\(p\)</span> is length.</li>
+</ul></li>
+<li>Unless there is only one symbol, then exactly one rotation.
+<ul>
+<li>There are exactly <span class="math inline">\(a\)</span> unique symbols, so</li>
+<li>Exactly <span class="math inline">\(a\)</span> strings of this form.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="strategy-1" class="level1">
+<h1>Strategy</h1>
+<ul>
+<li>We show Fermat’s little theorem.</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+\forall a \in \mathbb{N}, p \in \mathbb{P} : \gcd(p,a) = 1 \implies a^{p-1} \equiv 1 \pmod{p} \\
+\end{align}
+\]</span></p>
+<ul>
+<li>Proof</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>nofriends <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    [<span class="st">"AAAAA"</span>],</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    [<span class="st">"BBBBB"</span>]</span>
+<span id="cb4-4"><a href="#cb4-4"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="today-2" class="level1">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>✓ Public Key Cryptography</li>
+<li>✓ Fermat’s little theorem</li>
+<li>RSA</li>
+</ul></li>
+</ul>
+</section>
+<section id="new-goal" class="level1">
+<h1>New Goal</h1>
+<ul>
+<li>We want: <span class="math display">\[
+a^p \equiv a \pmod{p} \implies
+\]</span> <span class="math display">\[
+\exists e, d, p, q \in \mathbb{N} : \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}
+\]</span></li>
+<li>We can restrict <span class="math inline">\(e,d,p,q\)</span> <span class="math display">\[
+\exists e, d\in \mathbb{N},  p, q \in \mathbb{P}: \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}
+\]</span></li>
+</ul>
+</section>
+<section id="insight" class="level1">
+<h1>Insight</h1>
+<ul>
+<li>We use something called the “Carmichael function” denoted, confusingly, as <span class="math inline">\(\lambda\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\lambda(n) = \text{min}(\{m : \forall a : gcd(a,n) = 1 : a^m \equiv 1 \pmod{n}\})
+\]</span></p>
+<ul>
+<li>Say, <span class="math inline">\(\lambda(n)\)</span> is the smallest number that coprimes to <span class="math inline">\(n\)</span> are equivalent to zero mod <span class="math inline">\(n\)</span>.</li>
+<li>Easy for prime <span class="math inline">\(p\)</span>, its <span class="math inline">\(\lambda(p) = p - 1\)</span>.
+<ul>
+<li>Just try <code>5</code>, it’s not too bad.</li>
+</ul></li>
+</ul>
+</section>
+<section id="rsa" class="level1">
+<h1>RSA</h1>
+<ol type="1">
+<li>Choose two big primes <span class="math inline">\(p\)</span>, <span class="math inline">\(q\)</span></li>
+<li>Find <span class="math inline">\(n = pq\)</span></li>
+<li>Find <span class="math inline">\(\lambda(n)\)</span></li>
+<li>Find <span class="math inline">\(e : e \lt \lambda(n) \land \gcd(e, \lambda (n)) = 1\)</span></li>
+<li>Find <span class="math inline">\(d : d \equiv e^{-1} \pmod{\lambda (n)}\)</span></li>
+</ol>
+</section>
+<section id="p-q" class="level1">
+<h1>1. <span class="math inline">\(p\)</span>, <span class="math inline">\(q\)</span></h1>
+<ul>
+<li>Do <code>4096_t</code> and use, probably, 6k+1 or a performance optimization.</li>
+</ul>
+<div id="b041dc0b" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># this will still be slow with big numbers</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb5-6"><a href="#cb5-6"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> candidate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>LibGMP provides <code>gmp_nextprime</code></li>
+</ul>
+</section>
+<section id="n" class="level1">
+<h1>2. <span class="math inline">\(n\)</span></h1>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource C number-lines code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1"></a>n <span class="op">=</span> p <span class="op">*</span> q<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="lambdan" class="level1">
+<h1>3. <span class="math inline">\(\lambda(n)\)</span></h1>
+<ul>
+<li>This one is kept secret by the way.</li>
+<li>It so happens: <span class="math display">\[
+\forall p,q \in \mathbb{P} : \lambda(pq) = \text{lcm}(p-1, q-1)
+\]</span></li>
+<li>There’s fast ways to this, but anything goes this week.</li>
+</ul>
+</section>
+<section id="aside-lcm" class="level1">
+<h1>Aside: lcm</h1>
+<ul>
+<li>GitHub Copilot provides:</li>
+</ul>
+<div id="62a92a5d" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> gcd(a, b):</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">"""Calculate the Greatest Common Divisor of a and b."""</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="cf">while</span> b:</span>
+<span id="cb7-4"><a href="#cb7-4"></a>        a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="cf">return</span> a</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="co">"""Calculate the Least Common Multiple of a and b."""</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="e" class="level1">
+<h1>4. <span class="math inline">\(e\)</span></h1>
+<ul>
+<li>Find <span class="math inline">\(e : e \lt \lambda(n) \land \gcd(e, \lambda (n)) = 1\)</span></li>
+<li>You know what is comprime with whatever <span class="math inline">\(\lambda (n)\)</span> is?</li>
+<li>A prime number.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource C number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1"></a>e <span class="op">=</span> <span class="dv">65537</span><span class="op">;</span> <span class="co">// 2 ^ 16 + 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="aside-hamming-weight" class="level1">
+<h1>Aside: Hamming weight</h1>
+<ol type="1">
+<li>What is <code>65537</code> in binary?</li>
+<li>Is multiplying hard?</li>
+<li>Is bit-shifting hard?</li>
+<li>Can we combine bit-shifts to multiple?</li>
+<li>If we did that, what numbers would be easiest to multiply by?</li>
+</ol>
+</section>
+<section id="d" class="level1">
+<h1>5. <span class="math inline">\(d\)</span></h1>
+<ul>
+<li>This one is very secret!</li>
+<li>Find <span class="math inline">\(d : d \equiv e^{-1} \pmod{\lambda (n)}\)</span></li>
+<li>There’s a good way to do this, or…</li>
+<li>Find <span class="math inline">\(de \equiv 1 \pmod{\lambda (n)}\)</span>
+<ul>
+<li>Just start at <span class="math inline">\(d = 1\)</span> and go up until you find it.</li>
+<li>It’ll be less than <span class="math inline">\(\lambda (n)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="today-3" class="level1">
+<h1>Today</h1>
+<ul>
+<li>New
+<ul>
+<li>✓ Public Key Cryptography</li>
+<li>✓ Fermat’s little theorem</li>
+<li>✓ RSA</li>
+</ul></li>
+</ul>
+</section>
+<section id="using-rsa" class="level1">
+<h1>Using RSA</h1>
+</section>
+<section id="lets-make-a-secret" class="level1">
+<h1>Let’s make a secret</h1>
+<div id="0990b382" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prime-checker" class="level1">
+<h1>Prime checker</h1>
+<div id="427beee3" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">all</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>)<span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb10-2"><a href="#cb10-2"></a>is_prime(<span class="dv">60</span>), is_prime(<span class="dv">61</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>(False, True)</code></pre>
+</div>
+</div>
+</section>
+<section id="two-primes" class="level1">
+<h1>Two primes</h1>
+<div id="adf71b23" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">10</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">15</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb12-4"><a href="#cb12-4"></a>n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>5917</code></pre>
+</div>
+</div>
+</section>
+<section id="confusingly-named" class="level1">
+<h1>Confusingly Named</h1>
+<div id="8db05eb1" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="public-key" class="level1">
+<h1>Public Key</h1>
+<div id="d6af31e5" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>e <span class="op">=</span> <span class="dv">65537</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="d-decryptor" class="level1">
+<h1><span class="math inline">\(d\)</span> (decryptor)</h1>
+<div id="075db7a8" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">def</span> find_d():</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="cf">return</span> d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="the-process" class="level1">
+<h1>The Process</h1>
+<ul>
+<li>Encrypt our message.</li>
+</ul>
+<div id="4bdb248a" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>c <span class="op">=</span> m <span class="op">**</span> e</span>
+<span id="cb17-3"><a href="#cb17-3"></a>m, c, c <span class="op">%</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg ansi-bold">ValueError</span>                                Traceback (most recent call last)
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\core\formatters.py:711</span>, in <span class="ansi-cyan-fg">PlainTextFormatter.__call__</span><span class="ansi-blue-fg ansi-bold">(self, obj)</span>
+<span class="ansi-green-fg">    704</span> stream <span style="color:rgb(98,98,98)">=</span> StringIO()
+<span class="ansi-green-fg">    705</span> printer <span style="color:rgb(98,98,98)">=</span> pretty<span style="color:rgb(98,98,98)">.</span>RepresentationPrinter(stream, <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>verbose,
+<span class="ansi-green-fg">    706</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>max_width, <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>newline,
+<span class="ansi-green-fg">    707</span>     max_seq_length<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>max_seq_length,
+<span class="ansi-green-fg">    708</span>     singleton_pprinters<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>singleton_printers,
+<span class="ansi-green-fg">    709</span>     type_pprinters<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>type_printers,
+<span class="ansi-green-fg">    710</span>     deferred_pprinters<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>deferred_printers)
+<span class="ansi-green-fg ansi-bold">--&gt; 711</span> <span class="ansi-yellow-bg">printer</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">pretty</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    712</span> printer<span style="color:rgb(98,98,98)">.</span>flush()
+<span class="ansi-green-fg">    713</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> stream<span style="color:rgb(98,98,98)">.</span>getvalue()
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:394</span>, in <span class="ansi-cyan-fg">RepresentationPrinter.pretty</span><span class="ansi-blue-fg ansi-bold">(self, obj)</span>
+<span class="ansi-green-fg">    391</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> _get_mro(obj_class):
+<span class="ansi-green-fg">    392</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>type_pprinters:
+<span class="ansi-green-fg">    393</span>         <span style="font-style:italic;color:rgb(95,135,135)"># printer registered in self.type_pprinters</span>
+<span class="ansi-green-fg ansi-bold">--&gt; 394</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">type_pprinters</span><span class="ansi-yellow-bg">[</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">cls</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">cycle</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    395</span>     <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">    396</span>         <span style="font-style:italic;color:rgb(95,135,135)"># deferred printer</span>
+<span class="ansi-green-fg">    397</span>         printer <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_in_deferred_types(<span style="color:rgb(0,135,0)">cls</span>)
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:649</span>, in <span class="ansi-cyan-fg">_seq_pprinter_factory.&lt;locals&gt;.inner</span><span class="ansi-blue-fg ansi-bold">(obj, p, cycle)</span>
+<span class="ansi-green-fg">    647</span>         p<span style="color:rgb(98,98,98)">.</span>text(<span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">,</span><span style="color:rgb(175,0,0)">'</span>)
+<span class="ansi-green-fg">    648</span>         p<span style="color:rgb(98,98,98)">.</span>breakable()
+<span class="ansi-green-fg ansi-bold">--&gt; 649</span>     <span class="ansi-yellow-bg">p</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">pretty</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    650</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(obj) <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(98,98,98)">1</span> <span style="font-weight:bold;color:rgb(175,0,255)">and</span> <span style="color:rgb(0,135,0)">isinstance</span>(obj, <span style="color:rgb(0,135,0)">tuple</span>):
+<span class="ansi-green-fg">    651</span>     <span style="font-style:italic;color:rgb(95,135,135)"># Special case for 1-item tuples.</span>
+<span class="ansi-green-fg">    652</span>     p<span style="color:rgb(98,98,98)">.</span>text(<span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">,</span><span style="color:rgb(175,0,0)">'</span>)
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:394</span>, in <span class="ansi-cyan-fg">RepresentationPrinter.pretty</span><span class="ansi-blue-fg ansi-bold">(self, obj)</span>
+<span class="ansi-green-fg">    391</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> _get_mro(obj_class):
+<span class="ansi-green-fg">    392</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">cls</span> <span style="font-weight:bold;color:rgb(175,0,255)">in</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>type_pprinters:
+<span class="ansi-green-fg">    393</span>         <span style="font-style:italic;color:rgb(95,135,135)"># printer registered in self.type_pprinters</span>
+<span class="ansi-green-fg ansi-bold">--&gt; 394</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">type_pprinters</span><span class="ansi-yellow-bg">[</span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">cls</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">cycle</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    395</span>     <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">    396</span>         <span style="font-style:italic;color:rgb(95,135,135)"># deferred printer</span>
+<span class="ansi-green-fg">    397</span>         printer <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_in_deferred_types(<span style="color:rgb(0,135,0)">cls</span>)
+
+File <span class="ansi-green-fg ansi-bold">~\AppData\Local\Programs\Python\Python312\Lib\site-packages\IPython\lib\pretty.py:787</span>, in <span class="ansi-cyan-fg">_repr_pprint</span><span class="ansi-blue-fg ansi-bold">(obj, p, cycle)</span>
+<span class="ansi-green-fg">    785</span> <span style="font-style:italic;color:rgb(175,0,0)">"""A pprint that just redirects to the normal repr function."""</span>
+<span class="ansi-green-fg">    786</span> <span style="font-style:italic;color:rgb(95,135,135)"># Find newlines and replace them with p.break_()</span>
+<span class="ansi-green-fg ansi-bold">--&gt; 787</span> output <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">repr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    788</span> lines <span style="color:rgb(98,98,98)">=</span> output<span style="color:rgb(98,98,98)">.</span>splitlines()
+<span class="ansi-green-fg">    789</span> <span style="font-weight:bold;color:rgb(0,135,0)">with</span> p<span style="color:rgb(98,98,98)">.</span>group():
+
+<span class="ansi-red-fg ansi-bold">ValueError</span>: Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit</pre>
+</div>
+</div>
+</div>
+</section>
+<section id="too-big" class="level1">
+<h1>Too Big</h1>
+<ul>
+<li>Haha Python can’t handle big numbers.</li>
+<li>Not to worry, we’re working in modular arithmetic.</li>
+</ul>
+<div id="ee450c9a" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb18-3"><a href="#cb18-3"></a>      <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb18-5"><a href="#cb18-5"></a>      <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb18-6"><a href="#cb18-6"></a>  <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb18-7"><a href="#cb18-7"></a>      <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb18-8"><a href="#cb18-8"></a>  <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="encrypt" class="level1">
+<h1>Encrypt</h1>
+<ul>
+<li>Encrypt our message.</li>
+</ul>
+<div id="b3431d20" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>c <span class="op">=</span> modexp(m, e, n)</span>
+<span id="cb19-3"><a href="#cb19-3"></a>m, c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>(67, 5887)</code></pre>
+</div>
+</div>
+</section>
+<section id="decrypt" class="level1">
+<h1>Decrypt</h1>
+<ul>
+<li>Decrypt our message.</li>
+</ul>
+<div id="f7072ad5" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb21-2"><a href="#cb21-2"></a>new_m, m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>(67, 67)</code></pre>
+</div>
+</div>
+</section>
+<section id="is-it-good" class="level1">
+<h1>Is it good?</h1>
+<div id="21e2c5f7" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>'C'</code></pre>
+</div>
+</div>
+</section>
+<section id="all" class="level1">
+<h1>All</h1>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">any</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb25-3"><a href="#cb25-3"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb25-6"><a href="#cb25-6"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a>    <span class="cf">return</span> candidate</span>
+<span id="cb25-8"><a href="#cb25-8"></a></span>
+<span id="cb25-9"><a href="#cb25-9"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb25-10"><a href="#cb25-10"></a>    <span class="kw">def</span> gcd(a, b):</span>
+<span id="cb25-11"><a href="#cb25-11"></a>        <span class="cf">while</span> b:</span>
+<span id="cb25-12"><a href="#cb25-12"></a>            a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb25-13"><a href="#cb25-13"></a>        <span class="cf">return</span> a</span>
+<span id="cb25-14"><a href="#cb25-14"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span>
+<span id="cb25-15"><a href="#cb25-15"></a></span>
+<span id="cb25-16"><a href="#cb25-16"></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span>
+<span id="cb25-17"><a href="#cb25-17"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb25-18"><a href="#cb25-18"></a></span>
+<span id="cb25-19"><a href="#cb25-19"></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">10</span>)</span>
+<span id="cb25-20"><a href="#cb25-20"></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">15</span>)</span>
+<span id="cb25-21"><a href="#cb25-21"></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb25-22"><a href="#cb25-22"></a></span>
+<span id="cb25-23"><a href="#cb25-23"></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb25-24"><a href="#cb25-24"></a></span>
+<span id="cb25-25"><a href="#cb25-25"></a>e <span class="op">=</span> <span class="dv">65537</span> <span class="co"># encryptor</span></span>
+<span id="cb25-26"><a href="#cb25-26"></a></span>
+<span id="cb25-27"><a href="#cb25-27"></a><span class="kw">def</span> find_d():</span>
+<span id="cb25-28"><a href="#cb25-28"></a>    d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb25-29"><a href="#cb25-29"></a>    <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb25-30"><a href="#cb25-30"></a>        d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb25-31"><a href="#cb25-31"></a>    <span class="cf">return</span> d</span>
+<span id="cb25-32"><a href="#cb25-32"></a></span>
+<span id="cb25-33"><a href="#cb25-33"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb25-34"><a href="#cb25-34"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb25-35"><a href="#cb25-35"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb25-36"><a href="#cb25-36"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb25-37"><a href="#cb25-37"></a>        <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb25-38"><a href="#cb25-38"></a>    <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb25-39"><a href="#cb25-39"></a>        <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb25-40"><a href="#cb25-40"></a>    <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb25-41"><a href="#cb25-41"></a></span>
+<span id="cb25-42"><a href="#cb25-42"></a>c <span class="op">=</span> modexp(m, e, n) <span class="co"># ciphertext</span></span>
+<span id="cb25-43"><a href="#cb25-43"></a></span>
+<span id="cb25-44"><a href="#cb25-44"></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb25-45"><a href="#cb25-45"></a></span>
+<span id="cb25-46"><a href="#cb25-46"></a><span class="bu">print</span>(<span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./euclid.html" class="pagination-link" aria-label="Euclid">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Euclid</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./finite.html" class="pagination-link" aria-label="Finite">
+        <span class="nav-page-text">Finite</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb26" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb26-1"><a href="#cb26-1"></a><span class="co">---</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="an">title:</span><span class="co"> Fermat</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="an">subtitle:</span><span class="co"> "Week 0x3.0"</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="an">execute:</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="co">    echo: true</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="co">    cache: true</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="co">    freeze: true  # never re-render during project render</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="co">    code-fold: false</span></span>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="co">---</span></span>
+<span id="cb26-10"><a href="#cb26-10"></a></span>
+<span id="cb26-11"><a href="#cb26-11"></a><span class="fu"># Announcements</span></span>
+<span id="cb26-12"><a href="#cb26-12"></a></span>
+<span id="cb26-13"><a href="#cb26-13"></a><span class="ss">- </span>**Welcome** to Computing Security</span>
+<span id="cb26-14"><a href="#cb26-14"></a><span class="ss">  - </span>We introduce RSA, and </span>
+<span id="cb26-15"><a href="#cb26-15"></a><span class="ss">  - </span>Why it makes sense, courtesy Fermat</span>
+<span id="cb26-16"><a href="#cb26-16"></a><span class="ss">- </span>**Action Items**:</span>
+<span id="cb26-17"><a href="#cb26-17"></a><span class="ss">  - </span>4096_t due today</span>
+<span id="cb26-18"><a href="#cb26-18"></a><span class="ss">  - </span>BigRSA due next week</span>
+<span id="cb26-19"><a href="#cb26-19"></a>  </span>
+<span id="cb26-20"><a href="#cb26-20"></a><span class="fu"># Today</span></span>
+<span id="cb26-21"><a href="#cb26-21"></a><span class="ss">- </span>New</span>
+<span id="cb26-22"><a href="#cb26-22"></a><span class="ss">  - </span>Public Key Cryptography</span>
+<span id="cb26-23"><a href="#cb26-23"></a><span class="ss">  - </span>Fermat's little theorem</span>
+<span id="cb26-24"><a href="#cb26-24"></a><span class="ss">  - </span>RSA</span>
+<span id="cb26-25"><a href="#cb26-25"></a></span>
+<span id="cb26-26"><a href="#cb26-26"></a><span class="fu"># Public Key Cryptography</span></span>
+<span id="cb26-27"><a href="#cb26-27"></a></span>
+<span id="cb26-28"><a href="#cb26-28"></a><span class="fu"># Motivating Example</span></span>
+<span id="cb26-29"><a href="#cb26-29"></a></span>
+<span id="cb26-30"><a href="#cb26-30"></a><span class="ss">- </span>Canonical Example is Snowden x Greenwald 2013</span>
+<span id="cb26-31"><a href="#cb26-31"></a><span class="ss">  - </span>Snowden wished to communicate a secret to Greenwald</span>
+<span id="cb26-32"><a href="#cb26-32"></a><span class="ss">  - </span>Snowden and Greenwald had never met</span>
+<span id="cb26-33"><a href="#cb26-33"></a><span class="ss">  - </span>Snowden could not transmit the secret in plain text</span>
+<span id="cb26-34"><a href="#cb26-34"></a><span class="ss">- </span>Vs enigma, no prior agreement on how to encrypt/decrypt</span>
+<span id="cb26-35"><a href="#cb26-35"></a></span>
+<span id="cb26-36"><a href="#cb26-36"></a><span class="fu"># Reads [Cryptobook](https://toc.cryptobook.us/book.pdf)</span></span>
+<span id="cb26-37"><a href="#cb26-37"></a></span>
+<span id="cb26-38"><a href="#cb26-38"></a><span class="at">&gt; A key exchange protocol $P$ is a pair of probabilistic machines $(A, B)$ that take turns in sending messages to each other.</span></span>
+<span id="cb26-39"><a href="#cb26-39"></a><span class="at">At the end of the protocol, when both machines terminate, they both obtain the same value $k$. A</span></span>
+<span id="cb26-40"><a href="#cb26-40"></a><span class="at">protocol transcript $T_P$ is the sequence of messages exchanged between the parties in one exe-</span></span>
+<span id="cb26-41"><a href="#cb26-41"></a><span class="at">cution of the protocol. </span></span>
+<span id="cb26-42"><a href="#cb26-42"></a></span>
+<span id="cb26-43"><a href="#cb26-43"></a><span class="fu"># Reads [Cryptobook](https://toc.cryptobook.us/book.pdf)</span></span>
+<span id="cb26-44"><a href="#cb26-44"></a></span>
+<span id="cb26-45"><a href="#cb26-45"></a><span class="at">&gt; Since $A$ and $B$ are probabilistic machines, we obtain a different transcript</span></span>
+<span id="cb26-46"><a href="#cb26-46"></a><span class="at">every time we run the protocol. Formally, the transcript $T_P$ of protocol $P$ is a random variable, which is a function of the random bits generated by $A$ and $B$. The eavesdropping adversary $E$ sees the entire transcript $T_P$ and its goal is to figure out the secret $k$.</span></span>
+<span id="cb26-47"><a href="#cb26-47"></a></span>
+<span id="cb26-48"><a href="#cb26-48"></a><span class="fu"># Set the Stage</span></span>
+<span id="cb26-49"><a href="#cb26-49"></a></span>
+<span id="cb26-50"><a href="#cb26-50"></a><span class="ss">- </span>Snowden has e.g. files on a harddrive</span>
+<span id="cb26-51"><a href="#cb26-51"></a><span class="ss">  - </span>The files contain keywords that cannot be safely transmitted over US-based internet connections.</span>
+<span id="cb26-52"><a href="#cb26-52"></a><span class="ss">  - </span>Snowden is based in Hawai'i with no access to non-US-based connections.</span>
+<span id="cb26-53"><a href="#cb26-53"></a><span class="ss">  - </span>Snowden needs to encrypt the files in such as a way that *only* a trusted destination may read them.</span>
+<span id="cb26-54"><a href="#cb26-54"></a></span>
+<span id="cb26-55"><a href="#cb26-55"></a><span class="fu"># First Contact</span></span>
+<span id="cb26-56"><a href="#cb26-56"></a></span>
+<span id="cb26-57"><a href="#cb26-57"></a><span class="ss">- </span>Snowden contacts Greenwald to agree to use a secure messaging protocol</span>
+<span id="cb26-58"><a href="#cb26-58"></a><span class="ss">  - </span>Use of such protocols is relatively non-suspicious, used for banking etc.</span>
+<span id="cb26-59"><a href="#cb26-59"></a><span class="ss">  - </span>It was enough to raise alarms for Snowden, but not quickly enough to stop him.</span>
+<span id="cb26-60"><a href="#cb26-60"></a><span class="ss">- </span>Greenwald agrees to a recommended protocol</span>
+<span id="cb26-61"><a href="#cb26-61"></a></span>
+<span id="cb26-62"><a href="#cb26-62"></a><span class="fu"># Initialization</span></span>
+<span id="cb26-63"><a href="#cb26-63"></a></span>
+<span id="cb26-64"><a href="#cb26-64"></a><span class="ss">- </span>Greenwald generates a combination of numerical values on a local computing device.</span>
+<span id="cb26-65"><a href="#cb26-65"></a><span class="ss">  - </span>One of these is the public-key, which Greenwalk may circulate broadly.</span>
+<span id="cb26-66"><a href="#cb26-66"></a><span class="ss">- </span>We see an example of such a technology on the next slide.</span>
+<span id="cb26-67"><a href="#cb26-67"></a></span>
+<span id="cb26-68"><a href="#cb26-68"></a><span class="fu"># SecureDrop</span></span>
+<span id="cb26-69"><a href="#cb26-69"></a></span>
+<span id="cb26-70"><a href="#cb26-70"></a><span class="ss">- </span>Embed doesn't work for what are likely obvious reasons:</span>
+<span id="cb26-71"><a href="#cb26-71"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Link</span><span class="co">](https://theintercept.com/source/)</span></span>
+<span id="cb26-72"><a href="#cb26-72"></a></span>
+<span id="cb26-73"><a href="#cb26-73"></a>&lt;iframe </span>
+<span id="cb26-74"><a href="#cb26-74"></a>  id="source"</span>
+<span id="cb26-75"><a href="#cb26-75"></a>  title="source"</span>
+<span id="cb26-76"><a href="#cb26-76"></a>  width="70%"</span>
+<span id="cb26-77"><a href="#cb26-77"></a>  height="70%"</span>
+<span id="cb26-78"><a href="#cb26-78"></a>  src="https://theintercept.com/source/"&gt;&lt;/iframe&gt;</span>
+<span id="cb26-79"><a href="#cb26-79"></a></span>
+<span id="cb26-80"><a href="#cb26-80"></a><span class="fu"># Safety Note</span></span>
+<span id="cb26-81"><a href="#cb26-81"></a></span>
+<span id="cb26-82"><a href="#cb26-82"></a><span class="ss">- </span>Probably dropping to *The Intercept* is not recommended.</span>
+<span id="cb26-83"><a href="#cb26-83"></a><span class="ss">- </span>Reality Winner is currently incarcerated due to a leak fumbled by *The Intercept*</span>
+<span id="cb26-84"><a href="#cb26-84"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Read more</span><span class="co">](https://www.google.com/search?client=firefox-b-1-d&amp;q=reality+winner)</span></span>
+<span id="cb26-85"><a href="#cb26-85"></a></span>
+<span id="cb26-86"><a href="#cb26-86"></a><span class="fu"># Step 2</span></span>
+<span id="cb26-87"><a href="#cb26-87"></a></span>
+<span id="cb26-88"><a href="#cb26-88"></a><span class="ss">- </span>Greenwald &amp; co. hold in reserve a *private-key*</span>
+<span id="cb26-89"><a href="#cb26-89"></a><span class="ss">- </span>They defend it like lives depend on it, as they did for Winner and Snowden.</span>
+<span id="cb26-90"><a href="#cb26-90"></a><span class="ss">- </span>So: not stored in plaintext on a hard-drive</span>
+<span id="cb26-91"><a href="#cb26-91"></a><span class="ss">- </span>So: if on a hard-drive, hard-drive is in a secure site from e.g. federal law enforcement.</span>
+<span id="cb26-92"><a href="#cb26-92"></a></span>
+<span id="cb26-93"><a href="#cb26-93"></a><span class="fu"># Step 3</span></span>
+<span id="cb26-94"><a href="#cb26-94"></a></span>
+<span id="cb26-95"><a href="#cb26-95"></a><span class="ss">- </span>Snowden, and hopefully enough others to avoid suspicion, use the public key to encrypt their payload.</span>
+<span id="cb26-96"><a href="#cb26-96"></a><span class="ss">- </span>In addition to e.g. top secret documents, concerned community members could send in less-secret materials such as analysis of policing data with which they would rather not be affiliated.</span>
+<span id="cb26-97"><a href="#cb26-97"></a><span class="ss">- </span>Journalists sift through the inputs.</span>
+<span id="cb26-98"><a href="#cb26-98"></a></span>
+<span id="cb26-99"><a href="#cb26-99"></a><span class="fu"># It's that simple</span></span>
+<span id="cb26-100"><a href="#cb26-100"></a></span>
+<span id="cb26-101"><a href="#cb26-101"></a><span class="ss">- </span>Okay but like how do we do that:</span>
+<span id="cb26-102"><a href="#cb26-102"></a><span class="ss">  - </span>Any eaves-dropping adversary can see the public key.</span>
+<span id="cb26-103"><a href="#cb26-103"></a><span class="ss">  - </span>One-to-one communication of a key is already dangerous</span>
+<span id="cb26-104"><a href="#cb26-104"></a><span class="ss">  - </span>All this encryption/decryption needs to be managable by e.g. non-computing specialized journalists.</span>
+<span id="cb26-105"><a href="#cb26-105"></a></span>
+<span id="cb26-106"><a href="#cb26-106"></a></span>
+<span id="cb26-107"><a href="#cb26-107"></a><span class="fu"># Today</span></span>
+<span id="cb26-108"><a href="#cb26-108"></a><span class="ss">- </span>New</span>
+<span id="cb26-109"><a href="#cb26-109"></a><span class="ss">  - </span><span class="dv">&amp;check;</span> Public Key Cryptography</span>
+<span id="cb26-110"><a href="#cb26-110"></a><span class="ss">  - </span>Fermat's little theorem</span>
+<span id="cb26-111"><a href="#cb26-111"></a><span class="ss">  - </span>RSA</span>
+<span id="cb26-112"><a href="#cb26-112"></a></span>
+<span id="cb26-113"><a href="#cb26-113"></a></span>
+<span id="cb26-114"><a href="#cb26-114"></a><span class="fu"># Fermat's Little Theorem</span></span>
+<span id="cb26-115"><a href="#cb26-115"></a></span>
+<span id="cb26-116"><a href="#cb26-116"></a><span class="fu"># Numbers</span></span>
+<span id="cb26-117"><a href="#cb26-117"></a></span>
+<span id="cb26-118"><a href="#cb26-118"></a><span class="ss">- </span>We have already learned from SHA and others, that if 'its in' a computer we can say it's a number.</span>
+<span id="cb26-119"><a href="#cb26-119"></a><span class="ss">- </span>We have already learned, from 4096_t and others, that numbers of arbitrarily large sizes can undertake operations in a computer.</span>
+<span id="cb26-120"><a href="#cb26-120"></a><span class="ss">- </span>We find a numerical operation that scrambles bits given a public key that is reversible only with a private key.</span>
+<span id="cb26-121"><a href="#cb26-121"></a></span>
+<span id="cb26-122"><a href="#cb26-122"></a><span class="fu"># Theorem</span></span>
+<span id="cb26-123"><a href="#cb26-123"></a></span>
+<span id="cb26-124"><a href="#cb26-124"></a>$$</span>
+<span id="cb26-125"><a href="#cb26-125"></a>\exists e, d, p, q \in \mathbb{N} : \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}</span>
+<span id="cb26-126"><a href="#cb26-126"></a>$$</span>
+<span id="cb26-127"><a href="#cb26-127"></a></span>
+<span id="cb26-128"><a href="#cb26-128"></a><span class="ss">- </span>$m$ : message, such as top secret documents or your credit card number.</span>
+<span id="cb26-129"><a href="#cb26-129"></a><span class="ss">- </span>$e$ : encryptor, the public key, that Greenwald or bandcamp post pubicly</span>
+<span id="cb26-130"><a href="#cb26-130"></a><span class="ss">- </span>$d$ : decryptor, the private key, that Greenwald stores in a bombproof safe or a dubiously secure AWS instance.</span>
+<span id="cb26-131"><a href="#cb26-131"></a></span>
+<span id="cb26-132"><a href="#cb26-132"></a><span class="fu"># Strategy</span></span>
+<span id="cb26-133"><a href="#cb26-133"></a></span>
+<span id="cb26-134"><a href="#cb26-134"></a><span class="ss">- </span>We show Fermat's little theorem.</span>
+<span id="cb26-135"><a href="#cb26-135"></a></span>
+<span id="cb26-136"><a href="#cb26-136"></a>$$</span>
+<span id="cb26-137"><a href="#cb26-137"></a>\begin{align}</span>
+<span id="cb26-138"><a href="#cb26-138"></a>\forall a \in \mathbb{N}, p \in \mathbb{P} : \gcd(p,a) = 1 \implies a^{p-1} \equiv 1 \pmod{p} <span class="sc">\\</span> </span>
+<span id="cb26-139"><a href="#cb26-139"></a>\end{align}</span>
+<span id="cb26-140"><a href="#cb26-140"></a>$$</span>
+<span id="cb26-141"><a href="#cb26-141"></a></span>
+<span id="cb26-142"><a href="#cb26-142"></a><span class="ss">- </span>That is, there's a prime you can raise a number to in order to get <span class="in">`1`</span> mod that prime.</span>
+<span id="cb26-143"><a href="#cb26-143"></a></span>
+<span id="cb26-144"><a href="#cb26-144"></a><span class="fu"># Proof</span></span>
+<span id="cb26-145"><a href="#cb26-145"></a></span>
+<span id="cb26-146"><a href="#cb26-146"></a><span class="ss">- </span>This is called "combinatorics"</span>
+<span id="cb26-147"><a href="#cb26-147"></a><span class="ss">  - </span>Look, I thought it was gonna be a CS class too.</span>
+<span id="cb26-148"><a href="#cb26-148"></a><span class="ss">- </span>We go live to a proof I never learned but love, "counting necklaces"</span>
+<span id="cb26-149"><a href="#cb26-149"></a><span class="ss">  - </span>Wikipedia is my legal guardian.</span>
+<span id="cb26-150"><a href="#cb26-150"></a></span>
+<span id="cb26-151"><a href="#cb26-151"></a><span class="fu"># Necklaces</span></span>
+<span id="cb26-152"><a href="#cb26-152"></a></span>
+<span id="cb26-153"><a href="#cb26-153"></a><span class="ss">-   </span>Simplest known proof.</span>
+<span id="cb26-154"><a href="#cb26-154"></a><span class="ss">-   </span>Combinatorial proof.</span>
+<span id="cb26-155"><a href="#cb26-155"></a><span class="ss">-   </span>Adapted from <span class="co">[</span><span class="ot">Golomb</span><span class="co">](https://en.wikipedia.org/wiki/Solomon_W._Golomb)</span>'s proof.</span>
+<span id="cb26-156"><a href="#cb26-156"></a><span class="ss">    - </span>Golomb is an electrical engineer who allegedly invented Tetris</span>
+<span id="cb26-157"><a href="#cb26-157"></a><span class="ss">    - </span>A lot of people allegedly did that though.</span>
+<span id="cb26-158"><a href="#cb26-158"></a></span>
+<span id="cb26-159"><a href="#cb26-159"></a><span class="fu"># Simplification</span></span>
+<span id="cb26-160"><a href="#cb26-160"></a></span>
+<span id="cb26-161"><a href="#cb26-161"></a><span class="ss">*   </span>Assume:</span>
+<span id="cb26-162"><a href="#cb26-162"></a>$$</span>
+<span id="cb26-163"><a href="#cb26-163"></a>0 \leq a \leq p - 1</span>
+<span id="cb26-164"><a href="#cb26-164"></a>$$</span>
+<span id="cb26-165"><a href="#cb26-165"></a><span class="ss">*   </span>Consequence of modular arithmetic.</span>
+<span id="cb26-166"><a href="#cb26-166"></a>$$</span>
+<span id="cb26-167"><a href="#cb26-167"></a>a^p \pmod{p} \lt p.</span>
+<span id="cb26-168"><a href="#cb26-168"></a>$$</span>
+<span id="cb26-169"><a href="#cb26-169"></a></span>
+<span id="cb26-170"><a href="#cb26-170"></a></span>
+<span id="cb26-171"><a href="#cb26-171"></a><span class="fu"># Simplification</span></span>
+<span id="cb26-172"><a href="#cb26-172"></a></span>
+<span id="cb26-173"><a href="#cb26-173"></a><span class="ss">- </span>We note the following expressions are logicially equivalent.</span>
+<span id="cb26-174"><a href="#cb26-174"></a></span>
+<span id="cb26-175"><a href="#cb26-175"></a>$$</span>
+<span id="cb26-176"><a href="#cb26-176"></a>a^{p-1} \equiv 1 \pmod{p}</span>
+<span id="cb26-177"><a href="#cb26-177"></a>$$</span>
+<span id="cb26-178"><a href="#cb26-178"></a></span>
+<span id="cb26-179"><a href="#cb26-179"></a><span class="ss">- </span>Multiply by $a$</span>
+<span id="cb26-180"><a href="#cb26-180"></a></span>
+<span id="cb26-181"><a href="#cb26-181"></a>$$</span>
+<span id="cb26-182"><a href="#cb26-182"></a>a^p \equiv a \pmod{p}</span>
+<span id="cb26-183"><a href="#cb26-183"></a>$$</span>
+<span id="cb26-184"><a href="#cb26-184"></a></span>
+<span id="cb26-185"><a href="#cb26-185"></a></span>
+<span id="cb26-186"><a href="#cb26-186"></a><span class="fu"># Strings</span></span>
+<span id="cb26-187"><a href="#cb26-187"></a></span>
+<span id="cb26-188"><a href="#cb26-188"></a><span class="ss">-   </span>Consider strings/necklaces of length $p$.</span>
+<span id="cb26-189"><a href="#cb26-189"></a><span class="ss">-   </span>Alphabet with $a$ symbols.</span>
+<span id="cb26-190"><a href="#cb26-190"></a><span class="ss">    - </span>Jeweler with $a$ gemstones </span>
+<span id="cb26-191"><a href="#cb26-191"></a><span class="ss">-   </span>Total number of strings is $a^p$.</span>
+<span id="cb26-192"><a href="#cb26-192"></a><span class="ss">-   </span>Take $p = 5, a = 2$ say "amethyst" and "beryl"</span>
+<span id="cb26-193"><a href="#cb26-193"></a></span>
+<span id="cb26-194"><a href="#cb26-194"></a><span class="in">```{.py}</span></span>
+<span id="cb26-195"><a href="#cb26-195"></a><span class="in">necklaces = [</span></span>
+<span id="cb26-196"><a href="#cb26-196"></a><span class="in">    "AAAAA", "AAAAB", "AAABA", "AAABB", "AABAA", "AABAB", "AABBA", "AABBB",</span></span>
+<span id="cb26-197"><a href="#cb26-197"></a><span class="in">    "ABAAA", "ABAAB", "ABABA", "ABABB", "ABBAA", "ABBAB", "ABBBA", "ABBBB",</span></span>
+<span id="cb26-198"><a href="#cb26-198"></a><span class="in">    "BAAAA", "BAAAB", "BAABA", "BAABB", "BABAA", "BABAB", "BABBA", "BABBB",</span></span>
+<span id="cb26-199"><a href="#cb26-199"></a><span class="in">    "BBAAA", "BBAAB", "BBABA", "BBABB", "BBBAA", "BBBAB", "BBBBA", "BBBBB"</span></span>
+<span id="cb26-200"><a href="#cb26-200"></a><span class="in">]</span></span>
+<span id="cb26-201"><a href="#cb26-201"></a><span class="in">```</span></span>
+<span id="cb26-202"><a href="#cb26-202"></a></span>
+<span id="cb26-203"><a href="#cb26-203"></a></span>
+<span id="cb26-204"><a href="#cb26-204"></a><span class="fu"># Necklaces</span></span>
+<span id="cb26-205"><a href="#cb26-205"></a></span>
+<span id="cb26-206"><a href="#cb26-206"></a><span class="ss">-   </span>Strings as necklaces.</span>
+<span id="cb26-207"><a href="#cb26-207"></a><span class="ss">-   </span>Regard rotationally related necklaces as friends.</span>
+<span id="cb26-208"><a href="#cb26-208"></a><span class="in">```{.py}</span></span>
+<span id="cb26-209"><a href="#cb26-209"></a><span class="in">def friends(n, m):</span></span>
+<span id="cb26-210"><a href="#cb26-210"></a><span class="in">  return any([n == m[i:] + m[:i] for i in range(len(m))])</span></span>
+<span id="cb26-211"><a href="#cb26-211"></a></span>
+<span id="cb26-212"><a href="#cb26-212"></a><span class="in">assert(friends("AAABB", "BBAAA"))</span></span>
+<span id="cb26-213"><a href="#cb26-213"></a><span class="in">```</span></span>
+<span id="cb26-214"><a href="#cb26-214"></a></span>
+<span id="cb26-215"><a href="#cb26-215"></a><span class="fu"># Friends 5gether</span></span>
+<span id="cb26-216"><a href="#cb26-216"></a></span>
+<span id="cb26-217"><a href="#cb26-217"></a><span class="ss">- </span>Get it? Not 2gether?</span>
+<span id="cb26-218"><a href="#cb26-218"></a></span>
+<span id="cb26-219"><a href="#cb26-219"></a><span class="in">```{.py}</span></span>
+<span id="cb26-220"><a href="#cb26-220"></a><span class="in">friends = [</span></span>
+<span id="cb26-221"><a href="#cb26-221"></a><span class="in">    ["AAAAB", "AAABA", "AABAA", "ABAAA", "BAAAA"],</span></span>
+<span id="cb26-222"><a href="#cb26-222"></a><span class="in">    ["AAABB", "AABBA", "ABBAA", "BBAAA", "BAAAB"],</span></span>
+<span id="cb26-223"><a href="#cb26-223"></a><span class="in">    ["AABAB", "ABABA", "BABAA", "ABAAB", "BAABA"],</span></span>
+<span id="cb26-224"><a href="#cb26-224"></a><span class="in">    ["AABBB", "ABBBA", "BBBAA", "BBAAB", "BAABB"],</span></span>
+<span id="cb26-225"><a href="#cb26-225"></a><span class="in">    ["ABABB", "BABBA", "ABBAB", "BBABA", "BABAB"],</span></span>
+<span id="cb26-226"><a href="#cb26-226"></a><span class="in">    ["ABBBB", "BBBBA", "BBBAB", "BBABB", "BABBB"],</span></span>
+<span id="cb26-227"><a href="#cb26-227"></a><span class="in">    ["AAAAA"],</span></span>
+<span id="cb26-228"><a href="#cb26-228"></a><span class="in">    ["BBBBB"]</span></span>
+<span id="cb26-229"><a href="#cb26-229"></a><span class="in">]</span></span>
+<span id="cb26-230"><a href="#cb26-230"></a><span class="in">```</span></span>
+<span id="cb26-231"><a href="#cb26-231"></a></span>
+<span id="cb26-232"><a href="#cb26-232"></a><span class="fu"># Aside</span></span>
+<span id="cb26-233"><a href="#cb26-233"></a></span>
+<span id="cb26-234"><a href="#cb26-234"></a><span class="ss">- </span>We note this suffices as a proof that:</span>
+<span id="cb26-235"><a href="#cb26-235"></a></span>
+<span id="cb26-236"><a href="#cb26-236"></a>$$</span>
+<span id="cb26-237"><a href="#cb26-237"></a>2^5 = 32 \equiv 2 \pmod{5}</span>
+<span id="cb26-238"><a href="#cb26-238"></a>$$</span>
+<span id="cb26-239"><a href="#cb26-239"></a></span>
+<span id="cb26-240"><a href="#cb26-240"></a><span class="fu"># Counting Friends</span></span>
+<span id="cb26-241"><a href="#cb26-241"></a></span>
+<span id="cb26-242"><a href="#cb26-242"></a><span class="ss">- </span>We note:</span>
+<span id="cb26-243"><a href="#cb26-243"></a><span class="ss">  - </span>There are exactly the same number of unique rotations as the length of the necklace</span>
+<span id="cb26-244"><a href="#cb26-244"></a><span class="ss">    - </span>After that we repeat.</span>
+<span id="cb26-245"><a href="#cb26-245"></a><span class="ss">    - </span>So... $p \equiv 0 \pmod{p}$ and $p$ is length.</span>
+<span id="cb26-246"><a href="#cb26-246"></a><span class="ss">  - </span>Unless there is only one symbol, then exactly one rotation.</span>
+<span id="cb26-247"><a href="#cb26-247"></a><span class="ss">    - </span>There are exactly $a$ unique symbols, so</span>
+<span id="cb26-248"><a href="#cb26-248"></a><span class="ss">    - </span>Exactly $a$ strings of this form.</span>
+<span id="cb26-249"><a href="#cb26-249"></a></span>
+<span id="cb26-250"><a href="#cb26-250"></a><span class="fu"># Strategy</span></span>
+<span id="cb26-251"><a href="#cb26-251"></a></span>
+<span id="cb26-252"><a href="#cb26-252"></a><span class="ss">- </span>We show Fermat's little theorem.</span>
+<span id="cb26-253"><a href="#cb26-253"></a></span>
+<span id="cb26-254"><a href="#cb26-254"></a>$$</span>
+<span id="cb26-255"><a href="#cb26-255"></a>\begin{align}</span>
+<span id="cb26-256"><a href="#cb26-256"></a>\forall a \in \mathbb{N}, p \in \mathbb{P} : \gcd(p,a) = 1 \implies a^{p-1} \equiv 1 \pmod{p} <span class="sc">\\</span> </span>
+<span id="cb26-257"><a href="#cb26-257"></a>\end{align}</span>
+<span id="cb26-258"><a href="#cb26-258"></a>$$</span>
+<span id="cb26-259"><a href="#cb26-259"></a></span>
+<span id="cb26-260"><a href="#cb26-260"></a><span class="ss">- </span>Proof</span>
+<span id="cb26-261"><a href="#cb26-261"></a><span class="in">```{.py}</span></span>
+<span id="cb26-262"><a href="#cb26-262"></a><span class="in">nofriends = [</span></span>
+<span id="cb26-263"><a href="#cb26-263"></a><span class="in">    ["AAAAA"],</span></span>
+<span id="cb26-264"><a href="#cb26-264"></a><span class="in">    ["BBBBB"]</span></span>
+<span id="cb26-265"><a href="#cb26-265"></a><span class="in">]</span></span>
+<span id="cb26-266"><a href="#cb26-266"></a><span class="in">```</span></span>
+<span id="cb26-267"><a href="#cb26-267"></a></span>
+<span id="cb26-268"><a href="#cb26-268"></a></span>
+<span id="cb26-269"><a href="#cb26-269"></a><span class="fu"># Today</span></span>
+<span id="cb26-270"><a href="#cb26-270"></a><span class="ss">- </span>New</span>
+<span id="cb26-271"><a href="#cb26-271"></a><span class="ss">  - </span><span class="dv">&amp;check;</span> Public Key Cryptography</span>
+<span id="cb26-272"><a href="#cb26-272"></a><span class="ss">  - </span><span class="dv">&amp;check;</span> Fermat's little theorem</span>
+<span id="cb26-273"><a href="#cb26-273"></a><span class="ss">  - </span>RSA</span>
+<span id="cb26-274"><a href="#cb26-274"></a></span>
+<span id="cb26-275"><a href="#cb26-275"></a></span>
+<span id="cb26-276"><a href="#cb26-276"></a><span class="fu"># New Goal</span></span>
+<span id="cb26-277"><a href="#cb26-277"></a></span>
+<span id="cb26-278"><a href="#cb26-278"></a><span class="ss">- </span>We want:</span>
+<span id="cb26-279"><a href="#cb26-279"></a>$$</span>
+<span id="cb26-280"><a href="#cb26-280"></a>a^p \equiv a \pmod{p} \implies </span>
+<span id="cb26-281"><a href="#cb26-281"></a>$$</span>
+<span id="cb26-282"><a href="#cb26-282"></a>$$</span>
+<span id="cb26-283"><a href="#cb26-283"></a>\exists e, d, p, q \in \mathbb{N} : \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}</span>
+<span id="cb26-284"><a href="#cb26-284"></a>$$</span>
+<span id="cb26-285"><a href="#cb26-285"></a><span class="ss">- </span>We can restrict $e,d,p,q$</span>
+<span id="cb26-286"><a href="#cb26-286"></a>$$</span>
+<span id="cb26-287"><a href="#cb26-287"></a>\exists e, d\in \mathbb{N},  p, q \in \mathbb{P}: \forall m \in \mathbb{N} : (m^e)^d \equiv m \pmod{pq}</span>
+<span id="cb26-288"><a href="#cb26-288"></a>$$</span>
+<span id="cb26-289"><a href="#cb26-289"></a></span>
+<span id="cb26-290"><a href="#cb26-290"></a><span class="fu"># Insight</span></span>
+<span id="cb26-291"><a href="#cb26-291"></a></span>
+<span id="cb26-292"><a href="#cb26-292"></a><span class="ss">- </span>We use something called the "Carmichael function" denoted, confusingly, as $\lambda$:</span>
+<span id="cb26-293"><a href="#cb26-293"></a></span>
+<span id="cb26-294"><a href="#cb26-294"></a>$$</span>
+<span id="cb26-295"><a href="#cb26-295"></a>\lambda(n) = \text{min}(<span class="sc">\{</span>m : \forall a : gcd(a,n) = 1 : a^m \equiv 1 \pmod{n}<span class="sc">\}</span>)</span>
+<span id="cb26-296"><a href="#cb26-296"></a>$$</span>
+<span id="cb26-297"><a href="#cb26-297"></a></span>
+<span id="cb26-298"><a href="#cb26-298"></a><span class="ss">- </span>Say, $\lambda(n)$ is the smallest number that coprimes to $n$ are equivalent to zero mod $n$.</span>
+<span id="cb26-299"><a href="#cb26-299"></a><span class="ss">- </span>Easy for prime $p$, its $\lambda(p) = p - 1$.</span>
+<span id="cb26-300"><a href="#cb26-300"></a><span class="ss">  - </span>Just try <span class="in">`5`</span>, it's not too bad.</span>
+<span id="cb26-301"><a href="#cb26-301"></a></span>
+<span id="cb26-302"><a href="#cb26-302"></a><span class="fu"># RSA</span></span>
+<span id="cb26-303"><a href="#cb26-303"></a></span>
+<span id="cb26-304"><a href="#cb26-304"></a><span class="ss">1. </span>Choose two big primes $p$, $q$</span>
+<span id="cb26-305"><a href="#cb26-305"></a><span class="ss">2. </span>Find $n = pq$</span>
+<span id="cb26-306"><a href="#cb26-306"></a><span class="ss">3. </span>Find $\lambda(n)$</span>
+<span id="cb26-307"><a href="#cb26-307"></a><span class="ss">4. </span>Find $e : e \lt \lambda(n) \land \gcd(e, \lambda (n)) = 1$</span>
+<span id="cb26-308"><a href="#cb26-308"></a><span class="ss">5. </span>Find $d : d \equiv e^{-1} \pmod{\lambda (n)}$</span>
+<span id="cb26-309"><a href="#cb26-309"></a></span>
+<span id="cb26-310"><a href="#cb26-310"></a><span class="fu"># 1. $p$, $q$</span></span>
+<span id="cb26-311"><a href="#cb26-311"></a></span>
+<span id="cb26-312"><a href="#cb26-312"></a><span class="ss">- </span>Do <span class="in">`4096_t`</span> and use, probably, 6k+1 or a performance optimization.</span>
+<span id="cb26-315"><a href="#cb26-315"></a><span class="in">```{python}</span></span>
+<span id="cb26-316"><a href="#cb26-316"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-317"><a href="#cb26-317"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-318"><a href="#cb26-318"></a><span class="co"># this will still be slow with big numbers</span></span>
+<span id="cb26-319"><a href="#cb26-319"></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb26-320"><a href="#cb26-320"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb26-321"><a href="#cb26-321"></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb26-322"><a href="#cb26-322"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb26-323"><a href="#cb26-323"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb26-324"><a href="#cb26-324"></a>    <span class="cf">return</span> candidate</span>
+<span id="cb26-325"><a href="#cb26-325"></a><span class="in">```</span></span>
+<span id="cb26-326"><a href="#cb26-326"></a><span class="ss">- </span>LibGMP provides <span class="in">`gmp_nextprime`</span></span>
+<span id="cb26-327"><a href="#cb26-327"></a></span>
+<span id="cb26-328"><a href="#cb26-328"></a></span>
+<span id="cb26-329"><a href="#cb26-329"></a><span class="fu"># 2. $n$</span></span>
+<span id="cb26-330"><a href="#cb26-330"></a></span>
+<span id="cb26-331"><a href="#cb26-331"></a><span class="in">```{.C}</span></span>
+<span id="cb26-332"><a href="#cb26-332"></a><span class="in">n = p * q;</span></span>
+<span id="cb26-333"><a href="#cb26-333"></a><span class="in">```</span></span>
+<span id="cb26-334"><a href="#cb26-334"></a></span>
+<span id="cb26-335"><a href="#cb26-335"></a><span class="fu"># 3. $\lambda(n)$</span></span>
+<span id="cb26-336"><a href="#cb26-336"></a></span>
+<span id="cb26-337"><a href="#cb26-337"></a><span class="ss">- </span>This one is kept secret by the way.</span>
+<span id="cb26-338"><a href="#cb26-338"></a><span class="ss">- </span>It so happens:</span>
+<span id="cb26-339"><a href="#cb26-339"></a>$$</span>
+<span id="cb26-340"><a href="#cb26-340"></a>\forall p,q \in \mathbb{P} : \lambda(pq) = \text{lcm}(p-1, q-1)</span>
+<span id="cb26-341"><a href="#cb26-341"></a>$$</span>
+<span id="cb26-342"><a href="#cb26-342"></a><span class="ss">- </span>There's fast ways to this, but anything goes this week.</span>
+<span id="cb26-343"><a href="#cb26-343"></a></span>
+<span id="cb26-344"><a href="#cb26-344"></a><span class="fu"># Aside: lcm</span></span>
+<span id="cb26-345"><a href="#cb26-345"></a></span>
+<span id="cb26-346"><a href="#cb26-346"></a><span class="ss">- </span>GitHub Copilot provides:</span>
+<span id="cb26-349"><a href="#cb26-349"></a><span class="in">```{python}</span></span>
+<span id="cb26-350"><a href="#cb26-350"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-351"><a href="#cb26-351"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-352"><a href="#cb26-352"></a><span class="kw">def</span> gcd(a, b):</span>
+<span id="cb26-353"><a href="#cb26-353"></a>    <span class="co">"""Calculate the Greatest Common Divisor of a and b."""</span></span>
+<span id="cb26-354"><a href="#cb26-354"></a>    <span class="cf">while</span> b:</span>
+<span id="cb26-355"><a href="#cb26-355"></a>        a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb26-356"><a href="#cb26-356"></a>    <span class="cf">return</span> a</span>
+<span id="cb26-357"><a href="#cb26-357"></a></span>
+<span id="cb26-358"><a href="#cb26-358"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb26-359"><a href="#cb26-359"></a>    <span class="co">"""Calculate the Least Common Multiple of a and b."""</span></span>
+<span id="cb26-360"><a href="#cb26-360"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span>
+<span id="cb26-361"><a href="#cb26-361"></a><span class="in">```</span></span>
+<span id="cb26-362"><a href="#cb26-362"></a></span>
+<span id="cb26-363"><a href="#cb26-363"></a><span class="fu"># 4. $e$</span></span>
+<span id="cb26-364"><a href="#cb26-364"></a></span>
+<span id="cb26-365"><a href="#cb26-365"></a><span class="ss">- </span>Find $e : e \lt \lambda(n) \land \gcd(e, \lambda (n)) = 1$</span>
+<span id="cb26-366"><a href="#cb26-366"></a><span class="ss">- </span>You know what is comprime with whatever $\lambda (n)$ is?</span>
+<span id="cb26-367"><a href="#cb26-367"></a><span class="ss">- </span>A prime number.</span>
+<span id="cb26-368"><a href="#cb26-368"></a><span class="in">```{.C}</span></span>
+<span id="cb26-369"><a href="#cb26-369"></a><span class="in">e = 65537; // 2 ^ 16 + 1</span></span>
+<span id="cb26-370"><a href="#cb26-370"></a><span class="in">```</span></span>
+<span id="cb26-371"><a href="#cb26-371"></a></span>
+<span id="cb26-372"><a href="#cb26-372"></a><span class="fu"># Aside: Hamming weight</span></span>
+<span id="cb26-373"><a href="#cb26-373"></a></span>
+<span id="cb26-374"><a href="#cb26-374"></a><span class="ss">1. </span>What is <span class="in">`65537`</span> in binary?</span>
+<span id="cb26-375"><a href="#cb26-375"></a><span class="ss">2. </span>Is multiplying hard?</span>
+<span id="cb26-376"><a href="#cb26-376"></a><span class="ss">3. </span>Is bit-shifting hard?</span>
+<span id="cb26-377"><a href="#cb26-377"></a><span class="ss">4. </span>Can we combine bit-shifts to multiple?</span>
+<span id="cb26-378"><a href="#cb26-378"></a><span class="ss">5. </span>If we did that, what numbers would be easiest to multiply by?</span>
+<span id="cb26-379"><a href="#cb26-379"></a></span>
+<span id="cb26-380"><a href="#cb26-380"></a><span class="fu"># 5. $d$</span></span>
+<span id="cb26-381"><a href="#cb26-381"></a></span>
+<span id="cb26-382"><a href="#cb26-382"></a><span class="ss">- </span>This one is very secret!</span>
+<span id="cb26-383"><a href="#cb26-383"></a><span class="ss">- </span>Find $d : d \equiv e^{-1} \pmod{\lambda (n)}$</span>
+<span id="cb26-384"><a href="#cb26-384"></a><span class="ss">- </span>There's a good way to do this, or...</span>
+<span id="cb26-385"><a href="#cb26-385"></a><span class="ss">- </span>Find $de \equiv 1 \pmod{\lambda (n)}$</span>
+<span id="cb26-386"><a href="#cb26-386"></a><span class="ss">  - </span>Just start at $d = 1$ and go up until you find it.</span>
+<span id="cb26-387"><a href="#cb26-387"></a><span class="ss">  - </span>It'll be less than $\lambda (n)$</span>
+<span id="cb26-388"><a href="#cb26-388"></a></span>
+<span id="cb26-389"><a href="#cb26-389"></a><span class="fu"># Today</span></span>
+<span id="cb26-390"><a href="#cb26-390"></a><span class="ss">- </span>New</span>
+<span id="cb26-391"><a href="#cb26-391"></a><span class="ss">  - </span><span class="dv">&amp;check;</span> Public Key Cryptography</span>
+<span id="cb26-392"><a href="#cb26-392"></a><span class="ss">  - </span><span class="dv">&amp;check;</span> Fermat's little theorem</span>
+<span id="cb26-393"><a href="#cb26-393"></a><span class="ss">  - </span><span class="dv">&amp;check;</span> RSA</span>
+<span id="cb26-394"><a href="#cb26-394"></a></span>
+<span id="cb26-395"><a href="#cb26-395"></a><span class="fu"># Using RSA</span></span>
+<span id="cb26-396"><a href="#cb26-396"></a></span>
+<span id="cb26-397"><a href="#cb26-397"></a><span class="fu"># Let's make a secret</span></span>
+<span id="cb26-398"><a href="#cb26-398"></a></span>
+<span id="cb26-401"><a href="#cb26-401"></a><span class="in">```{python}</span></span>
+<span id="cb26-402"><a href="#cb26-402"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-403"><a href="#cb26-403"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-404"><a href="#cb26-404"></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span>
+<span id="cb26-405"><a href="#cb26-405"></a><span class="in">```</span></span>
+<span id="cb26-406"><a href="#cb26-406"></a></span>
+<span id="cb26-407"><a href="#cb26-407"></a><span class="fu"># Prime checker</span></span>
+<span id="cb26-408"><a href="#cb26-408"></a></span>
+<span id="cb26-411"><a href="#cb26-411"></a><span class="in">```{python}</span></span>
+<span id="cb26-412"><a href="#cb26-412"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-413"><a href="#cb26-413"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-414"><a href="#cb26-414"></a>is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">all</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>)<span class="op">+</span><span class="dv">1</span>)])</span>
+<span id="cb26-415"><a href="#cb26-415"></a>is_prime(<span class="dv">60</span>), is_prime(<span class="dv">61</span>)</span>
+<span id="cb26-416"><a href="#cb26-416"></a><span class="in">```</span></span>
+<span id="cb26-417"><a href="#cb26-417"></a></span>
+<span id="cb26-418"><a href="#cb26-418"></a></span>
+<span id="cb26-419"><a href="#cb26-419"></a><span class="fu"># Two primes</span></span>
+<span id="cb26-420"><a href="#cb26-420"></a></span>
+<span id="cb26-423"><a href="#cb26-423"></a><span class="in">```{python}</span></span>
+<span id="cb26-424"><a href="#cb26-424"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-425"><a href="#cb26-425"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-426"><a href="#cb26-426"></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">10</span>)</span>
+<span id="cb26-427"><a href="#cb26-427"></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">15</span>)</span>
+<span id="cb26-428"><a href="#cb26-428"></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb26-429"><a href="#cb26-429"></a>n</span>
+<span id="cb26-430"><a href="#cb26-430"></a><span class="in">```</span></span>
+<span id="cb26-431"><a href="#cb26-431"></a></span>
+<span id="cb26-432"><a href="#cb26-432"></a><span class="fu"># Confusingly Named</span></span>
+<span id="cb26-433"><a href="#cb26-433"></a></span>
+<span id="cb26-436"><a href="#cb26-436"></a><span class="in">```{python}</span></span>
+<span id="cb26-437"><a href="#cb26-437"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-438"><a href="#cb26-438"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-439"><a href="#cb26-439"></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb26-440"><a href="#cb26-440"></a><span class="in">```</span></span>
+<span id="cb26-441"><a href="#cb26-441"></a></span>
+<span id="cb26-442"><a href="#cb26-442"></a><span class="fu"># Public Key</span></span>
+<span id="cb26-443"><a href="#cb26-443"></a></span>
+<span id="cb26-446"><a href="#cb26-446"></a><span class="in">```{python}</span></span>
+<span id="cb26-447"><a href="#cb26-447"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-448"><a href="#cb26-448"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-449"><a href="#cb26-449"></a>e <span class="op">=</span> <span class="dv">65537</span></span>
+<span id="cb26-450"><a href="#cb26-450"></a><span class="in">```</span></span>
+<span id="cb26-451"><a href="#cb26-451"></a></span>
+<span id="cb26-452"><a href="#cb26-452"></a><span class="fu"># $d$ (decryptor)</span></span>
+<span id="cb26-453"><a href="#cb26-453"></a></span>
+<span id="cb26-456"><a href="#cb26-456"></a><span class="in">```{python}</span></span>
+<span id="cb26-457"><a href="#cb26-457"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-458"><a href="#cb26-458"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-459"><a href="#cb26-459"></a><span class="kw">def</span> find_d():</span>
+<span id="cb26-460"><a href="#cb26-460"></a>  d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb26-461"><a href="#cb26-461"></a>  <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb26-462"><a href="#cb26-462"></a>    d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb26-463"><a href="#cb26-463"></a>  <span class="cf">return</span> d</span>
+<span id="cb26-464"><a href="#cb26-464"></a><span class="in">```</span></span>
+<span id="cb26-465"><a href="#cb26-465"></a></span>
+<span id="cb26-466"><a href="#cb26-466"></a><span class="fu"># The Process</span></span>
+<span id="cb26-467"><a href="#cb26-467"></a></span>
+<span id="cb26-468"><a href="#cb26-468"></a><span class="ss">- </span>Encrypt our message.</span>
+<span id="cb26-471"><a href="#cb26-471"></a><span class="in">```{python}</span></span>
+<span id="cb26-472"><a href="#cb26-472"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-473"><a href="#cb26-473"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-474"><a href="#cb26-474"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb26-475"><a href="#cb26-475"></a>c <span class="op">=</span> m <span class="op">**</span> e</span>
+<span id="cb26-476"><a href="#cb26-476"></a>m, c, c <span class="op">%</span> n</span>
+<span id="cb26-477"><a href="#cb26-477"></a><span class="in">```</span></span>
+<span id="cb26-478"><a href="#cb26-478"></a></span>
+<span id="cb26-479"><a href="#cb26-479"></a><span class="fu"># Too Big</span></span>
+<span id="cb26-480"><a href="#cb26-480"></a></span>
+<span id="cb26-481"><a href="#cb26-481"></a><span class="ss">- </span>Haha Python can't handle big numbers.</span>
+<span id="cb26-482"><a href="#cb26-482"></a><span class="ss">- </span>Not to worry, we're working in modular arithmetic.</span>
+<span id="cb26-485"><a href="#cb26-485"></a><span class="in">```{python}</span></span>
+<span id="cb26-486"><a href="#cb26-486"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-487"><a href="#cb26-487"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-488"><a href="#cb26-488"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb26-489"><a href="#cb26-489"></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb26-490"><a href="#cb26-490"></a>      <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb26-491"><a href="#cb26-491"></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb26-492"><a href="#cb26-492"></a>      <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb26-493"><a href="#cb26-493"></a>  <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb26-494"><a href="#cb26-494"></a>      <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb26-495"><a href="#cb26-495"></a>  <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb26-496"><a href="#cb26-496"></a><span class="in">```</span></span>
+<span id="cb26-497"><a href="#cb26-497"></a></span>
+<span id="cb26-498"><a href="#cb26-498"></a><span class="fu"># Encrypt</span></span>
+<span id="cb26-499"><a href="#cb26-499"></a></span>
+<span id="cb26-500"><a href="#cb26-500"></a><span class="ss">- </span>Encrypt our message.</span>
+<span id="cb26-503"><a href="#cb26-503"></a><span class="in">```{python}</span></span>
+<span id="cb26-504"><a href="#cb26-504"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-505"><a href="#cb26-505"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-506"><a href="#cb26-506"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb26-507"><a href="#cb26-507"></a>c <span class="op">=</span> modexp(m, e, n)</span>
+<span id="cb26-508"><a href="#cb26-508"></a>m, c</span>
+<span id="cb26-509"><a href="#cb26-509"></a><span class="in">```</span></span>
+<span id="cb26-510"><a href="#cb26-510"></a></span>
+<span id="cb26-511"><a href="#cb26-511"></a></span>
+<span id="cb26-512"><a href="#cb26-512"></a><span class="fu"># Decrypt</span></span>
+<span id="cb26-513"><a href="#cb26-513"></a></span>
+<span id="cb26-514"><a href="#cb26-514"></a><span class="ss">- </span>Decrypt our message.</span>
+<span id="cb26-517"><a href="#cb26-517"></a><span class="in">```{python}</span></span>
+<span id="cb26-518"><a href="#cb26-518"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-519"><a href="#cb26-519"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-520"><a href="#cb26-520"></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb26-521"><a href="#cb26-521"></a>new_m, m</span>
+<span id="cb26-522"><a href="#cb26-522"></a><span class="in">```</span></span>
+<span id="cb26-523"><a href="#cb26-523"></a></span>
+<span id="cb26-524"><a href="#cb26-524"></a><span class="fu"># Is it good?</span></span>
+<span id="cb26-525"><a href="#cb26-525"></a></span>
+<span id="cb26-528"><a href="#cb26-528"></a><span class="in">```{python}</span></span>
+<span id="cb26-529"><a href="#cb26-529"></a><span class="co">#| echo: true</span></span>
+<span id="cb26-530"><a href="#cb26-530"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb26-531"><a href="#cb26-531"></a><span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n))</span>
+<span id="cb26-532"><a href="#cb26-532"></a><span class="in">```</span></span>
+<span id="cb26-533"><a href="#cb26-533"></a></span>
+<span id="cb26-534"><a href="#cb26-534"></a><span class="fu"># All</span></span>
+<span id="cb26-535"><a href="#cb26-535"></a></span>
+<span id="cb26-536"><a href="#cb26-536"></a><span class="in">```python</span></span>
+<span id="cb26-537"><a href="#cb26-537"></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb26-538"><a href="#cb26-538"></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">any</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb26-539"><a href="#cb26-539"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb26-540"><a href="#cb26-540"></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb26-541"><a href="#cb26-541"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb26-542"><a href="#cb26-542"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb26-543"><a href="#cb26-543"></a>    <span class="cf">return</span> candidate</span>
+<span id="cb26-544"><a href="#cb26-544"></a></span>
+<span id="cb26-545"><a href="#cb26-545"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb26-546"><a href="#cb26-546"></a>    <span class="kw">def</span> gcd(a, b):</span>
+<span id="cb26-547"><a href="#cb26-547"></a>        <span class="cf">while</span> b:</span>
+<span id="cb26-548"><a href="#cb26-548"></a>            a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb26-549"><a href="#cb26-549"></a>        <span class="cf">return</span> a</span>
+<span id="cb26-550"><a href="#cb26-550"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span>
+<span id="cb26-551"><a href="#cb26-551"></a></span>
+<span id="cb26-552"><a href="#cb26-552"></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span>
+<span id="cb26-553"><a href="#cb26-553"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb26-554"><a href="#cb26-554"></a></span>
+<span id="cb26-555"><a href="#cb26-555"></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">10</span>)</span>
+<span id="cb26-556"><a href="#cb26-556"></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">15</span>)</span>
+<span id="cb26-557"><a href="#cb26-557"></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb26-558"><a href="#cb26-558"></a></span>
+<span id="cb26-559"><a href="#cb26-559"></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb26-560"><a href="#cb26-560"></a></span>
+<span id="cb26-561"><a href="#cb26-561"></a>e <span class="op">=</span> <span class="dv">65537</span> <span class="co"># encryptor</span></span>
+<span id="cb26-562"><a href="#cb26-562"></a></span>
+<span id="cb26-563"><a href="#cb26-563"></a><span class="kw">def</span> find_d():</span>
+<span id="cb26-564"><a href="#cb26-564"></a>    d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb26-565"><a href="#cb26-565"></a>    <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb26-566"><a href="#cb26-566"></a>        d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb26-567"><a href="#cb26-567"></a>    <span class="cf">return</span> d</span>
+<span id="cb26-568"><a href="#cb26-568"></a></span>
+<span id="cb26-569"><a href="#cb26-569"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb26-570"><a href="#cb26-570"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb26-571"><a href="#cb26-571"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb26-572"><a href="#cb26-572"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb26-573"><a href="#cb26-573"></a>        <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb26-574"><a href="#cb26-574"></a>    <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb26-575"><a href="#cb26-575"></a>        <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb26-576"><a href="#cb26-576"></a>    <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb26-577"><a href="#cb26-577"></a></span>
+<span id="cb26-578"><a href="#cb26-578"></a>c <span class="op">=</span> modexp(m, e, n) <span class="co"># ciphertext</span></span>
+<span id="cb26-579"><a href="#cb26-579"></a></span>
+<span id="cb26-580"><a href="#cb26-580"></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb26-581"><a href="#cb26-581"></a></span>
+<span id="cb26-582"><a href="#cb26-582"></a><span class="bu">print</span>(<span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n)))</span>
+<span id="cb26-583"><a href="#cb26-583"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

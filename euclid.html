@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Euclid – AI 101</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./fermat.html" rel="next">
+<link href="./enigma.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-a4a11d514c7d463668e07712114998e6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-70c9a4798e5f6abb0636bcdc3eed0e90.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./euclid.html">Euclid</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">AI 101</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4096_t.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4096_t</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./4bytes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4bytes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./alpine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Alpine</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bchain.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">bchain</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bigadd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BigAdd</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bignum.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BigNum</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bigrsa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BigRSA</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./btcinc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BTCinC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c89_99.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C89/99</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./encode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Encode</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./endian.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Endian</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./enigma.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Enigma</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./euclid.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Euclid</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fermat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fermat</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./finite.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Finite</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./graphs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Graphs</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heap_t.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">heap_t</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./keygen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">KeyGen</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./list_t.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">list_t</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./macros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Macros</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./malloc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">malloc</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./merkle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Merkle</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ops_ui.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ops_ui</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./podman.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Podman</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./printb.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">format: html</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./rsainc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RSAinC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sha256.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SHA256</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./shainc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SHAinC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">struct</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#announcements" id="toc-announcements" class="nav-link active" data-scroll-target="#announcements">Announcements</a></li>
+  <li><a href="#today" id="toc-today" class="nav-link" data-scroll-target="#today">Today</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a></li>
+  <li><a href="#lambdan" id="toc-lambdan" class="nav-link" data-scroll-target="#lambdan">3. <span class="math inline">\(\lambda(n)\)</span></a></li>
+  <li><a href="#lcm" id="toc-lcm" class="nav-link" data-scroll-target="#lcm">LCM</a></li>
+  <li><a href="#mmi" id="toc-mmi" class="nav-link" data-scroll-target="#mmi">MMI</a></li>
+  <li><a href="#modexp" id="toc-modexp" class="nav-link" data-scroll-target="#modexp">ModExp</a></li>
+  <li><a href="#context" id="toc-context" class="nav-link" data-scroll-target="#context">Context</a></li>
+  <li><a href="#euclidean-division" id="toc-euclidean-division" class="nav-link" data-scroll-target="#euclidean-division">Euclidean Division</a></li>
+  <li><a href="#naive-division" id="toc-naive-division" class="nav-link" data-scroll-target="#naive-division">Naive Division</a></li>
+  <li><a href="#integer-division" id="toc-integer-division" class="nav-link" data-scroll-target="#integer-division">Integer Division</a></li>
+  <li><a href="#we-note" id="toc-we-note" class="nav-link" data-scroll-target="#we-note">We note</a></li>
+  <li><a href="#euclidean-division-1" id="toc-euclidean-division-1" class="nav-link" data-scroll-target="#euclidean-division-1">Euclidean Division</a></li>
+  <li><a href="#euclidean-division-2" id="toc-euclidean-division-2" class="nav-link" data-scroll-target="#euclidean-division-2">Euclidean Division</a></li>
+  <li><a href="#euclidean-division-3" id="toc-euclidean-division-3" class="nav-link" data-scroll-target="#euclidean-division-3">Euclidean Division</a></li>
+  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology">Terminology</a></li>
+  <li><a href="#equality" id="toc-equality" class="nav-link" data-scroll-target="#equality">Equality</a></li>
+  <li><a href="#constraints" id="toc-constraints" class="nav-link" data-scroll-target="#constraints">Constraints</a></li>
+  <li><a href="#constraints-1" id="toc-constraints-1" class="nav-link" data-scroll-target="#constraints-1">Constraints</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways">Takeaways</a></li>
+  <li><a href="#today-1" id="toc-today-1" class="nav-link" data-scroll-target="#today-1">Today</a></li>
+  <li><a href="#sidebar" id="toc-sidebar" class="nav-link" data-scroll-target="#sidebar">Sidebar</a></li>
+  <li><a href="#goals" id="toc-goals" class="nav-link" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
+  <li><a href="#initialize" id="toc-initialize" class="nav-link" data-scroll-target="#initialize">Initialize</a></li>
+  <li><a href="#substract" id="toc-substract" class="nav-link" data-scroll-target="#substract">Substract</a></li>
+  <li><a href="#loop" id="toc-loop" class="nav-link" data-scroll-target="#loop">Loop</a></li>
+  <li><a href="#terminate" id="toc-terminate" class="nav-link" data-scroll-target="#terminate">Terminate</a></li>
+  <li><a href="#iteratively" id="toc-iteratively" class="nav-link" data-scroll-target="#iteratively">Iteratively</a></li>
+  <li><a href="#modulo" id="toc-modulo" class="nav-link" data-scroll-target="#modulo">Modulo</a></li>
+  <li><a href="#recursively" id="toc-recursively" class="nav-link" data-scroll-target="#recursively">Recursively</a></li>
+  <li><a href="#recursively-1" id="toc-recursively-1" class="nav-link" data-scroll-target="#recursively-1">Recursively</a></li>
+  <li><a href="#with-def" id="toc-with-def" class="nav-link" data-scroll-target="#with-def">With <code>def</code></a></li>
+  <li><a href="#simplest" id="toc-simplest" class="nav-link" data-scroll-target="#simplest">Simplest</a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example</a></li>
+  <li><a href="#test-it" id="toc-test-it" class="nav-link" data-scroll-target="#test-it">Test it</a></li>
+  <li><a href="#anyways" id="toc-anyways" class="nav-link" data-scroll-target="#anyways">Anyways</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#today-2" id="toc-today-2" class="nav-link" data-scroll-target="#today-2">Today</a></li>
+  <li><a href="#reorder" id="toc-reorder" class="nav-link" data-scroll-target="#reorder">Reorder</a></li>
+  <li><a href="#mmi-1" id="toc-mmi-1" class="nav-link" data-scroll-target="#mmi-1">MMI</a></li>
+  <li><a href="#slow" id="toc-slow" class="nav-link" data-scroll-target="#slow">Slow</a></li>
+  <li><a href="#we-note-1" id="toc-we-note-1" class="nav-link" data-scroll-target="#we-note-1">We note</a></li>
+  <li><a href="#bézouts-identity" id="toc-bézouts-identity" class="nav-link" data-scroll-target="#bézouts-identity">Bézout’s identity</a></li>
+  <li><a href="#recall" id="toc-recall" class="nav-link" data-scroll-target="#recall">Recall</a></li>
+  <li><a href="#goals-1" id="toc-goals-1" class="nav-link" data-scroll-target="#goals-1">Goals</a></li>
+  <li><a href="#put-it-all-together" id="toc-put-it-all-together" class="nav-link" data-scroll-target="#put-it-all-together">Put it all together</a></li>
+  <li><a href="#reorder-1" id="toc-reorder-1" class="nav-link" data-scroll-target="#reorder-1">Reorder</a></li>
+  <li><a href="#mmi-2" id="toc-mmi-2" class="nav-link" data-scroll-target="#mmi-2">MMI</a></li>
+  <li><a href="#eea" id="toc-eea" class="nav-link" data-scroll-target="#eea">EEA</a></li>
+  <li><a href="#ground-truth" id="toc-ground-truth" class="nav-link" data-scroll-target="#ground-truth">Ground truth</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#x-and-y" id="toc-x-and-y" class="nav-link" data-scroll-target="#x-and-y"><span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"></a></li>
+  <li><a href="#modulo-1" id="toc-modulo-1" class="nav-link" data-scroll-target="#modulo-1">Modulo</a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3"></a></li>
+  <li><a href="#recursion" id="toc-recursion" class="nav-link" data-scroll-target="#recursion">Recursion</a></li>
+  <li><a href="#we-can-recurse" id="toc-we-can-recurse" class="nav-link" data-scroll-target="#we-can-recurse">We can recurse</a></li>
+  <li><a href="#to-python" id="toc-to-python" class="nav-link" data-scroll-target="#to-python">To Python</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2">Example</a></li>
+  <li><a href="#wait-a-minute" id="toc-wait-a-minute" class="nav-link" data-scroll-target="#wait-a-minute">Wait a minute!</a></li>
+  <li><a href="#in-practice" id="toc-in-practice" class="nav-link" data-scroll-target="#in-practice">In Practice</a></li>
+  <li><a href="#reorder-2" id="toc-reorder-2" class="nav-link" data-scroll-target="#reorder-2">Reorder</a></li>
+  <li><a href="#closing" id="toc-closing" class="nav-link" data-scroll-target="#closing">Closing</a></li>
+  <li><a href="#all" id="toc-all" class="nav-link" data-scroll-target="#all">All</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="euclid.rjs.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Euclid</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i></button></div></div>
+<p class="subtitle lead">Week 0x3.3</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="announcements" class="level1">
+<h1>Announcements</h1>
+<ul>
+<li><strong>Welcome</strong> to Computing Security
+<ul>
+<li>We introduce an algorithm that makes key generation viable.</li>
+</ul></li>
+<li><strong>Action Items</strong>:
+<ul>
+<li>BigRSA ongoing.</li>
+</ul></li>
+</ul>
+</section>
+<section id="today" class="level1">
+<h1>Today</h1>
+<ul>
+<li>Euclidean division</li>
+<li>Euclidean algorithm</li>
+<li>Extended Euclidean algorithm</li>
+<li>Bézout’s identity</li>
+</ul>
+</section>
+<section id="review" class="level1">
+<h1>Review</h1>
+</section>
+<section id="lambdan" class="level1">
+<h1>3. <span class="math inline">\(\lambda(n)\)</span></h1>
+<ul>
+<li>This one is kept secret by the way.</li>
+<li>It so happens: <span class="math display">\[
+\forall p,q \in \mathbb{P} : \lambda(pq) = \text{lcm}(p-1, q-1)
+\]</span></li>
+<li>There’s fast ways to this, but anything goes this week.</li>
+</ul>
+</section>
+<section id="lcm" class="level1">
+<h1>LCM</h1>
+<ul>
+<li>Least common multiple</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> gcd(a, b):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">"""Calculate the Greatest Common Divisor of a and b."""</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">while</span> b:</span>
+<span id="cb1-4"><a href="#cb1-4"></a>        a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="cf">return</span> a</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="co">"""Calculate the Least Common Multiple of a and b."""</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="mmi" class="level1">
+<h1>MMI</h1>
+<ul>
+<li>Multiplicative Modular Inverse</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> find_d():</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="cf">return</span> d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="modexp" class="level1">
+<h1>ModExp</h1>
+<ul>
+<li>Exponentation modulo <span class="math inline">\(n\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb3-3"><a href="#cb3-3"></a>      <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb3-5"><a href="#cb3-5"></a>      <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb3-6"><a href="#cb3-6"></a>  <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb3-7"><a href="#cb3-7"></a>      <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb3-8"><a href="#cb3-8"></a>  <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="context" class="level1">
+<h1>Context</h1>
+<ul>
+<li>Each of these operations are dealing with, fundamentally, the same problem.</li>
+<li>We have big numbers we want to work with but,</li>
+<li>None are bigger than <span class="math inline">\(n\)</span>, and</li>
+<li>The bigger the number, the harder the work.</li>
+</ul>
+</section>
+<section id="euclidean-division" class="level1">
+<h1>Euclidean Division</h1>
+<ul>
+<li>Division as implemented by “bigdiv”:</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource C number-lines code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">uint64_t</span> bigdiv<span class="op">(</span><span class="dt">uint64_t</span> <span class="op">*</span>num<span class="op">,</span> <span class="dt">uint64_t</span> <span class="op">*</span>den<span class="op">,</span> <span class="dt">uint64_t</span> <span class="op">*</span>quo<span class="op">,</span> <span class="dt">uint64_t</span> <span class="op">*</span>rem<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">}</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="dt">uint64_t</span> bigquo<span class="op">(</span><span class="dt">uint64_t</span> <span class="op">*</span>num<span class="op">,</span> <span class="dt">uint64_t</span> <span class="op">*</span>den<span class="op">,</span> <span class="dt">uint64_t</span> <span class="op">*</span>quo<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="dt">uint64_t</span> rem<span class="op">[</span>S<span class="op">];</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    bigdiv<span class="op">(</span>num<span class="op">,</span>den<span class="op">,</span>quo<span class="op">,</span>rem<span class="op">);</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="op">}</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="dt">uint64_t</span> bigrem<span class="op">(</span><span class="dt">uint64_t</span> <span class="op">*</span>num<span class="op">,</span> <span class="dt">uint64_t</span> <span class="op">*</span>den<span class="op">,</span> <span class="dt">uint64_t</span> <span class="op">*</span>rem<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="dt">uint64_t</span> quo<span class="op">[</span>S<span class="op">];</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>    bigdiv<span class="op">(</span>num<span class="op">,</span>den<span class="op">,</span>quo<span class="op">,</span>rem<span class="op">);</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="naive-division" class="level1">
+<h1>Naive Division</h1>
+<ul>
+<li>Entry-level categorization, term it “naive”
+<ul>
+<li>often over <span class="math inline">\(\mathbb{Q}\)</span> or <span class="math inline">\(\mathbb{R}\)</span></li>
+<li><code>quotient:float = division(dividided:int|float,divisor:int|float)</code></li>
+<li>In Python <span class="math inline">\(\mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Q}\)</span></li>
+<li>Python <code>/</code> for all values, C <code>/</code> for float types.</li>
+</ul></li>
+</ul>
+</section>
+<section id="integer-division" class="level1">
+<h1>Integer Division</h1>
+<ul>
+<li>Integer division - often over <span class="math inline">\(\mathbb{N}\)</span> or <span class="math inline">\(\mathbb{Z}\)</span>
+<ul>
+<li><code>quotient:int = division(dividided:int,divisor:int)</code></li>
+<li>Python <code>//</code> for int types, C <code>/</code> for int types.</li>
+</ul></li>
+</ul>
+</section>
+<section id="we-note" class="level1">
+<h1>We note</h1>
+<ul>
+<li>Many sets of numbers are not closed under division
+<ul>
+<li><span class="math inline">\(\exists x,y \in \mathbb{N} : x/y \not\in \mathbb{N}\)</span></li>
+</ul></li>
+<li>These sets are closed under integer division but then lack multiplicative inverses.
+<ul>
+<li><span class="math inline">\(\exists n \in \mathbb{N} : \nexists m \in \mathbb{N} : n \times m \in \mathbb{N}\)</span></li>
+</ul></li>
+<li>These are all bad!</li>
+</ul>
+</section>
+<section id="euclidean-division-1" class="level1">
+<h1>Euclidean Division</h1>
+<ul>
+<li>Euclidean division solves this problem by <em>changing the type of the function</em>
+<ul>
+<li><strong>NOT</strong> by changing the types of the operands (inputs, divisor, divisend, numerator, denominator)</li>
+<li><strong>YES</strong> by changing the <em>number of return values</em></li>
+</ul></li>
+<li>We will simply have two return values.
+<ul>
+<li>We recall this impossible in C (loud cheers)</li>
+</ul></li>
+</ul>
+</section>
+<section id="euclidean-division-2" class="level1">
+<h1>Euclidean Division</h1>
+<ul>
+<li>Also called “division with remainder”.
+<ul>
+<li>Generally regarded as being applied to the integers, and works well for unsigned ints.</li>
+<li>Often termed <code>div</code>, <code>/</code>, <code>\</code>, and <code>%</code>, I used div for “bigdiv” since the others were taken.</li>
+</ul></li>
+<li>Named as a result of “Euclidean Algorithm”, which is used in cryptography!</li>
+</ul>
+</section>
+<section id="euclidean-division-3" class="level1">
+<h1>Euclidean Division</h1>
+<ul>
+<li>In Python:</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> div(x:<span class="bu">int</span>, y:<span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">int</span>, <span class="bu">int</span>]:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co"># Euclidean Division</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="cf">return</span> x <span class="op">//</span> y, x <span class="op">%</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>In Latex: <span class="math inline">\(\mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z} \times \mathbb{N}\)</span></li>
+</ul>
+</section>
+<section id="terminology" class="level1">
+<h1>Terminology</h1>
+<ul>
+<li>Dividend / Divisor = Quotient</li>
+<li>Dividend % Divisor = Remainder</li>
+<li>Dividend ~= Numerator</li>
+<li>Divisor ~= Denominator</li>
+<li>Quotient ~= Fraction ~= Ratio</li>
+<li>Remainder is modulo if dividend and divisor are naturals.</li>
+</ul>
+</section>
+<section id="equality" class="level1">
+<h1>Equality</h1>
+<ul>
+<li>Divisor <span class="math inline">\(\times\)</span> Quotient + Remainder = Dividend</li>
+</ul>
+</section>
+<section id="constraints" class="level1">
+<h1>Constraints</h1>
+<ul>
+<li>The remainder is restricted to the naturals, even for division over the integers.</li>
+<li>The remainder is restricted to be smaller than divisor - the thing by which we divide.</li>
+</ul>
+</section>
+<section id="constraints-1" class="level1">
+<h1>Constraints</h1>
+<ul>
+<li>The quotient is the number of largest number absolute by which the divisor may be multipled such the product is absolutely less than the divisend.</li>
+<li>The remainder is the smallest positive value such that the sum of the remainder and the product of the quotient and divisor is equal to the divisend.</li>
+</ul>
+</section>
+<section id="takeaways" class="level1">
+<h1>Takeaways</h1>
+<ul>
+<li>Remainders are small and positive (good).</li>
+<li>We get to keep using integers, and through some effort can stick to naturals.</li>
+<li>This is good if we want to work with unsigned integers.</li>
+</ul>
+</section>
+<section id="today-1" class="level1">
+<h1>Today</h1>
+<ul>
+<li>✓ Euclidean division</li>
+<li>Euclidean algorithm</li>
+<li>Extended Euclidean algorithm</li>
+<li>Bézout’s identity</li>
+</ul>
+</section>
+<section id="sidebar" class="level1">
+<h1>Sidebar</h1>
+<ul>
+<li>The Euclidean algorith is:
+<ul>
+<li>An algorithm with,</li>
+<li>Algorithm in the name</li>
+</ul></li>
+<li>We love to see it.</li>
+<li>Also called “Euclid’s Algorithm”
+<ul>
+<li>Greek scholar preserved by Islamic scholars</li>
+<li>Thank you محمد بن موسى خوارزمی</li>
+</ul></li>
+</ul>
+</section>
+<section id="goals" class="level1">
+<h1>Goals</h1>
+<ul>
+<li>Given two values, the Euclidean algorithm finds the greatest common denominator.</li>
+<li>Generally, it proceeds either iteratively or recursively.
+<ul>
+<li>It is an algorithm, not an implementation.</li>
+</ul></li>
+<li>Historically used to synthesize integer division from integer subtraction, now primary use in cryptography.</li>
+</ul>
+</section>
+<section id="example" class="level1">
+<h1>Example</h1>
+<ul>
+<li>Suppose we have</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>a, b <span class="op">=</span> <span class="dv">1071</span>, <span class="dv">462</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>We wish to find their <em>greatest common denominator</em></li>
+</ul>
+</section>
+<section id="initialize" class="level1">
+<h1>Initialize</h1>
+<ol type="1">
+<li>Take the larger value</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>x, y <span class="op">=</span> <span class="bu">max</span>(a,b), <span class="bu">min</span>(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="substract" class="level1">
+<h1>Substract</h1>
+<ol start="2" type="1">
+<li>Subtract the smaller value from the larger value until it is no longer larger.</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="cf">while</span> x <span class="op">&gt;=</span> y:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    x <span class="op">-=</span> y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="loop" class="level1">
+<h1>Loop</h1>
+<ol start="3" type="1">
+<li>Repeat…</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>x, y <span class="op">=</span> <span class="bu">max</span>(x,y), <span class="bu">min</span>(x,y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="terminate" class="level1">
+<h1>Terminate</h1>
+<ol start="4" type="1">
+<li>Stop when either x or y is zero</li>
+</ol>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>x, y <span class="op">=</span> x <span class="op">!=</span> <span class="dv">0</span> <span class="kw">and</span> y <span class="op">!=</span> <span class="dv">0</span> ? <span class="bu">max</span>(x,y), <span class="bu">min</span>(x,y) : exit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="iteratively" class="level1">
+<h1>Iteratively</h1>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># i am not about to try to spell "uelcidan lagorhtim"</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">def</span> ea(a:<span class="bu">int</span>, b:<span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>: </span>
+<span id="cb11-3"><a href="#cb11-3"></a>    <span class="cf">while</span> <span class="bu">min</span>(a,b) <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb11-4"><a href="#cb11-4"></a>        a, b <span class="op">=</span> <span class="bu">max</span>(a,b), <span class="bu">min</span>(a,b)</span>
+<span id="cb11-5"><a href="#cb11-5"></a>        <span class="cf">while</span> a <span class="op">&gt;=</span> b:</span>
+<span id="cb11-6"><a href="#cb11-6"></a>            a <span class="op">-=</span> b</span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="cf">return</span> <span class="bu">max</span>(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="modulo" class="level1">
+<h1>Modulo</h1>
+<ul>
+<li>Essential we calculate a modulo or remainder (depending)</li>
+<li>Then… do that again.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># i am not about to try to spell "udelcian altoghtn"</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="kw">def</span> ea(a:<span class="bu">int</span>, b:<span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>: </span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="cf">while</span> <span class="bu">min</span>(a,b) <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb12-4"><a href="#cb12-4"></a>        a, b <span class="op">=</span> <span class="bu">max</span>(a,b), <span class="bu">min</span>(a,b)</span>
+<span id="cb12-5"><a href="#cb12-5"></a>        a <span class="op">%=</span> b</span>
+<span id="cb12-6"><a href="#cb12-6"></a>    <span class="cf">return</span> <span class="bu">max</span>(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Recall - this <em>invented</em> division and modulo, so it can be done without assuming division and modulo.
+<ul>
+<li>We are using it to do <code>gcd</code>, and exist in a world with division and modulo.</li>
+</ul></li>
+</ul>
+</section>
+<section id="recursively" class="level1">
+<h1>Recursively</h1>
+<ul>
+<li>Easier for me to understand recursively, either with mod or without.
+<ul>
+<li>Here’s one mod implementation.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Have to make a lot of design decisions here, this is one variant</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>recmod <span class="op">=</span> <span class="kw">lambda</span> a, b: recmod (a <span class="op">-</span> b, b) <span class="cf">if</span> a <span class="op">-</span> b <span class="op">&gt;=</span> <span class="dv">0</span> <span class="cf">else</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="recursively-1" class="level1">
+<h1>Recursively</h1>
+<ul>
+<li>Easier for me to understand recursively, either with mod or without.
+<ul>
+<li>Here’s recursive EA</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Much easier if we assume argument order, of course</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>rec_ea <span class="op">=</span> <span class="kw">lambda</span> a, b : rec_ea(<span class="bu">max</span>(a,b) <span class="op">%</span> <span class="bu">min</span>(a,b), <span class="bu">min</span>(a,b)) <span class="cf">if</span> <span class="bu">min</span>(a,b) <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="bu">max</span>(a,b)</span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co"># I much prefer</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>helper <span class="op">=</span> <span class="kw">lambda</span> a, b : helper(b, a <span class="op">%</span> b) <span class="cf">if</span> b <span class="cf">else</span> a</span>
+<span id="cb14-6"><a href="#cb14-6"></a>rec_ea <span class="op">=</span> <span class="kw">lambda</span> a, b : helper(<span class="bu">max</span>(a,b), <span class="bu">min</span>(a,b))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="with-def" class="level1">
+<h1>With <code>def</code></h1>
+<ul>
+<li>We do not all love inlining, and that’s okay!</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">def</span> ea(a:<span class="bu">int</span>, b:<span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    a, b <span class="op">=</span> <span class="bu">max</span>(a,b), <span class="bu">min</span>(a,b)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="kw">def</span> inner(a, b):</span>
+<span id="cb15-4"><a href="#cb15-4"></a>        <span class="cf">if</span> b:</span>
+<span id="cb15-5"><a href="#cb15-5"></a>            <span class="cf">return</span> inner(b, a <span class="op">%</span> b)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>        <span class="cf">else</span>: </span>
+<span id="cb15-7"><a href="#cb15-7"></a>            <span class="cf">return</span> a</span>
+<span id="cb15-8"><a href="#cb15-8"></a>    <span class="cf">return</span> inner(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="simplest" class="level1">
+<h1>Simplest</h1>
+<ul>
+<li>We can remove type hints and just trust bigger first.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">def</span> ea(a, b):</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    <span class="cf">if</span> b:</span>
+<span id="cb16-3"><a href="#cb16-3"></a>        <span class="cf">return</span> ea(b, a <span class="op">%</span> b)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="cf">return</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="example-1" class="level1">
+<h1>Example</h1>
+<ul>
+<li><code>ea(1071, 462)</code></li>
+<li>I will use the following:</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">def</span> ea(a, b):</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="bu">print</span>(<span class="ss">f"a = </span><span class="sc">{</span>a<span class="sc">:4d}</span><span class="ss">, b = </span><span class="sc">{</span>b<span class="sc">:4d}</span><span class="ss">"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    <span class="cf">if</span> b:</span>
+<span id="cb17-4"><a href="#cb17-4"></a>        <span class="cf">return</span> ea(b, a <span class="op">%</span> b)</span>
+<span id="cb17-5"><a href="#cb17-5"></a>    <span class="cf">return</span> a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>We get:</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb18-1"><a href="#cb18-1"></a>a = 1071, b =  462</span>
+<span id="cb18-2"><a href="#cb18-2"></a>a =  462, b =  147</span>
+<span id="cb18-3"><a href="#cb18-3"></a>a =  147, b =   21</span>
+<span id="cb18-4"><a href="#cb18-4"></a>a =   21, b =    0</span>
+<span id="cb18-5"><a href="#cb18-5"></a>21</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="test-it" class="level1">
+<h1>Test it</h1>
+<ul>
+<li>Both are divisible by 21!</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1071</span><span class="op">/</span><span class="dv">21</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="fl">51.0</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">462</span><span class="op">/</span><span class="dv">21</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="fl">22.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="anyways" class="level1">
+<h1>Anyways</h1>
+<ul>
+<li>This is what GitHub Copilot did, I don’t know if we understood it at the time.</li>
+</ul>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">def</span> gcd(a, b):</span>
+<span id="cb20-2"><a href="#cb20-2"></a>    <span class="co">"""Calculate the Greatest Common Divisor of a and b."""</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a>    <span class="cf">while</span> b:</span>
+<span id="cb20-4"><a href="#cb20-4"></a>        a, b <span class="op">=</span> b, a <span class="op">%</span> b</span>
+<span id="cb20-5"><a href="#cb20-5"></a>    <span class="cf">return</span> a</span>
+<span id="cb20-6"><a href="#cb20-6"></a></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb20-8"><a href="#cb20-8"></a>    <span class="co">"""Calculate the Least Common Multiple of a and b."""</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> gcd(a, b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="section" class="level1">
+<h1></h1>
+<div class="columns">
+<div class="column" style="width:25%;">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Euclidean_algorithm_1071_462.gif" class="img-fluid"></p>
+</div><div class="column" style="width:75%;">
+<blockquote class="blockquote">
+<p>Subtraction-based animation of the Euclidean algorithm. The initial rectangle has dimensions a = 1071 and b = 462. Squares of size 462×462 are placed within it leaving a 462×147 rectangle. This rectangle is tiled with 147×147 squares until a 21×147 rectangle is left, which in turn is tiled with 21×21 squares, leaving no uncovered area. The smallest square size, 21, is the GCD of 1071 and 462.</p>
+</blockquote>
+</div>
+</div>
+</section>
+<section id="today-2" class="level1">
+<h1>Today</h1>
+<ul>
+<li>✓ Euclidean division</li>
+<li>✓ Euclidean algorithm</li>
+<li>Extended Euclidean algorithm</li>
+<li>Bézout’s identity</li>
+</ul>
+</section>
+<section id="reorder" class="level1">
+<h1>Reorder</h1>
+<ul>
+<li>✓ Euclidean division</li>
+<li>✓ Euclidean algorithm</li>
+<li>Bézout’s identity</li>
+<li>Extended Euclidean algorithm</li>
+</ul>
+</section>
+<section id="mmi-1" class="level1">
+<h1>MMI</h1>
+<ul>
+<li>Multiplicative Modular Inverse</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">def</span> find_d():</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb21-4"><a href="#cb21-4"></a>    d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="cf">return</span> d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This is bad!
+<ul>
+<li>This could be a loop over a 4096 bit integer!</li>
+</ul></li>
+</ul>
+</section>
+<section id="slow" class="level1">
+<h1>Slow</h1>
+<ul>
+<li>It could loop this many times.</li>
+</ul>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource python code-overflow-wrap number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">4096</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="dv">1044388881413152506691752710716624382579964249047383780384233483283953907971557456848826811934997558340890106714439262837987573438185793607263236087851365277945956976543709998340361590134383718314428070011855946226376318839397712745672334684344586617496807908705803704071284048740118609114467977783598029006686938976881787785946905630190260940599579453432823469303026696443059025015972399867714215541693835559885291486318237914434496734087811872639496475100189041349008417061675093668333850551032972088269550769983616369411933015213796825837188091833656751221318492846368125550225998300412344784862595674492194617023806505913245610825731835380087608622102834270197698202313169017678006675195485079921636419370285375124784014907159135459982790513399611551794271106831134090584272884279791554849782954323534517065223269061394905987693002122963395687782878948440616007412945674919823050571642377154816321380631045902916136926708342856440730447899971901781465763473223850267253059899795996090799469201774624817718449867455659250178329070473119433165550807568221846571746373296884912819520317457002440926616910874148385078411929804522981857338977648103126085903001302413467189726673216491511131602920781738033436090243804708340403154190336</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="we-note-1" class="level1">
+<h1>We note</h1>
+<ul>
+<li>In the Euclidean algorithm, we were tracking only remainders.
+<ul>
+<li>What if we also tracked quotients?</li>
+</ul></li>
+<li>We introduce normal expression “Bézout’s identity”
+<ul>
+<li>Named after a 1700s French scholar</li>
+<li>Of note: subordinate result to 300s Chinese scholarship</li>
+</ul></li>
+</ul>
+</section>
+<section id="bézouts-identity" class="level1">
+<h1>Bézout’s identity</h1>
+<p><span class="math display">\[
+\forall a, b \in \mathbb{Z} : \exists x, y \in \mathbb{Z} : a \times x + b \times y = \gcd(a,b)
+\]</span></p>
+<ul>
+<li>The linear combinations of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are exactly the multiples of <span class="math inline">\(\gcd(a,b)\)</span></li>
+</ul>
+</section>
+<section id="recall" class="level1">
+<h1>Recall</h1>
+<ul>
+<li>To get <span class="math inline">\((m^e)^d \equiv m \pmod{n}\)</span></li>
+<li>We needed some <span class="math inline">\(d\)</span> that was the:
+<ul>
+<li>Multiplicative inverse of <span class="math inline">\(e\)</span></li>
+<li>Mod the <em>totient</em>, the lcm of one less than each prime.</li>
+</ul></li>
+</ul>
+</section>
+<section id="goals-1" class="level1">
+<h1>Goals</h1>
+<ul>
+<li>So we need that <span class="math inline">\(e\)</span>, times something, equals 1.
+<ul>
+<li>That’s a linear combination!</li>
+<li><span class="math inline">\(e\)</span> and <span class="math inline">\(\lambda(n)\)</span> were coprime by construction.
+<ul>
+<li><em>So their gcd is <code>1</code></em></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\forall e, \lambda(n) \in \mathbb{Z} : \exists x, y \in \mathbb{Z} : e \times x + \lambda(n) \times y = 1
+\]</span></p>
+<ul>
+<li>And we are taking this <span class="math inline">\(\pmod{\lambda(n)}\)</span> so</li>
+</ul>
+</section>
+<section id="put-it-all-together" class="level1">
+<h1>Put it all together</h1>
+<p><span class="math display">\[
+\forall e, \lambda(n) \in \mathbb{Z} : \exists x \in \mathbb{Z} : e \times x \equiv 1 \pmod{\lambda(n)}
+\]</span></p>
+<ul>
+<li>And this can be calculated with a little thing I like to call the “Extended Euclidean Algorithm”.
+<ul>
+<li>Perhaps prefer “extended GCD algorithm” which I think the terminology will converge on, in time.</li>
+<li>But if you need to look it up, mention Euclid.</li>
+</ul></li>
+</ul>
+</section>
+<section id="reorder-1" class="level1">
+<h1>Reorder</h1>
+<ul>
+<li>✓ Euclidean division</li>
+<li>✓ Euclidean algorithm</li>
+<li>✓ Bézout’s identity</li>
+<li>Extended Euclidean algorithm</li>
+</ul>
+</section>
+<section id="mmi-2" class="level1">
+<h1>MMI</h1>
+<ul>
+<li>Multiplicative Modular Inverse</li>
+</ul>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">def</span> find_d():</span>
+<span id="cb23-2"><a href="#cb23-2"></a>  d <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="cf">while</span> <span class="dv">1</span> <span class="op">!=</span> (d <span class="op">*</span> e <span class="op">%</span> hide_λ()):</span>
+<span id="cb23-4"><a href="#cb23-4"></a>    d <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>  <span class="cf">return</span> d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This is bad!
+<ul>
+<li>This could be a loop over a 4096 bit integer!</li>
+</ul></li>
+</ul>
+</section>
+<section id="eea" class="level1">
+<h1>EEA</h1>
+<ul>
+<li>The EEA is akin to the EA but tracks quotients as well as remainders.
+<ul>
+<li>This dramatically increases overhead.</li>
+</ul></li>
+</ul>
+</section>
+<section id="ground-truth" class="level1">
+<h1>Ground truth</h1>
+<ul>
+<li>I regard the Wikipedia simplifed pseudocode as ground thrust for eea.
+<ul>
+<li>They call it <code>extended_gcd</code>, which I do like.</li>
+</ul></li>
+</ul>
+</section>
+<section id="section-1" class="level1">
+<h1></h1>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb24-1"><a href="#cb24-1"></a>function extended_gcd(a, b)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    s := 0;    old_s := 1</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    r := b;    old_r := a</span>
+<span id="cb24-4"><a href="#cb24-4"></a>         </span>
+<span id="cb24-5"><a href="#cb24-5"></a>    while r ≠ 0 do</span>
+<span id="cb24-6"><a href="#cb24-6"></a>        quotient := old_r div r</span>
+<span id="cb24-7"><a href="#cb24-7"></a>        (old_r, r) := (r, old_r − quotient × r)</span>
+<span id="cb24-8"><a href="#cb24-8"></a>        (old_s, s) := (s, old_s − quotient × s)</span>
+<span id="cb24-9"><a href="#cb24-9"></a>    </span>
+<span id="cb24-10"><a href="#cb24-10"></a>    if b ≠ 0 then</span>
+<span id="cb24-11"><a href="#cb24-11"></a>        bezout_t := (old_r − old_s × a) div b</span>
+<span id="cb24-12"><a href="#cb24-12"></a>    else</span>
+<span id="cb24-13"><a href="#cb24-13"></a>        bezout_t := 0</span>
+<span id="cb24-14"><a href="#cb24-14"></a>    </span>
+<span id="cb24-15"><a href="#cb24-15"></a>    output "Bézout coefficients:", (old_s, bezout_t)</span>
+<span id="cb24-16"><a href="#cb24-16"></a>    output "greatest common divisor:", old_r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="x-and-y" class="level1">
+<h1><span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></h1>
+<ul>
+<li>We don’t need this:</li>
+</ul>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb25-1"><a href="#cb25-1"></a>    if b ≠ 0 then</span>
+<span id="cb25-2"><a href="#cb25-2"></a>        bezout_t := (old_r − old_s × a) div b</span>
+<span id="cb25-3"><a href="#cb25-3"></a>    else</span>
+<span id="cb25-4"><a href="#cb25-4"></a>        bezout_t := 0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>In Bézout’s identity: <span class="math display">\[
+\forall a, b \in \mathbb{Z} : \exists x, y \in \mathbb{Z} : a \times x + b \times y = \gcd(a,b)
+\]</span></li>
+<li>We need only <span class="math inline">\(x\)</span>, not <span class="math inline">\(y\)</span>.</li>
+</ul>
+</section>
+<section id="section-2" class="level1">
+<h1></h1>
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb26-1"><a href="#cb26-1"></a>function extended_gcd(a, b)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>    s := 0;    old_s := 1</span>
+<span id="cb26-3"><a href="#cb26-3"></a>    r := b;    old_r := a</span>
+<span id="cb26-4"><a href="#cb26-4"></a>         </span>
+<span id="cb26-5"><a href="#cb26-5"></a>    while r ≠ 0 do</span>
+<span id="cb26-6"><a href="#cb26-6"></a>        quotient := old_r div r</span>
+<span id="cb26-7"><a href="#cb26-7"></a>        (old_r, r) := (r, old_r − quotient × r)</span>
+<span id="cb26-8"><a href="#cb26-8"></a>        (old_s, s) := (s, old_s − quotient × s)</span>
+<span id="cb26-9"><a href="#cb26-9"></a>    </span>
+<span id="cb26-10"><a href="#cb26-10"></a>    output "Bézout coefficient:", old_s</span>
+<span id="cb26-11"><a href="#cb26-11"></a>    output "greatest common divisor:", old_r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="modulo-1" class="level1">
+<h1>Modulo</h1>
+<ul>
+<li>This implementation does not calculate modulo</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb27-1"><a href="#cb27-1"></a>quotient := old_r div r</span>
+<span id="cb27-2"><a href="#cb27-2"></a>(old_r, r) := (r, old_r − quotient × r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>That is equal to</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb28-1"><a href="#cb28-1"></a>quotient := old_r div r</span>
+<span id="cb28-2"><a href="#cb28-2"></a>(old_r, r) := (r, old_r mod quotient)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="section-3" class="level1">
+<h1></h1>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb29-1"><a href="#cb29-1"></a>function extended_gcd(a, b)</span>
+<span id="cb29-2"><a href="#cb29-2"></a>    s := 0;    old_s := 1</span>
+<span id="cb29-3"><a href="#cb29-3"></a>    r := b;    old_r := a</span>
+<span id="cb29-4"><a href="#cb29-4"></a>         </span>
+<span id="cb29-5"><a href="#cb29-5"></a>    while r ≠ 0 do</span>
+<span id="cb29-6"><a href="#cb29-6"></a>        quotient := old_r div r</span>
+<span id="cb29-7"><a href="#cb29-7"></a>        (old_r, r) := (r, old_r mod quotient)</span>
+<span id="cb29-8"><a href="#cb29-8"></a>        (old_s, s) := (s, old_s mod quotient)</span>
+<span id="cb29-9"><a href="#cb29-9"></a>    </span>
+<span id="cb29-10"><a href="#cb29-10"></a>    output "Bézout coefficient:", old_s</span>
+<span id="cb29-11"><a href="#cb29-11"></a>    output "greatest common divisor:", old_r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="recursion" class="level1">
+<h1>Recursion</h1>
+<ul>
+<li>The usage of “old s” and “old r” a holdovers from a conversion from recursion to iteration.
+<ul>
+<li>Recall the <code>gcd</code> is calculable by any implementation</li>
+<li>As is the algorithm</li>
+</ul></li>
+</ul>
+</section>
+<section id="we-can-recurse" class="level1">
+<h1>We can recurse</h1>
+<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource email number-lines code-with-copy"><code class="sourceCode email"><span id="cb30-1"><a href="#cb30-1"></a>function extended_gcd(a, b)</span>
+<span id="cb30-2"><a href="#cb30-2"></a>    if b is 0 do</span>
+<span id="cb30-3"><a href="#cb30-3"></a>        output a, 1, 0</span>
+<span id="cb30-4"><a href="#cb30-4"></a>        </span>
+<span id="cb30-5"><a href="#cb30-5"></a>    r, s, t := extended_gcd(b, a mod b)</span>
+<span id="cb30-6"><a href="#cb30-6"></a>    </span>
+<span id="cb30-7"><a href="#cb30-7"></a>    output r, t, s - (a div b) × t</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="to-python" class="level1">
+<h1>To Python</h1>
+<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">def</span> extended_gcd(a, b):</span>
+<span id="cb31-2"><a href="#cb31-2"></a>    <span class="cf">if</span> b <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb31-3"><a href="#cb31-3"></a>        <span class="cf">return</span> a, <span class="dv">1</span>, <span class="dv">0</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a>    r, s, t <span class="op">=</span> extended_gcd(b, a <span class="op">%</span> b)</span>
+<span id="cb31-5"><a href="#cb31-5"></a>    <span class="cf">return</span> r, t, s <span class="op">-</span> (a <span class="op">//</span> b) <span class="op">*</span> t <span class="co"># no graceful mod here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="example-2" class="level1">
+<h1>Example</h1>
+<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="op">&gt;&gt;&gt;</span> extended_gcd(<span class="dv">1071</span>, <span class="dv">462</span>)</span>
+<span id="cb32-2"><a href="#cb32-2"></a>(<span class="dv">21</span>, <span class="op">-</span><span class="dv">3</span>, <span class="dv">7</span>)</span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1071</span> <span class="op">*</span> <span class="op">-</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">462</span> <span class="op">*</span> <span class="dv">7</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="dv">21</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="wait-a-minute" class="level1">
+<h1>Wait a minute!</h1>
+<ul>
+<li>Negatives are <em>a problem</em></li>
+<li>We deal with this modwise</li>
+<li>Just add the modular base.</li>
+</ul>
+</section>
+<section id="in-practice" class="level1">
+<h1>In Practice</h1>
+<ul>
+<li>The modular base is the totient.</li>
+<li>That is also the <code>b</code> value we use in the eea.</li>
+</ul>
+<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">def</span> find_d():</span>
+<span id="cb33-2"><a href="#cb33-2"></a>    start <span class="op">=</span> extended_gcd(e,hide_λ())[<span class="dv">1</span>]</span>
+<span id="cb33-3"><a href="#cb33-3"></a>    <span class="cf">while</span> start <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb33-4"><a href="#cb33-4"></a>        start <span class="op">+=</span> hide_λ()</span>
+<span id="cb33-5"><a href="#cb33-5"></a>    <span class="cf">return</span> start</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="reorder-2" class="level1">
+<h1>Reorder</h1>
+<ul>
+<li>✓ Euclidean division</li>
+<li>✓ Euclidean algorithm</li>
+<li>✓ Bézout’s identity</li>
+<li>✓ Extended Euclidean algorithm</li>
+</ul>
+</section>
+<section id="closing" class="level1">
+<h1>Closing</h1>
+<ul>
+<li>You have have noticed <code>bigmul</code> &amp; co cannot be used as infix operators.</li>
+</ul>
+<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>r <span class="op">=</span> m <span class="op">%</span> n <span class="co"># this is a little mul</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a>bigmul(m, n, r) <span class="co"># this is the format of a big mul - not possible in Py</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>You will need to:
+<ul>
+<li>Track the sign of values</li>
+<li>Use big operations.</li>
+</ul></li>
+<li>Start thinking about it now!</li>
+</ul>
+</section>
+<section id="all" class="level1">
+<h1>All</h1>
+<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb35-2"><a href="#cb35-2"></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">any</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb35-3"><a href="#cb35-3"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb35-6"><a href="#cb35-6"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a>    <span class="cf">return</span> candidate</span>
+<span id="cb35-8"><a href="#cb35-8"></a></span>
+<span id="cb35-9"><a href="#cb35-9"></a><span class="kw">def</span> extended_gcd(a, b):</span>
+<span id="cb35-10"><a href="#cb35-10"></a>    <span class="cf">if</span> b <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb35-11"><a href="#cb35-11"></a>        <span class="cf">return</span> a, <span class="dv">1</span>, <span class="dv">0</span></span>
+<span id="cb35-12"><a href="#cb35-12"></a>    r, s, t <span class="op">=</span> extended_gcd(b, a <span class="op">%</span> b)</span>
+<span id="cb35-13"><a href="#cb35-13"></a>    <span class="cf">return</span> r, t, s <span class="op">-</span> (a <span class="op">//</span> b) <span class="op">*</span> t <span class="co"># no graceful mod here</span></span>
+<span id="cb35-14"><a href="#cb35-14"></a></span>
+<span id="cb35-15"><a href="#cb35-15"></a></span>
+<span id="cb35-16"><a href="#cb35-16"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb35-17"><a href="#cb35-17"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> extended_gcd(a,b)[<span class="dv">0</span>]</span>
+<span id="cb35-18"><a href="#cb35-18"></a></span>
+<span id="cb35-19"><a href="#cb35-19"></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span>
+<span id="cb35-20"><a href="#cb35-20"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb35-21"><a href="#cb35-21"></a></span>
+<span id="cb35-22"><a href="#cb35-22"></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">6</span>)</span>
+<span id="cb35-23"><a href="#cb35-23"></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">7</span>)</span>
+<span id="cb35-24"><a href="#cb35-24"></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb35-25"><a href="#cb35-25"></a></span>
+<span id="cb35-26"><a href="#cb35-26"></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb35-27"><a href="#cb35-27"></a></span>
+<span id="cb35-28"><a href="#cb35-28"></a>e <span class="op">=</span> <span class="dv">65537</span> <span class="co"># encryptor</span></span>
+<span id="cb35-29"><a href="#cb35-29"></a></span>
+<span id="cb35-30"><a href="#cb35-30"></a><span class="kw">def</span> find_d():</span>
+<span id="cb35-31"><a href="#cb35-31"></a>    start <span class="op">=</span> extended_gcd(e,hide_λ())[<span class="dv">1</span>]</span>
+<span id="cb35-32"><a href="#cb35-32"></a>    <span class="cf">while</span> start <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb35-33"><a href="#cb35-33"></a>        start <span class="op">+=</span> hide_λ()</span>
+<span id="cb35-34"><a href="#cb35-34"></a>    <span class="cf">return</span> start</span>
+<span id="cb35-35"><a href="#cb35-35"></a></span>
+<span id="cb35-36"><a href="#cb35-36"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb35-37"><a href="#cb35-37"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb35-38"><a href="#cb35-38"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb35-39"><a href="#cb35-39"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb35-40"><a href="#cb35-40"></a>        <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb35-41"><a href="#cb35-41"></a>    <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb35-42"><a href="#cb35-42"></a>        <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb35-43"><a href="#cb35-43"></a>    <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb35-44"><a href="#cb35-44"></a></span>
+<span id="cb35-45"><a href="#cb35-45"></a>c <span class="op">=</span> modexp(m, e, n) <span class="co"># ciphertext</span></span>
+<span id="cb35-46"><a href="#cb35-46"></a></span>
+<span id="cb35-47"><a href="#cb35-47"></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb35-48"><a href="#cb35-48"></a></span>
+<span id="cb35-49"><a href="#cb35-49"></a><span class="bu">print</span>(<span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./enigma.html" class="pagination-link" aria-label="Enigma">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Enigma</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./fermat.html" class="pagination-link" aria-label="Fermat">
+        <span class="nav-page-text">Fermat</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1"></a><span class="co">---</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="an">title:</span><span class="co"> Euclid</span></span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="an">subtitle:</span><span class="co"> "Week 0x3.3"</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="an">execute:</span></span>
+<span id="cb36-6"><a href="#cb36-6"></a><span class="co">    echo: true</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a><span class="co">    cache: true</span></span>
+<span id="cb36-8"><a href="#cb36-8"></a><span class="co">    freeze: true  # never re-render during project render</span></span>
+<span id="cb36-9"><a href="#cb36-9"></a><span class="co">    code-fold: false</span></span>
+<span id="cb36-10"><a href="#cb36-10"></a><span class="co">---</span></span>
+<span id="cb36-11"><a href="#cb36-11"></a></span>
+<span id="cb36-12"><a href="#cb36-12"></a><span class="fu"># Announcements</span></span>
+<span id="cb36-13"><a href="#cb36-13"></a></span>
+<span id="cb36-14"><a href="#cb36-14"></a><span class="ss">- </span>**Welcome** to Computing Security</span>
+<span id="cb36-15"><a href="#cb36-15"></a><span class="ss">  - </span>We introduce an algorithm that makes key generation viable.</span>
+<span id="cb36-16"><a href="#cb36-16"></a><span class="ss">- </span>**Action Items**:</span>
+<span id="cb36-17"><a href="#cb36-17"></a><span class="ss">  - </span>BigRSA ongoing.</span>
+<span id="cb36-18"><a href="#cb36-18"></a>  </span>
+<span id="cb36-19"><a href="#cb36-19"></a><span class="fu"># Today</span></span>
+<span id="cb36-20"><a href="#cb36-20"></a><span class="ss">- </span>Euclidean division</span>
+<span id="cb36-21"><a href="#cb36-21"></a><span class="ss">- </span>Euclidean algorithm</span>
+<span id="cb36-22"><a href="#cb36-22"></a><span class="ss">- </span>Extended Euclidean algorithm</span>
+<span id="cb36-23"><a href="#cb36-23"></a><span class="ss">- </span>Bézout's identity</span>
+<span id="cb36-24"><a href="#cb36-24"></a></span>
+<span id="cb36-25"><a href="#cb36-25"></a><span class="fu"># Review</span></span>
+<span id="cb36-26"><a href="#cb36-26"></a></span>
+<span id="cb36-27"><a href="#cb36-27"></a><span class="fu"># 3. $\lambda(n)$</span></span>
+<span id="cb36-28"><a href="#cb36-28"></a></span>
+<span id="cb36-29"><a href="#cb36-29"></a><span class="ss">- </span>This one is kept secret by the way.</span>
+<span id="cb36-30"><a href="#cb36-30"></a><span class="ss">- </span>It so happens:</span>
+<span id="cb36-31"><a href="#cb36-31"></a>$$</span>
+<span id="cb36-32"><a href="#cb36-32"></a>\forall p,q \in \mathbb{P} : \lambda(pq) = \text{lcm}(p-1, q-1)</span>
+<span id="cb36-33"><a href="#cb36-33"></a>$$</span>
+<span id="cb36-34"><a href="#cb36-34"></a><span class="ss">- </span>There's fast ways to this, but anything goes this week.</span>
+<span id="cb36-35"><a href="#cb36-35"></a></span>
+<span id="cb36-36"><a href="#cb36-36"></a><span class="fu"># LCM</span></span>
+<span id="cb36-37"><a href="#cb36-37"></a></span>
+<span id="cb36-38"><a href="#cb36-38"></a><span class="ss">- </span>Least common multiple</span>
+<span id="cb36-39"><a href="#cb36-39"></a></span>
+<span id="cb36-40"><a href="#cb36-40"></a><span class="in">```{.python}</span></span>
+<span id="cb36-41"><a href="#cb36-41"></a><span class="in">def gcd(a, b):</span></span>
+<span id="cb36-42"><a href="#cb36-42"></a><span class="in">    """Calculate the Greatest Common Divisor of a and b."""</span></span>
+<span id="cb36-43"><a href="#cb36-43"></a><span class="in">    while b:</span></span>
+<span id="cb36-44"><a href="#cb36-44"></a><span class="in">        a, b = b, a % b</span></span>
+<span id="cb36-45"><a href="#cb36-45"></a><span class="in">    return a</span></span>
+<span id="cb36-46"><a href="#cb36-46"></a></span>
+<span id="cb36-47"><a href="#cb36-47"></a><span class="in">def lcm(a, b):</span></span>
+<span id="cb36-48"><a href="#cb36-48"></a><span class="in">    """Calculate the Least Common Multiple of a and b."""</span></span>
+<span id="cb36-49"><a href="#cb36-49"></a><span class="in">    return a * b // gcd(a, b)</span></span>
+<span id="cb36-50"><a href="#cb36-50"></a><span class="in">```</span></span>
+<span id="cb36-51"><a href="#cb36-51"></a></span>
+<span id="cb36-52"><a href="#cb36-52"></a><span class="fu"># MMI</span></span>
+<span id="cb36-53"><a href="#cb36-53"></a></span>
+<span id="cb36-54"><a href="#cb36-54"></a><span class="ss">- </span>Multiplicative Modular Inverse</span>
+<span id="cb36-55"><a href="#cb36-55"></a></span>
+<span id="cb36-56"><a href="#cb36-56"></a><span class="in">```{.python}</span></span>
+<span id="cb36-57"><a href="#cb36-57"></a><span class="in">def find_d():</span></span>
+<span id="cb36-58"><a href="#cb36-58"></a><span class="in">  d = 1</span></span>
+<span id="cb36-59"><a href="#cb36-59"></a><span class="in">  while 1 != (d * e % hide_λ()):</span></span>
+<span id="cb36-60"><a href="#cb36-60"></a><span class="in">    d += 1</span></span>
+<span id="cb36-61"><a href="#cb36-61"></a><span class="in">  return d</span></span>
+<span id="cb36-62"><a href="#cb36-62"></a><span class="in">```</span></span>
+<span id="cb36-63"><a href="#cb36-63"></a></span>
+<span id="cb36-64"><a href="#cb36-64"></a><span class="fu"># ModExp</span></span>
+<span id="cb36-65"><a href="#cb36-65"></a></span>
+<span id="cb36-66"><a href="#cb36-66"></a><span class="ss">- </span>Exponentation modulo $n$.</span>
+<span id="cb36-67"><a href="#cb36-67"></a></span>
+<span id="cb36-68"><a href="#cb36-68"></a><span class="in">```{.python}</span></span>
+<span id="cb36-69"><a href="#cb36-69"></a><span class="in">def modexp(m, e, n):</span></span>
+<span id="cb36-70"><a href="#cb36-70"></a><span class="in">  if e == 0:</span></span>
+<span id="cb36-71"><a href="#cb36-71"></a><span class="in">      return 1</span></span>
+<span id="cb36-72"><a href="#cb36-72"></a><span class="in">  if e == 1:</span></span>
+<span id="cb36-73"><a href="#cb36-73"></a><span class="in">      return m % n</span></span>
+<span id="cb36-74"><a href="#cb36-74"></a><span class="in">  if e % 2:</span></span>
+<span id="cb36-75"><a href="#cb36-75"></a><span class="in">      return (m * modexp(m*m % n, e//2, n)) % n</span></span>
+<span id="cb36-76"><a href="#cb36-76"></a><span class="in">  return  modexp(m*m % n, e//2, n) % n</span></span>
+<span id="cb36-77"><a href="#cb36-77"></a><span class="in">```</span></span>
+<span id="cb36-78"><a href="#cb36-78"></a></span>
+<span id="cb36-79"><a href="#cb36-79"></a><span class="fu"># Context</span></span>
+<span id="cb36-80"><a href="#cb36-80"></a><span class="ss">- </span>Each of these operations are dealing with, fundamentally, the same problem.</span>
+<span id="cb36-81"><a href="#cb36-81"></a><span class="ss">- </span>We have big numbers we want to work with but,</span>
+<span id="cb36-82"><a href="#cb36-82"></a><span class="ss">- </span>None are bigger than $n$, and</span>
+<span id="cb36-83"><a href="#cb36-83"></a><span class="ss">- </span>The bigger the number, the harder the work.</span>
+<span id="cb36-84"><a href="#cb36-84"></a></span>
+<span id="cb36-85"><a href="#cb36-85"></a><span class="fu"># Euclidean Division</span></span>
+<span id="cb36-86"><a href="#cb36-86"></a></span>
+<span id="cb36-87"><a href="#cb36-87"></a><span class="ss">- </span>Division as implemented by "bigdiv":</span>
+<span id="cb36-88"><a href="#cb36-88"></a></span>
+<span id="cb36-89"><a href="#cb36-89"></a><span class="in">```{.C}</span></span>
+<span id="cb36-90"><a href="#cb36-90"></a><span class="in">uint64_t bigdiv(uint64_t *num, uint64_t *den, uint64_t *quo, uint64_t *rem) {</span></span>
+<span id="cb36-91"><a href="#cb36-91"></a><span class="in">    return 0;</span></span>
+<span id="cb36-92"><a href="#cb36-92"></a><span class="in">}</span></span>
+<span id="cb36-93"><a href="#cb36-93"></a></span>
+<span id="cb36-94"><a href="#cb36-94"></a><span class="in">uint64_t bigquo(uint64_t *num, uint64_t *den, uint64_t *quo) {</span></span>
+<span id="cb36-95"><a href="#cb36-95"></a><span class="in">    uint64_t rem[S];</span></span>
+<span id="cb36-96"><a href="#cb36-96"></a><span class="in">    bigdiv(num,den,quo,rem);</span></span>
+<span id="cb36-97"><a href="#cb36-97"></a><span class="in">    return 0;</span></span>
+<span id="cb36-98"><a href="#cb36-98"></a><span class="in">}</span></span>
+<span id="cb36-99"><a href="#cb36-99"></a></span>
+<span id="cb36-100"><a href="#cb36-100"></a><span class="in">uint64_t bigrem(uint64_t *num, uint64_t *den, uint64_t *rem) {</span></span>
+<span id="cb36-101"><a href="#cb36-101"></a><span class="in">    uint64_t quo[S];</span></span>
+<span id="cb36-102"><a href="#cb36-102"></a><span class="in">    bigdiv(num,den,quo,rem);</span></span>
+<span id="cb36-103"><a href="#cb36-103"></a><span class="in">    return 0;</span></span>
+<span id="cb36-104"><a href="#cb36-104"></a><span class="in">}</span></span>
+<span id="cb36-105"><a href="#cb36-105"></a><span class="in">```</span></span>
+<span id="cb36-106"><a href="#cb36-106"></a></span>
+<span id="cb36-107"><a href="#cb36-107"></a><span class="fu"># Naive Division</span></span>
+<span id="cb36-108"><a href="#cb36-108"></a></span>
+<span id="cb36-109"><a href="#cb36-109"></a><span class="ss">- </span>Entry-level categorization, term it "naive"</span>
+<span id="cb36-110"><a href="#cb36-110"></a><span class="ss">    - </span>often over $\mathbb{Q}$ or $\mathbb{R}$</span>
+<span id="cb36-111"><a href="#cb36-111"></a><span class="ss">    - </span><span class="in">`quotient:float = division(dividided:int|float,divisor:int|float)`</span></span>
+<span id="cb36-112"><a href="#cb36-112"></a><span class="ss">    - </span>In Python $\mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Q}$</span>
+<span id="cb36-113"><a href="#cb36-113"></a><span class="ss">    - </span>Python <span class="in">`/`</span> for all values, C <span class="in">`/`</span> for float types.</span>
+<span id="cb36-114"><a href="#cb36-114"></a>    </span>
+<span id="cb36-115"><a href="#cb36-115"></a><span class="fu"># Integer Division</span></span>
+<span id="cb36-116"><a href="#cb36-116"></a></span>
+<span id="cb36-117"><a href="#cb36-117"></a><span class="ss">- </span>Integer division - often over $\mathbb{N}$ or $\mathbb{Z}$</span>
+<span id="cb36-118"><a href="#cb36-118"></a><span class="ss">    - </span><span class="in">`quotient:int = division(dividided:int,divisor:int)`</span></span>
+<span id="cb36-119"><a href="#cb36-119"></a><span class="ss">    - </span>Python <span class="in">`//`</span> for int types, C <span class="in">`/`</span> for int types.</span>
+<span id="cb36-120"><a href="#cb36-120"></a>    </span>
+<span id="cb36-121"><a href="#cb36-121"></a><span class="fu"># We note</span></span>
+<span id="cb36-122"><a href="#cb36-122"></a></span>
+<span id="cb36-123"><a href="#cb36-123"></a><span class="ss">- </span>Many sets of numbers are not closed under division</span>
+<span id="cb36-124"><a href="#cb36-124"></a><span class="ss">    - </span>$\exists x,y \in \mathbb{N} : x/y \not\in \mathbb{N}$</span>
+<span id="cb36-125"><a href="#cb36-125"></a><span class="ss">- </span>These sets are closed under integer division but then lack multiplicative inverses.</span>
+<span id="cb36-126"><a href="#cb36-126"></a><span class="ss">    - </span>$\exists n \in \mathbb{N} : \nexists m \in \mathbb{N} : n \times m \in \mathbb{N}$</span>
+<span id="cb36-127"><a href="#cb36-127"></a><span class="ss">- </span>These are all bad!</span>
+<span id="cb36-128"><a href="#cb36-128"></a></span>
+<span id="cb36-129"><a href="#cb36-129"></a><span class="fu"># Euclidean Division</span></span>
+<span id="cb36-130"><a href="#cb36-130"></a></span>
+<span id="cb36-131"><a href="#cb36-131"></a><span class="ss">- </span>Euclidean division solves this problem by *changing the type of the function*</span>
+<span id="cb36-132"><a href="#cb36-132"></a><span class="ss">    - </span>**NOT** by changing the types of the operands (inputs, divisor, divisend, numerator, denominator)</span>
+<span id="cb36-133"><a href="#cb36-133"></a><span class="ss">    - </span>**YES** by changing the *number of return values*</span>
+<span id="cb36-134"><a href="#cb36-134"></a><span class="ss">- </span>We will simply have two return values.</span>
+<span id="cb36-135"><a href="#cb36-135"></a><span class="ss">    - </span>We recall this impossible in C (loud cheers)</span>
+<span id="cb36-136"><a href="#cb36-136"></a>    </span>
+<span id="cb36-137"><a href="#cb36-137"></a><span class="fu"># Euclidean Division</span></span>
+<span id="cb36-138"><a href="#cb36-138"></a></span>
+<span id="cb36-139"><a href="#cb36-139"></a><span class="ss">- </span>Also called "division with remainder".</span>
+<span id="cb36-140"><a href="#cb36-140"></a><span class="ss">    - </span>Generally regarded as being applied to the integers, and works well for unsigned ints.</span>
+<span id="cb36-141"><a href="#cb36-141"></a><span class="ss">    - </span>Often termed <span class="in">`div`</span>, <span class="in">`/`</span>, <span class="in">`\`</span>, and <span class="in">`%`</span>, I used div for "bigdiv" since the others were taken.</span>
+<span id="cb36-142"><a href="#cb36-142"></a><span class="ss">- </span>Named as a result of "Euclidean Algorithm", which is used in cryptography!</span>
+<span id="cb36-143"><a href="#cb36-143"></a></span>
+<span id="cb36-144"><a href="#cb36-144"></a><span class="fu"># Euclidean Division</span></span>
+<span id="cb36-145"><a href="#cb36-145"></a></span>
+<span id="cb36-146"><a href="#cb36-146"></a><span class="ss">- </span>In Python:</span>
+<span id="cb36-147"><a href="#cb36-147"></a></span>
+<span id="cb36-148"><a href="#cb36-148"></a><span class="in">```{.python}</span></span>
+<span id="cb36-149"><a href="#cb36-149"></a><span class="in">def div(x:int, y:int) -&gt; tuple[int, int]:</span></span>
+<span id="cb36-150"><a href="#cb36-150"></a><span class="in">    # Euclidean Division</span></span>
+<span id="cb36-151"><a href="#cb36-151"></a><span class="in">    return x // y, x % y</span></span>
+<span id="cb36-152"><a href="#cb36-152"></a><span class="in">```</span></span>
+<span id="cb36-153"><a href="#cb36-153"></a></span>
+<span id="cb36-154"><a href="#cb36-154"></a><span class="ss">- </span>In Latex: $\mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z} \times \mathbb{N}$</span>
+<span id="cb36-155"><a href="#cb36-155"></a></span>
+<span id="cb36-156"><a href="#cb36-156"></a><span class="fu"># Terminology</span></span>
+<span id="cb36-157"><a href="#cb36-157"></a></span>
+<span id="cb36-158"><a href="#cb36-158"></a><span class="ss">- </span>Dividend / Divisor = Quotient</span>
+<span id="cb36-159"><a href="#cb36-159"></a><span class="ss">- </span>Dividend % Divisor = Remainder</span>
+<span id="cb36-160"><a href="#cb36-160"></a><span class="ss">- </span>Dividend ~= Numerator</span>
+<span id="cb36-161"><a href="#cb36-161"></a><span class="ss">- </span>Divisor ~= Denominator</span>
+<span id="cb36-162"><a href="#cb36-162"></a><span class="ss">- </span>Quotient ~= Fraction ~= Ratio</span>
+<span id="cb36-163"><a href="#cb36-163"></a><span class="ss">- </span>Remainder is modulo if dividend and divisor are naturals.</span>
+<span id="cb36-164"><a href="#cb36-164"></a></span>
+<span id="cb36-165"><a href="#cb36-165"></a><span class="fu"># Equality</span></span>
+<span id="cb36-166"><a href="#cb36-166"></a></span>
+<span id="cb36-167"><a href="#cb36-167"></a><span class="ss">- </span>Divisor $\times$ Quotient + Remainder = Dividend</span>
+<span id="cb36-168"><a href="#cb36-168"></a></span>
+<span id="cb36-169"><a href="#cb36-169"></a><span class="fu"># Constraints</span></span>
+<span id="cb36-170"><a href="#cb36-170"></a></span>
+<span id="cb36-171"><a href="#cb36-171"></a><span class="ss">- </span>The remainder is restricted to the naturals, even for division over the integers.</span>
+<span id="cb36-172"><a href="#cb36-172"></a><span class="ss">- </span>The remainder is restricted to be smaller than divisor - the thing by which we divide.</span>
+<span id="cb36-173"><a href="#cb36-173"></a></span>
+<span id="cb36-174"><a href="#cb36-174"></a><span class="fu"># Constraints</span></span>
+<span id="cb36-175"><a href="#cb36-175"></a></span>
+<span id="cb36-176"><a href="#cb36-176"></a><span class="ss">- </span>The quotient is the number of largest number absolute by which the divisor may be multipled such the product is absolutely less than the divisend.</span>
+<span id="cb36-177"><a href="#cb36-177"></a><span class="ss">- </span>The remainder is the smallest positive value such that the sum of the remainder and the product of the quotient and divisor is equal to the divisend.</span>
+<span id="cb36-178"><a href="#cb36-178"></a></span>
+<span id="cb36-179"><a href="#cb36-179"></a><span class="fu"># Takeaways</span></span>
+<span id="cb36-180"><a href="#cb36-180"></a></span>
+<span id="cb36-181"><a href="#cb36-181"></a><span class="ss">- </span>Remainders are small and positive (good).</span>
+<span id="cb36-182"><a href="#cb36-182"></a><span class="ss">- </span>We get to keep using integers, and through some effort can stick to naturals.</span>
+<span id="cb36-183"><a href="#cb36-183"></a><span class="ss">- </span>This is good if we want to work with unsigned integers.</span>
+<span id="cb36-184"><a href="#cb36-184"></a></span>
+<span id="cb36-185"><a href="#cb36-185"></a><span class="fu"># Today</span></span>
+<span id="cb36-186"><a href="#cb36-186"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean division</span>
+<span id="cb36-187"><a href="#cb36-187"></a><span class="ss">- </span>Euclidean algorithm</span>
+<span id="cb36-188"><a href="#cb36-188"></a><span class="ss">- </span>Extended Euclidean algorithm</span>
+<span id="cb36-189"><a href="#cb36-189"></a><span class="ss">- </span>Bézout's identity</span>
+<span id="cb36-190"><a href="#cb36-190"></a></span>
+<span id="cb36-191"><a href="#cb36-191"></a><span class="fu"># Sidebar</span></span>
+<span id="cb36-192"><a href="#cb36-192"></a></span>
+<span id="cb36-193"><a href="#cb36-193"></a><span class="ss">- </span>The Euclidean algorith is:</span>
+<span id="cb36-194"><a href="#cb36-194"></a><span class="ss">    - </span>An algorithm with,</span>
+<span id="cb36-195"><a href="#cb36-195"></a><span class="ss">    - </span>Algorithm in the name</span>
+<span id="cb36-196"><a href="#cb36-196"></a><span class="ss">- </span>We love to see it.</span>
+<span id="cb36-197"><a href="#cb36-197"></a><span class="ss">- </span>Also called "Euclid's Algorithm"</span>
+<span id="cb36-198"><a href="#cb36-198"></a><span class="ss">    - </span>Greek scholar preserved by Islamic scholars</span>
+<span id="cb36-199"><a href="#cb36-199"></a><span class="ss">    - </span>Thank you محمد بن موسى خوارزمی</span>
+<span id="cb36-200"><a href="#cb36-200"></a></span>
+<span id="cb36-201"><a href="#cb36-201"></a><span class="fu"># Goals</span></span>
+<span id="cb36-202"><a href="#cb36-202"></a></span>
+<span id="cb36-203"><a href="#cb36-203"></a><span class="ss">- </span>Given two values, the Euclidean algorithm finds the greatest common denominator.</span>
+<span id="cb36-204"><a href="#cb36-204"></a><span class="ss">- </span>Generally, it proceeds either iteratively or recursively.</span>
+<span id="cb36-205"><a href="#cb36-205"></a><span class="ss">    - </span>It is an algorithm, not an implementation.</span>
+<span id="cb36-206"><a href="#cb36-206"></a><span class="ss">- </span>Historically used to synthesize integer division from integer subtraction, now primary use in cryptography.</span>
+<span id="cb36-207"><a href="#cb36-207"></a></span>
+<span id="cb36-208"><a href="#cb36-208"></a></span>
+<span id="cb36-209"><a href="#cb36-209"></a><span class="fu"># Example</span></span>
+<span id="cb36-210"><a href="#cb36-210"></a></span>
+<span id="cb36-211"><a href="#cb36-211"></a><span class="ss">- </span>Suppose we have</span>
+<span id="cb36-212"><a href="#cb36-212"></a><span class="in">```{.python}</span></span>
+<span id="cb36-213"><a href="#cb36-213"></a><span class="in">a, b = 1071, 462</span></span>
+<span id="cb36-214"><a href="#cb36-214"></a><span class="in">```</span></span>
+<span id="cb36-215"><a href="#cb36-215"></a><span class="ss">- </span>We wish to find their *greatest common denominator*</span>
+<span id="cb36-216"><a href="#cb36-216"></a></span>
+<span id="cb36-217"><a href="#cb36-217"></a><span class="fu"># Initialize</span></span>
+<span id="cb36-218"><a href="#cb36-218"></a></span>
+<span id="cb36-219"><a href="#cb36-219"></a><span class="ss">1. </span>Take the larger value</span>
+<span id="cb36-220"><a href="#cb36-220"></a><span class="in">```{.python}</span></span>
+<span id="cb36-221"><a href="#cb36-221"></a><span class="in">x, y = max(a,b), min(a,b)</span></span>
+<span id="cb36-222"><a href="#cb36-222"></a><span class="in">```</span></span>
+<span id="cb36-223"><a href="#cb36-223"></a></span>
+<span id="cb36-224"><a href="#cb36-224"></a></span>
+<span id="cb36-225"><a href="#cb36-225"></a><span class="fu"># Substract </span></span>
+<span id="cb36-226"><a href="#cb36-226"></a></span>
+<span id="cb36-227"><a href="#cb36-227"></a><span class="ss">2. </span>Subtract the smaller value from the larger value until it is no longer larger.</span>
+<span id="cb36-228"><a href="#cb36-228"></a><span class="in">```{.python}</span></span>
+<span id="cb36-229"><a href="#cb36-229"></a><span class="in">while x &gt;= y:</span></span>
+<span id="cb36-230"><a href="#cb36-230"></a><span class="in">    x -= y</span></span>
+<span id="cb36-231"><a href="#cb36-231"></a><span class="in">```</span></span>
+<span id="cb36-232"><a href="#cb36-232"></a></span>
+<span id="cb36-233"><a href="#cb36-233"></a><span class="fu"># Loop</span></span>
+<span id="cb36-234"><a href="#cb36-234"></a></span>
+<span id="cb36-235"><a href="#cb36-235"></a><span class="ss">3. </span>Repeat...</span>
+<span id="cb36-236"><a href="#cb36-236"></a></span>
+<span id="cb36-237"><a href="#cb36-237"></a><span class="in">```{.python}</span></span>
+<span id="cb36-238"><a href="#cb36-238"></a><span class="in">x, y = max(x,y), min(x,y)</span></span>
+<span id="cb36-239"><a href="#cb36-239"></a><span class="in">```</span></span>
+<span id="cb36-240"><a href="#cb36-240"></a></span>
+<span id="cb36-241"><a href="#cb36-241"></a><span class="fu"># Terminate</span></span>
+<span id="cb36-242"><a href="#cb36-242"></a></span>
+<span id="cb36-243"><a href="#cb36-243"></a><span class="ss">4. </span>Stop when either x or y is zero</span>
+<span id="cb36-244"><a href="#cb36-244"></a></span>
+<span id="cb36-245"><a href="#cb36-245"></a><span class="in">```{.python}</span></span>
+<span id="cb36-246"><a href="#cb36-246"></a><span class="in">x, y = x != 0 and y != 0 ? max(x,y), min(x,y) : exit()</span></span>
+<span id="cb36-247"><a href="#cb36-247"></a><span class="in">```</span></span>
+<span id="cb36-248"><a href="#cb36-248"></a></span>
+<span id="cb36-249"><a href="#cb36-249"></a><span class="fu"># Iteratively</span></span>
+<span id="cb36-250"><a href="#cb36-250"></a></span>
+<span id="cb36-251"><a href="#cb36-251"></a><span class="in">```{.python}</span></span>
+<span id="cb36-252"><a href="#cb36-252"></a><span class="in"># i am not about to try to spell "uelcidan lagorhtim"</span></span>
+<span id="cb36-253"><a href="#cb36-253"></a><span class="in">def ea(a:int, b:int) -&gt; int: </span></span>
+<span id="cb36-254"><a href="#cb36-254"></a><span class="in">    while min(a,b) != 0:</span></span>
+<span id="cb36-255"><a href="#cb36-255"></a><span class="in">        a, b = max(a,b), min(a,b)</span></span>
+<span id="cb36-256"><a href="#cb36-256"></a><span class="in">        while a &gt;= b:</span></span>
+<span id="cb36-257"><a href="#cb36-257"></a><span class="in">            a -= b</span></span>
+<span id="cb36-258"><a href="#cb36-258"></a><span class="in">    return max(a,b)</span></span>
+<span id="cb36-259"><a href="#cb36-259"></a><span class="in">```</span></span>
+<span id="cb36-260"><a href="#cb36-260"></a></span>
+<span id="cb36-261"><a href="#cb36-261"></a><span class="fu"># Modulo</span></span>
+<span id="cb36-262"><a href="#cb36-262"></a></span>
+<span id="cb36-263"><a href="#cb36-263"></a><span class="ss">- </span>Essential we calculate a modulo or remainder (depending)</span>
+<span id="cb36-264"><a href="#cb36-264"></a><span class="ss">- </span>Then... do that again.</span>
+<span id="cb36-265"><a href="#cb36-265"></a>    </span>
+<span id="cb36-266"><a href="#cb36-266"></a><span class="in">```{.python}</span></span>
+<span id="cb36-267"><a href="#cb36-267"></a><span class="in"># i am not about to try to spell "udelcian altoghtn"</span></span>
+<span id="cb36-268"><a href="#cb36-268"></a><span class="in">def ea(a:int, b:int) -&gt; int: </span></span>
+<span id="cb36-269"><a href="#cb36-269"></a><span class="in">    while min(a,b) != 0:</span></span>
+<span id="cb36-270"><a href="#cb36-270"></a><span class="in">        a, b = max(a,b), min(a,b)</span></span>
+<span id="cb36-271"><a href="#cb36-271"></a><span class="in">        a %= b</span></span>
+<span id="cb36-272"><a href="#cb36-272"></a><span class="in">    return max(a,b)</span></span>
+<span id="cb36-273"><a href="#cb36-273"></a><span class="in">```</span></span>
+<span id="cb36-274"><a href="#cb36-274"></a></span>
+<span id="cb36-275"><a href="#cb36-275"></a><span class="ss">- </span>Recall - this *invented* division and modulo, so it can be done without assuming division and modulo.</span>
+<span id="cb36-276"><a href="#cb36-276"></a><span class="ss">    - </span>We are using it to do <span class="in">`gcd`</span>, and exist in a world with division and modulo.</span>
+<span id="cb36-277"><a href="#cb36-277"></a>    </span>
+<span id="cb36-278"><a href="#cb36-278"></a><span class="fu"># Recursively</span></span>
+<span id="cb36-279"><a href="#cb36-279"></a></span>
+<span id="cb36-280"><a href="#cb36-280"></a><span class="ss">- </span>Easier for me to understand recursively, either with mod or without.</span>
+<span id="cb36-281"><a href="#cb36-281"></a><span class="ss">    - </span>Here's one mod implementation.</span>
+<span id="cb36-282"><a href="#cb36-282"></a></span>
+<span id="cb36-283"><a href="#cb36-283"></a><span class="in">```{.python}</span></span>
+<span id="cb36-284"><a href="#cb36-284"></a><span class="in"># Have to make a lot of design decisions here, this is one variant</span></span>
+<span id="cb36-285"><a href="#cb36-285"></a><span class="in">recmod = lambda a, b: recmod (a - b, b) if a - b &gt;= 0 else a</span></span>
+<span id="cb36-286"><a href="#cb36-286"></a><span class="in">```</span></span>
+<span id="cb36-287"><a href="#cb36-287"></a></span>
+<span id="cb36-288"><a href="#cb36-288"></a></span>
+<span id="cb36-289"><a href="#cb36-289"></a><span class="fu"># Recursively</span></span>
+<span id="cb36-290"><a href="#cb36-290"></a></span>
+<span id="cb36-291"><a href="#cb36-291"></a><span class="ss">- </span>Easier for me to understand recursively, either with mod or without.</span>
+<span id="cb36-292"><a href="#cb36-292"></a><span class="ss">    - </span>Here's recursive EA</span>
+<span id="cb36-293"><a href="#cb36-293"></a></span>
+<span id="cb36-294"><a href="#cb36-294"></a><span class="in">```{.python}</span></span>
+<span id="cb36-295"><a href="#cb36-295"></a><span class="in"># Much easier if we assume argument order, of course</span></span>
+<span id="cb36-296"><a href="#cb36-296"></a><span class="in">rec_ea = lambda a, b : rec_ea(max(a,b) % min(a,b), min(a,b)) if min(a,b) &gt; 0 else max(a,b)</span></span>
+<span id="cb36-297"><a href="#cb36-297"></a></span>
+<span id="cb36-298"><a href="#cb36-298"></a><span class="in"># I much prefer</span></span>
+<span id="cb36-299"><a href="#cb36-299"></a><span class="in">helper = lambda a, b : helper(b, a % b) if b else a</span></span>
+<span id="cb36-300"><a href="#cb36-300"></a><span class="in">rec_ea = lambda a, b : helper(max(a,b), min(a,b))</span></span>
+<span id="cb36-301"><a href="#cb36-301"></a><span class="in">```</span></span>
+<span id="cb36-302"><a href="#cb36-302"></a></span>
+<span id="cb36-303"><a href="#cb36-303"></a><span class="fu"># With `def`</span></span>
+<span id="cb36-304"><a href="#cb36-304"></a></span>
+<span id="cb36-305"><a href="#cb36-305"></a><span class="ss">- </span>We do not all love inlining, and that's okay!</span>
+<span id="cb36-306"><a href="#cb36-306"></a></span>
+<span id="cb36-307"><a href="#cb36-307"></a><span class="in">```{.python}</span></span>
+<span id="cb36-308"><a href="#cb36-308"></a><span class="in">def ea(a:int, b:int) -&gt; int:</span></span>
+<span id="cb36-309"><a href="#cb36-309"></a><span class="in">    a, b = max(a,b), min(a,b)</span></span>
+<span id="cb36-310"><a href="#cb36-310"></a><span class="in">    def inner(a, b):</span></span>
+<span id="cb36-311"><a href="#cb36-311"></a><span class="in">        if b:</span></span>
+<span id="cb36-312"><a href="#cb36-312"></a><span class="in">            return inner(b, a % b)</span></span>
+<span id="cb36-313"><a href="#cb36-313"></a><span class="in">        else: </span></span>
+<span id="cb36-314"><a href="#cb36-314"></a><span class="in">            return a</span></span>
+<span id="cb36-315"><a href="#cb36-315"></a><span class="in">    return inner(a,b)</span></span>
+<span id="cb36-316"><a href="#cb36-316"></a><span class="in">```</span></span>
+<span id="cb36-317"><a href="#cb36-317"></a></span>
+<span id="cb36-318"><a href="#cb36-318"></a><span class="fu"># Simplest</span></span>
+<span id="cb36-319"><a href="#cb36-319"></a></span>
+<span id="cb36-320"><a href="#cb36-320"></a><span class="ss">- </span>We can remove type hints and just trust bigger first.</span>
+<span id="cb36-321"><a href="#cb36-321"></a></span>
+<span id="cb36-322"><a href="#cb36-322"></a><span class="in">```{.python}</span></span>
+<span id="cb36-323"><a href="#cb36-323"></a><span class="in">def ea(a, b):</span></span>
+<span id="cb36-324"><a href="#cb36-324"></a><span class="in">    if b:</span></span>
+<span id="cb36-325"><a href="#cb36-325"></a><span class="in">        return ea(b, a % b)</span></span>
+<span id="cb36-326"><a href="#cb36-326"></a><span class="in">    return a</span></span>
+<span id="cb36-327"><a href="#cb36-327"></a><span class="in">```</span></span>
+<span id="cb36-328"><a href="#cb36-328"></a></span>
+<span id="cb36-329"><a href="#cb36-329"></a><span class="fu"># Example</span></span>
+<span id="cb36-330"><a href="#cb36-330"></a></span>
+<span id="cb36-331"><a href="#cb36-331"></a><span class="ss">- </span><span class="in">`ea(1071, 462)`</span></span>
+<span id="cb36-332"><a href="#cb36-332"></a><span class="ss">- </span>I will use the following:</span>
+<span id="cb36-333"><a href="#cb36-333"></a><span class="in">```{.python}</span></span>
+<span id="cb36-334"><a href="#cb36-334"></a><span class="in">def ea(a, b):</span></span>
+<span id="cb36-335"><a href="#cb36-335"></a><span class="in">    print(f"a = {a:4d}, b = {b:4d}")</span></span>
+<span id="cb36-336"><a href="#cb36-336"></a><span class="in">    if b:</span></span>
+<span id="cb36-337"><a href="#cb36-337"></a><span class="in">        return ea(b, a % b)</span></span>
+<span id="cb36-338"><a href="#cb36-338"></a><span class="in">    return a</span></span>
+<span id="cb36-339"><a href="#cb36-339"></a><span class="in">```</span></span>
+<span id="cb36-340"><a href="#cb36-340"></a><span class="ss">- </span>We get:</span>
+<span id="cb36-341"><a href="#cb36-341"></a><span class="in">```{.email}</span></span>
+<span id="cb36-342"><a href="#cb36-342"></a><span class="in">a = 1071, b =  462</span></span>
+<span id="cb36-343"><a href="#cb36-343"></a><span class="in">a =  462, b =  147</span></span>
+<span id="cb36-344"><a href="#cb36-344"></a><span class="in">a =  147, b =   21</span></span>
+<span id="cb36-345"><a href="#cb36-345"></a><span class="in">a =   21, b =    0</span></span>
+<span id="cb36-346"><a href="#cb36-346"></a><span class="in">21</span></span>
+<span id="cb36-347"><a href="#cb36-347"></a><span class="in">```</span></span>
+<span id="cb36-348"><a href="#cb36-348"></a></span>
+<span id="cb36-349"><a href="#cb36-349"></a><span class="fu"># Test it</span></span>
+<span id="cb36-350"><a href="#cb36-350"></a></span>
+<span id="cb36-351"><a href="#cb36-351"></a><span class="ss">- </span>Both are divisible by 21!</span>
+<span id="cb36-352"><a href="#cb36-352"></a></span>
+<span id="cb36-353"><a href="#cb36-353"></a><span class="in">```{.python}</span></span>
+<span id="cb36-354"><a href="#cb36-354"></a><span class="in">&gt;&gt;&gt; 1071/21</span></span>
+<span id="cb36-355"><a href="#cb36-355"></a><span class="in">51.0</span></span>
+<span id="cb36-356"><a href="#cb36-356"></a><span class="in">&gt;&gt;&gt; 462/21</span></span>
+<span id="cb36-357"><a href="#cb36-357"></a><span class="in">22.0</span></span>
+<span id="cb36-358"><a href="#cb36-358"></a><span class="in">```</span></span>
+<span id="cb36-359"><a href="#cb36-359"></a></span>
+<span id="cb36-360"><a href="#cb36-360"></a><span class="fu"># Anyways</span></span>
+<span id="cb36-361"><a href="#cb36-361"></a></span>
+<span id="cb36-362"><a href="#cb36-362"></a><span class="ss">- </span>This is what GitHub Copilot did, I don't know if we understood it at the time.</span>
+<span id="cb36-363"><a href="#cb36-363"></a></span>
+<span id="cb36-364"><a href="#cb36-364"></a><span class="in">```{.python}</span></span>
+<span id="cb36-365"><a href="#cb36-365"></a><span class="in">def gcd(a, b):</span></span>
+<span id="cb36-366"><a href="#cb36-366"></a><span class="in">    """Calculate the Greatest Common Divisor of a and b."""</span></span>
+<span id="cb36-367"><a href="#cb36-367"></a><span class="in">    while b:</span></span>
+<span id="cb36-368"><a href="#cb36-368"></a><span class="in">        a, b = b, a % b</span></span>
+<span id="cb36-369"><a href="#cb36-369"></a><span class="in">    return a</span></span>
+<span id="cb36-370"><a href="#cb36-370"></a></span>
+<span id="cb36-371"><a href="#cb36-371"></a><span class="in">def lcm(a, b):</span></span>
+<span id="cb36-372"><a href="#cb36-372"></a><span class="in">    """Calculate the Least Common Multiple of a and b."""</span></span>
+<span id="cb36-373"><a href="#cb36-373"></a><span class="in">    return a * b // gcd(a, b)</span></span>
+<span id="cb36-374"><a href="#cb36-374"></a><span class="in">```</span></span>
+<span id="cb36-375"><a href="#cb36-375"></a></span>
+<span id="cb36-376"><a href="#cb36-376"></a>#</span>
+<span id="cb36-377"><a href="#cb36-377"></a></span>
+<span id="cb36-378"><a href="#cb36-378"></a>::::{.columns}</span>
+<span id="cb36-379"><a href="#cb36-379"></a></span>
+<span id="cb36-380"><a href="#cb36-380"></a>:::{.column width="25%"}</span>
+<span id="cb36-381"><a href="#cb36-381"></a></span>
+<span id="cb36-382"><a href="#cb36-382"></a><span class="al">![](https://upload.wikimedia.org/wikipedia/commons/1/1c/Euclidean_algorithm_1071_462.gif)</span></span>
+<span id="cb36-383"><a href="#cb36-383"></a></span>
+<span id="cb36-384"><a href="#cb36-384"></a>:::</span>
+<span id="cb36-385"><a href="#cb36-385"></a></span>
+<span id="cb36-386"><a href="#cb36-386"></a>:::{.column width="75%"}</span>
+<span id="cb36-387"><a href="#cb36-387"></a></span>
+<span id="cb36-388"><a href="#cb36-388"></a><span class="at">&gt; Subtraction-based animation of the Euclidean algorithm. The initial rectangle has dimensions a = 1071 and b = 462. Squares of size 462×462 are placed within it leaving a 462×147 rectangle. This rectangle is tiled with 147×147 squares until a 21×147 rectangle is left, which in turn is tiled with 21×21 squares, leaving no uncovered area. The smallest square size, 21, is the GCD of 1071 and 462.</span></span>
+<span id="cb36-389"><a href="#cb36-389"></a></span>
+<span id="cb36-390"><a href="#cb36-390"></a>:::</span>
+<span id="cb36-391"><a href="#cb36-391"></a></span>
+<span id="cb36-392"><a href="#cb36-392"></a>::::</span>
+<span id="cb36-393"><a href="#cb36-393"></a></span>
+<span id="cb36-394"><a href="#cb36-394"></a><span class="fu"># Today</span></span>
+<span id="cb36-395"><a href="#cb36-395"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean division</span>
+<span id="cb36-396"><a href="#cb36-396"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean algorithm</span>
+<span id="cb36-397"><a href="#cb36-397"></a><span class="ss">- </span>Extended Euclidean algorithm</span>
+<span id="cb36-398"><a href="#cb36-398"></a><span class="ss">- </span>Bézout's identity</span>
+<span id="cb36-399"><a href="#cb36-399"></a></span>
+<span id="cb36-400"><a href="#cb36-400"></a></span>
+<span id="cb36-401"><a href="#cb36-401"></a><span class="fu"># Reorder</span></span>
+<span id="cb36-402"><a href="#cb36-402"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean division</span>
+<span id="cb36-403"><a href="#cb36-403"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean algorithm</span>
+<span id="cb36-404"><a href="#cb36-404"></a><span class="ss">- </span>Bézout's identity</span>
+<span id="cb36-405"><a href="#cb36-405"></a><span class="ss">- </span>Extended Euclidean algorithm</span>
+<span id="cb36-406"><a href="#cb36-406"></a></span>
+<span id="cb36-407"><a href="#cb36-407"></a></span>
+<span id="cb36-408"><a href="#cb36-408"></a><span class="fu"># MMI</span></span>
+<span id="cb36-409"><a href="#cb36-409"></a></span>
+<span id="cb36-410"><a href="#cb36-410"></a><span class="ss">- </span>Multiplicative Modular Inverse</span>
+<span id="cb36-411"><a href="#cb36-411"></a></span>
+<span id="cb36-412"><a href="#cb36-412"></a><span class="in">```{.python}</span></span>
+<span id="cb36-413"><a href="#cb36-413"></a><span class="in">def find_d():</span></span>
+<span id="cb36-414"><a href="#cb36-414"></a><span class="in">  d = 1</span></span>
+<span id="cb36-415"><a href="#cb36-415"></a><span class="in">  while 1 != (d * e % hide_λ()):</span></span>
+<span id="cb36-416"><a href="#cb36-416"></a><span class="in">    d += 1</span></span>
+<span id="cb36-417"><a href="#cb36-417"></a><span class="in">  return d</span></span>
+<span id="cb36-418"><a href="#cb36-418"></a><span class="in">```</span></span>
+<span id="cb36-419"><a href="#cb36-419"></a></span>
+<span id="cb36-420"><a href="#cb36-420"></a><span class="ss">- </span>This is bad!</span>
+<span id="cb36-421"><a href="#cb36-421"></a><span class="ss">    - </span>This could be a loop over a 4096 bit integer!</span>
+<span id="cb36-422"><a href="#cb36-422"></a>    </span>
+<span id="cb36-423"><a href="#cb36-423"></a><span class="fu"># Slow</span></span>
+<span id="cb36-424"><a href="#cb36-424"></a></span>
+<span id="cb36-425"><a href="#cb36-425"></a><span class="ss">- </span>It could loop this many times.</span>
+<span id="cb36-426"><a href="#cb36-426"></a><span class="in">```{.python .code-overflow-wrap}</span></span>
+<span id="cb36-427"><a href="#cb36-427"></a><span class="in">&gt;&gt;&gt; 1 &lt;&lt; 4096</span></span>
+<span id="cb36-428"><a href="#cb36-428"></a><span class="in">1044388881413152506691752710716624382579964249047383780384233483283953907971557456848826811934997558340890106714439262837987573438185793607263236087851365277945956976543709998340361590134383718314428070011855946226376318839397712745672334684344586617496807908705803704071284048740118609114467977783598029006686938976881787785946905630190260940599579453432823469303026696443059025015972399867714215541693835559885291486318237914434496734087811872639496475100189041349008417061675093668333850551032972088269550769983616369411933015213796825837188091833656751221318492846368125550225998300412344784862595674492194617023806505913245610825731835380087608622102834270197698202313169017678006675195485079921636419370285375124784014907159135459982790513399611551794271106831134090584272884279791554849782954323534517065223269061394905987693002122963395687782878948440616007412945674919823050571642377154816321380631045902916136926708342856440730447899971901781465763473223850267253059899795996090799469201774624817718449867455659250178329070473119433165550807568221846571746373296884912819520317457002440926616910874148385078411929804522981857338977648103126085903001302413467189726673216491511131602920781738033436090243804708340403154190336</span></span>
+<span id="cb36-429"><a href="#cb36-429"></a><span class="in">```</span></span>
+<span id="cb36-430"><a href="#cb36-430"></a></span>
+<span id="cb36-431"><a href="#cb36-431"></a><span class="fu"># We note</span></span>
+<span id="cb36-432"><a href="#cb36-432"></a></span>
+<span id="cb36-433"><a href="#cb36-433"></a><span class="ss">- </span>In the Euclidean algorithm, we were tracking only remainders.</span>
+<span id="cb36-434"><a href="#cb36-434"></a><span class="ss">    - </span>What if we also tracked quotients?</span>
+<span id="cb36-435"><a href="#cb36-435"></a><span class="ss">- </span>We introduce normal expression "Bézout's identity"</span>
+<span id="cb36-436"><a href="#cb36-436"></a><span class="ss">    - </span>Named after a 1700s French scholar</span>
+<span id="cb36-437"><a href="#cb36-437"></a><span class="ss">    - </span>Of note: subordinate result to 300s Chinese scholarship</span>
+<span id="cb36-438"><a href="#cb36-438"></a></span>
+<span id="cb36-439"><a href="#cb36-439"></a><span class="fu"># Bézout's identity</span></span>
+<span id="cb36-440"><a href="#cb36-440"></a></span>
+<span id="cb36-441"><a href="#cb36-441"></a>$$</span>
+<span id="cb36-442"><a href="#cb36-442"></a>\forall a, b \in \mathbb{Z} : \exists x, y \in \mathbb{Z} : a \times x + b \times y = \gcd(a,b)</span>
+<span id="cb36-443"><a href="#cb36-443"></a>$$</span>
+<span id="cb36-444"><a href="#cb36-444"></a></span>
+<span id="cb36-445"><a href="#cb36-445"></a><span class="ss">- </span>The linear combinations of $a$ and $b$ are exactly the multiples of $\gcd(a,b)$</span>
+<span id="cb36-446"><a href="#cb36-446"></a></span>
+<span id="cb36-447"><a href="#cb36-447"></a><span class="fu"># Recall</span></span>
+<span id="cb36-448"><a href="#cb36-448"></a></span>
+<span id="cb36-449"><a href="#cb36-449"></a><span class="ss">- </span>To get $(m^e)^d \equiv m \pmod{n}$</span>
+<span id="cb36-450"><a href="#cb36-450"></a><span class="ss">- </span>We needed some $d$ that was the:</span>
+<span id="cb36-451"><a href="#cb36-451"></a><span class="ss">    - </span>Multiplicative inverse of $e$</span>
+<span id="cb36-452"><a href="#cb36-452"></a><span class="ss">    - </span>Mod the *totient*, the lcm of one less than each prime.</span>
+<span id="cb36-453"><a href="#cb36-453"></a>    </span>
+<span id="cb36-454"><a href="#cb36-454"></a><span class="fu"># Goals</span></span>
+<span id="cb36-455"><a href="#cb36-455"></a>    </span>
+<span id="cb36-456"><a href="#cb36-456"></a><span class="ss">- </span>So we need that $e$, times something, equals 1.</span>
+<span id="cb36-457"><a href="#cb36-457"></a><span class="ss">    - </span>That's a linear combination!</span>
+<span id="cb36-458"><a href="#cb36-458"></a><span class="ss">    - </span>$e$ and $\lambda(n)$ were coprime by construction.</span>
+<span id="cb36-459"><a href="#cb36-459"></a><span class="ss">        - </span>*So their gcd is `1`*</span>
+<span id="cb36-460"><a href="#cb36-460"></a></span>
+<span id="cb36-461"><a href="#cb36-461"></a>$$</span>
+<span id="cb36-462"><a href="#cb36-462"></a>\forall e, \lambda(n) \in \mathbb{Z} : \exists x, y \in \mathbb{Z} : e \times x + \lambda(n) \times y = 1</span>
+<span id="cb36-463"><a href="#cb36-463"></a>$$</span>
+<span id="cb36-464"><a href="#cb36-464"></a></span>
+<span id="cb36-465"><a href="#cb36-465"></a><span class="ss">- </span>And we are taking this $\pmod{\lambda(n)}$ so</span>
+<span id="cb36-466"><a href="#cb36-466"></a></span>
+<span id="cb36-467"><a href="#cb36-467"></a><span class="fu"># Put it all together</span></span>
+<span id="cb36-468"><a href="#cb36-468"></a></span>
+<span id="cb36-469"><a href="#cb36-469"></a>$$</span>
+<span id="cb36-470"><a href="#cb36-470"></a>\forall e, \lambda(n) \in \mathbb{Z} : \exists x \in \mathbb{Z} : e \times x \equiv 1 \pmod{\lambda(n)}</span>
+<span id="cb36-471"><a href="#cb36-471"></a>$$</span>
+<span id="cb36-472"><a href="#cb36-472"></a></span>
+<span id="cb36-473"><a href="#cb36-473"></a><span class="ss">- </span>And this can be calculated with a little thing I like to call the "Extended Euclidean Algorithm".</span>
+<span id="cb36-474"><a href="#cb36-474"></a><span class="ss">    - </span>Perhaps prefer "extended GCD algorithm" which I think the terminology will converge on, in time.</span>
+<span id="cb36-475"><a href="#cb36-475"></a><span class="ss">    - </span>But if you need to look it up, mention Euclid.</span>
+<span id="cb36-476"><a href="#cb36-476"></a></span>
+<span id="cb36-477"><a href="#cb36-477"></a></span>
+<span id="cb36-478"><a href="#cb36-478"></a><span class="fu"># Reorder</span></span>
+<span id="cb36-479"><a href="#cb36-479"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean division</span>
+<span id="cb36-480"><a href="#cb36-480"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean algorithm</span>
+<span id="cb36-481"><a href="#cb36-481"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Bézout's identity</span>
+<span id="cb36-482"><a href="#cb36-482"></a><span class="ss">- </span>Extended Euclidean algorithm</span>
+<span id="cb36-483"><a href="#cb36-483"></a></span>
+<span id="cb36-484"><a href="#cb36-484"></a><span class="fu"># MMI</span></span>
+<span id="cb36-485"><a href="#cb36-485"></a></span>
+<span id="cb36-486"><a href="#cb36-486"></a><span class="ss">- </span>Multiplicative Modular Inverse</span>
+<span id="cb36-487"><a href="#cb36-487"></a></span>
+<span id="cb36-488"><a href="#cb36-488"></a><span class="in">```{.python}</span></span>
+<span id="cb36-489"><a href="#cb36-489"></a><span class="in">def find_d():</span></span>
+<span id="cb36-490"><a href="#cb36-490"></a><span class="in">  d = 1</span></span>
+<span id="cb36-491"><a href="#cb36-491"></a><span class="in">  while 1 != (d * e % hide_λ()):</span></span>
+<span id="cb36-492"><a href="#cb36-492"></a><span class="in">    d += 1</span></span>
+<span id="cb36-493"><a href="#cb36-493"></a><span class="in">  return d</span></span>
+<span id="cb36-494"><a href="#cb36-494"></a><span class="in">```</span></span>
+<span id="cb36-495"><a href="#cb36-495"></a></span>
+<span id="cb36-496"><a href="#cb36-496"></a><span class="ss">- </span>This is bad!</span>
+<span id="cb36-497"><a href="#cb36-497"></a><span class="ss">    - </span>This could be a loop over a 4096 bit integer!</span>
+<span id="cb36-498"><a href="#cb36-498"></a>    </span>
+<span id="cb36-499"><a href="#cb36-499"></a><span class="fu"># EEA</span></span>
+<span id="cb36-500"><a href="#cb36-500"></a></span>
+<span id="cb36-501"><a href="#cb36-501"></a><span class="ss">- </span>The EEA is akin to the EA but tracks quotients as well as remainders.</span>
+<span id="cb36-502"><a href="#cb36-502"></a><span class="ss">    - </span>This dramatically increases overhead.</span>
+<span id="cb36-503"><a href="#cb36-503"></a></span>
+<span id="cb36-504"><a href="#cb36-504"></a></span>
+<span id="cb36-505"><a href="#cb36-505"></a><span class="fu"># Ground truth</span></span>
+<span id="cb36-506"><a href="#cb36-506"></a></span>
+<span id="cb36-507"><a href="#cb36-507"></a><span class="ss">- </span>I regard the Wikipedia simplifed pseudocode as ground thrust for eea.</span>
+<span id="cb36-508"><a href="#cb36-508"></a><span class="ss">    - </span>They call it <span class="in">`extended_gcd`</span>, which I do like.</span>
+<span id="cb36-509"><a href="#cb36-509"></a></span>
+<span id="cb36-510"><a href="#cb36-510"></a>#</span>
+<span id="cb36-511"><a href="#cb36-511"></a></span>
+<span id="cb36-512"><a href="#cb36-512"></a><span class="in">```{.email}</span></span>
+<span id="cb36-513"><a href="#cb36-513"></a><span class="in">function extended_gcd(a, b)</span></span>
+<span id="cb36-514"><a href="#cb36-514"></a><span class="in">    s := 0;    old_s := 1</span></span>
+<span id="cb36-515"><a href="#cb36-515"></a><span class="in">    r := b;    old_r := a</span></span>
+<span id="cb36-516"><a href="#cb36-516"></a><span class="in">         </span></span>
+<span id="cb36-517"><a href="#cb36-517"></a><span class="in">    while r ≠ 0 do</span></span>
+<span id="cb36-518"><a href="#cb36-518"></a><span class="in">        quotient := old_r div r</span></span>
+<span id="cb36-519"><a href="#cb36-519"></a><span class="in">        (old_r, r) := (r, old_r − quotient × r)</span></span>
+<span id="cb36-520"><a href="#cb36-520"></a><span class="in">        (old_s, s) := (s, old_s − quotient × s)</span></span>
+<span id="cb36-521"><a href="#cb36-521"></a><span class="in">    </span></span>
+<span id="cb36-522"><a href="#cb36-522"></a><span class="in">    if b ≠ 0 then</span></span>
+<span id="cb36-523"><a href="#cb36-523"></a><span class="in">        bezout_t := (old_r − old_s × a) div b</span></span>
+<span id="cb36-524"><a href="#cb36-524"></a><span class="in">    else</span></span>
+<span id="cb36-525"><a href="#cb36-525"></a><span class="in">        bezout_t := 0</span></span>
+<span id="cb36-526"><a href="#cb36-526"></a><span class="in">    </span></span>
+<span id="cb36-527"><a href="#cb36-527"></a><span class="in">    output "Bézout coefficients:", (old_s, bezout_t)</span></span>
+<span id="cb36-528"><a href="#cb36-528"></a><span class="in">    output "greatest common divisor:", old_r</span></span>
+<span id="cb36-529"><a href="#cb36-529"></a><span class="in">```</span></span>
+<span id="cb36-530"><a href="#cb36-530"></a></span>
+<span id="cb36-531"><a href="#cb36-531"></a></span>
+<span id="cb36-532"><a href="#cb36-532"></a><span class="fu"># $x$ and $y$</span></span>
+<span id="cb36-533"><a href="#cb36-533"></a></span>
+<span id="cb36-534"><a href="#cb36-534"></a><span class="ss">- </span>We don't need this:</span>
+<span id="cb36-535"><a href="#cb36-535"></a><span class="in">```{.email}</span></span>
+<span id="cb36-536"><a href="#cb36-536"></a><span class="in">    if b ≠ 0 then</span></span>
+<span id="cb36-537"><a href="#cb36-537"></a><span class="in">        bezout_t := (old_r − old_s × a) div b</span></span>
+<span id="cb36-538"><a href="#cb36-538"></a><span class="in">    else</span></span>
+<span id="cb36-539"><a href="#cb36-539"></a><span class="in">        bezout_t := 0</span></span>
+<span id="cb36-540"><a href="#cb36-540"></a><span class="in">```</span></span>
+<span id="cb36-541"><a href="#cb36-541"></a><span class="ss">- </span>In Bézout's identity:</span>
+<span id="cb36-542"><a href="#cb36-542"></a>$$</span>
+<span id="cb36-543"><a href="#cb36-543"></a>\forall a, b \in \mathbb{Z} : \exists x, y \in \mathbb{Z} : a \times x + b \times y = \gcd(a,b)</span>
+<span id="cb36-544"><a href="#cb36-544"></a>$$</span>
+<span id="cb36-545"><a href="#cb36-545"></a><span class="ss">- </span>We need only $x$, not $y$.</span>
+<span id="cb36-546"><a href="#cb36-546"></a></span>
+<span id="cb36-547"><a href="#cb36-547"></a>#</span>
+<span id="cb36-548"><a href="#cb36-548"></a></span>
+<span id="cb36-549"><a href="#cb36-549"></a><span class="in">```{.email}</span></span>
+<span id="cb36-550"><a href="#cb36-550"></a><span class="in">function extended_gcd(a, b)</span></span>
+<span id="cb36-551"><a href="#cb36-551"></a><span class="in">    s := 0;    old_s := 1</span></span>
+<span id="cb36-552"><a href="#cb36-552"></a><span class="in">    r := b;    old_r := a</span></span>
+<span id="cb36-553"><a href="#cb36-553"></a><span class="in">         </span></span>
+<span id="cb36-554"><a href="#cb36-554"></a><span class="in">    while r ≠ 0 do</span></span>
+<span id="cb36-555"><a href="#cb36-555"></a><span class="in">        quotient := old_r div r</span></span>
+<span id="cb36-556"><a href="#cb36-556"></a><span class="in">        (old_r, r) := (r, old_r − quotient × r)</span></span>
+<span id="cb36-557"><a href="#cb36-557"></a><span class="in">        (old_s, s) := (s, old_s − quotient × s)</span></span>
+<span id="cb36-558"><a href="#cb36-558"></a><span class="in">    </span></span>
+<span id="cb36-559"><a href="#cb36-559"></a><span class="in">    output "Bézout coefficient:", old_s</span></span>
+<span id="cb36-560"><a href="#cb36-560"></a><span class="in">    output "greatest common divisor:", old_r</span></span>
+<span id="cb36-561"><a href="#cb36-561"></a><span class="in">```</span></span>
+<span id="cb36-562"><a href="#cb36-562"></a></span>
+<span id="cb36-563"><a href="#cb36-563"></a></span>
+<span id="cb36-564"><a href="#cb36-564"></a><span class="fu"># Modulo</span></span>
+<span id="cb36-565"><a href="#cb36-565"></a></span>
+<span id="cb36-566"><a href="#cb36-566"></a><span class="ss">- </span>This implementation does not calculate modulo</span>
+<span id="cb36-567"><a href="#cb36-567"></a><span class="in">```{.email}</span></span>
+<span id="cb36-568"><a href="#cb36-568"></a><span class="in">quotient := old_r div r</span></span>
+<span id="cb36-569"><a href="#cb36-569"></a><span class="in">(old_r, r) := (r, old_r − quotient × r)</span></span>
+<span id="cb36-570"><a href="#cb36-570"></a><span class="in">```</span></span>
+<span id="cb36-571"><a href="#cb36-571"></a><span class="ss">- </span>That is equal to </span>
+<span id="cb36-572"><a href="#cb36-572"></a><span class="in">```{.email}</span></span>
+<span id="cb36-573"><a href="#cb36-573"></a><span class="in">quotient := old_r div r</span></span>
+<span id="cb36-574"><a href="#cb36-574"></a><span class="in">(old_r, r) := (r, old_r mod quotient)</span></span>
+<span id="cb36-575"><a href="#cb36-575"></a><span class="in">```</span></span>
+<span id="cb36-576"><a href="#cb36-576"></a></span>
+<span id="cb36-577"><a href="#cb36-577"></a>#</span>
+<span id="cb36-578"><a href="#cb36-578"></a></span>
+<span id="cb36-579"><a href="#cb36-579"></a><span class="in">```{.email}</span></span>
+<span id="cb36-580"><a href="#cb36-580"></a><span class="in">function extended_gcd(a, b)</span></span>
+<span id="cb36-581"><a href="#cb36-581"></a><span class="in">    s := 0;    old_s := 1</span></span>
+<span id="cb36-582"><a href="#cb36-582"></a><span class="in">    r := b;    old_r := a</span></span>
+<span id="cb36-583"><a href="#cb36-583"></a><span class="in">         </span></span>
+<span id="cb36-584"><a href="#cb36-584"></a><span class="in">    while r ≠ 0 do</span></span>
+<span id="cb36-585"><a href="#cb36-585"></a><span class="in">        quotient := old_r div r</span></span>
+<span id="cb36-586"><a href="#cb36-586"></a><span class="in">        (old_r, r) := (r, old_r mod quotient)</span></span>
+<span id="cb36-587"><a href="#cb36-587"></a><span class="in">        (old_s, s) := (s, old_s mod quotient)</span></span>
+<span id="cb36-588"><a href="#cb36-588"></a><span class="in">    </span></span>
+<span id="cb36-589"><a href="#cb36-589"></a><span class="in">    output "Bézout coefficient:", old_s</span></span>
+<span id="cb36-590"><a href="#cb36-590"></a><span class="in">    output "greatest common divisor:", old_r</span></span>
+<span id="cb36-591"><a href="#cb36-591"></a><span class="in">```</span></span>
+<span id="cb36-592"><a href="#cb36-592"></a></span>
+<span id="cb36-593"><a href="#cb36-593"></a><span class="fu"># Recursion</span></span>
+<span id="cb36-594"><a href="#cb36-594"></a></span>
+<span id="cb36-595"><a href="#cb36-595"></a><span class="ss">- </span>The usage of "old s" and "old r" a holdovers from a conversion from recursion to iteration.</span>
+<span id="cb36-596"><a href="#cb36-596"></a><span class="ss">    - </span>Recall the <span class="in">`gcd`</span> is calculable by any implementation</span>
+<span id="cb36-597"><a href="#cb36-597"></a><span class="ss">    - </span>As is the algorithm</span>
+<span id="cb36-598"><a href="#cb36-598"></a></span>
+<span id="cb36-599"><a href="#cb36-599"></a><span class="fu"># We can recurse</span></span>
+<span id="cb36-600"><a href="#cb36-600"></a></span>
+<span id="cb36-601"><a href="#cb36-601"></a><span class="in">```{.email}</span></span>
+<span id="cb36-602"><a href="#cb36-602"></a><span class="in">function extended_gcd(a, b)</span></span>
+<span id="cb36-603"><a href="#cb36-603"></a><span class="in">    if b is 0 do</span></span>
+<span id="cb36-604"><a href="#cb36-604"></a><span class="in">        output a, 1, 0</span></span>
+<span id="cb36-605"><a href="#cb36-605"></a><span class="in">        </span></span>
+<span id="cb36-606"><a href="#cb36-606"></a><span class="in">    r, s, t := extended_gcd(b, a mod b)</span></span>
+<span id="cb36-607"><a href="#cb36-607"></a><span class="in">    </span></span>
+<span id="cb36-608"><a href="#cb36-608"></a><span class="in">    output r, t, s - (a div b) × t</span></span>
+<span id="cb36-609"><a href="#cb36-609"></a><span class="in">```</span></span>
+<span id="cb36-610"><a href="#cb36-610"></a></span>
+<span id="cb36-611"><a href="#cb36-611"></a><span class="fu"># To Python</span></span>
+<span id="cb36-612"><a href="#cb36-612"></a></span>
+<span id="cb36-613"><a href="#cb36-613"></a><span class="in">```{.python}</span></span>
+<span id="cb36-614"><a href="#cb36-614"></a><span class="in">def extended_gcd(a, b):</span></span>
+<span id="cb36-615"><a href="#cb36-615"></a><span class="in">    if b == 0:</span></span>
+<span id="cb36-616"><a href="#cb36-616"></a><span class="in">        return a, 1, 0</span></span>
+<span id="cb36-617"><a href="#cb36-617"></a><span class="in">    r, s, t = extended_gcd(b, a % b)</span></span>
+<span id="cb36-618"><a href="#cb36-618"></a><span class="in">    return r, t, s - (a // b) * t # no graceful mod here</span></span>
+<span id="cb36-619"><a href="#cb36-619"></a><span class="in">```</span></span>
+<span id="cb36-620"><a href="#cb36-620"></a></span>
+<span id="cb36-621"><a href="#cb36-621"></a><span class="fu"># Example</span></span>
+<span id="cb36-622"><a href="#cb36-622"></a></span>
+<span id="cb36-623"><a href="#cb36-623"></a><span class="in">```{.python}</span></span>
+<span id="cb36-624"><a href="#cb36-624"></a><span class="in">&gt;&gt;&gt; extended_gcd(1071, 462)</span></span>
+<span id="cb36-625"><a href="#cb36-625"></a><span class="in">(21, -3, 7)</span></span>
+<span id="cb36-626"><a href="#cb36-626"></a><span class="in">&gt;&gt;&gt; 1071 * -3 + 462 * 7</span></span>
+<span id="cb36-627"><a href="#cb36-627"></a><span class="in">21</span></span>
+<span id="cb36-628"><a href="#cb36-628"></a><span class="in">```</span></span>
+<span id="cb36-629"><a href="#cb36-629"></a></span>
+<span id="cb36-630"><a href="#cb36-630"></a><span class="fu"># Wait a minute!</span></span>
+<span id="cb36-631"><a href="#cb36-631"></a></span>
+<span id="cb36-632"><a href="#cb36-632"></a><span class="ss">- </span>Negatives are *a problem*</span>
+<span id="cb36-633"><a href="#cb36-633"></a><span class="ss">- </span>We deal with this modwise</span>
+<span id="cb36-634"><a href="#cb36-634"></a><span class="ss">- </span>Just add the modular base.</span>
+<span id="cb36-635"><a href="#cb36-635"></a></span>
+<span id="cb36-636"><a href="#cb36-636"></a><span class="fu"># In Practice</span></span>
+<span id="cb36-637"><a href="#cb36-637"></a></span>
+<span id="cb36-638"><a href="#cb36-638"></a><span class="ss">- </span>The modular base is the totient.</span>
+<span id="cb36-639"><a href="#cb36-639"></a><span class="ss">- </span>That is also the <span class="in">`b`</span> value we use in the eea.</span>
+<span id="cb36-640"><a href="#cb36-640"></a><span class="in">```{.python}</span></span>
+<span id="cb36-641"><a href="#cb36-641"></a><span class="in">def find_d():</span></span>
+<span id="cb36-642"><a href="#cb36-642"></a><span class="in">    start = extended_gcd(e,hide_λ())[1]</span></span>
+<span id="cb36-643"><a href="#cb36-643"></a><span class="in">    while start &lt; 0:</span></span>
+<span id="cb36-644"><a href="#cb36-644"></a><span class="in">        start += hide_λ()</span></span>
+<span id="cb36-645"><a href="#cb36-645"></a><span class="in">    return start</span></span>
+<span id="cb36-646"><a href="#cb36-646"></a><span class="in">```</span></span>
+<span id="cb36-647"><a href="#cb36-647"></a></span>
+<span id="cb36-648"><a href="#cb36-648"></a><span class="fu"># Reorder</span></span>
+<span id="cb36-649"><a href="#cb36-649"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean division</span>
+<span id="cb36-650"><a href="#cb36-650"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Euclidean algorithm</span>
+<span id="cb36-651"><a href="#cb36-651"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Bézout's identity</span>
+<span id="cb36-652"><a href="#cb36-652"></a><span class="ss">- </span><span class="dv">&amp;check;</span> Extended Euclidean algorithm</span>
+<span id="cb36-653"><a href="#cb36-653"></a></span>
+<span id="cb36-654"><a href="#cb36-654"></a></span>
+<span id="cb36-655"><a href="#cb36-655"></a><span class="fu"># Closing</span></span>
+<span id="cb36-656"><a href="#cb36-656"></a></span>
+<span id="cb36-657"><a href="#cb36-657"></a><span class="ss">- </span>You have have noticed <span class="in">`bigmul`</span> &amp; co cannot be used as infix operators.</span>
+<span id="cb36-658"><a href="#cb36-658"></a><span class="in">```{.python}</span></span>
+<span id="cb36-659"><a href="#cb36-659"></a><span class="in">r = m % n # this is a little mul</span></span>
+<span id="cb36-660"><a href="#cb36-660"></a><span class="in">bigmul(m, n, r) # this is the format of a big mul - not possible in Py</span></span>
+<span id="cb36-661"><a href="#cb36-661"></a><span class="in">```</span></span>
+<span id="cb36-662"><a href="#cb36-662"></a><span class="ss">- </span>You will need to:</span>
+<span id="cb36-663"><a href="#cb36-663"></a><span class="ss">    - </span>Track the sign of values</span>
+<span id="cb36-664"><a href="#cb36-664"></a><span class="ss">    - </span>Use big operations.</span>
+<span id="cb36-665"><a href="#cb36-665"></a><span class="ss">- </span>Start thinking about it now!</span>
+<span id="cb36-666"><a href="#cb36-666"></a></span>
+<span id="cb36-667"><a href="#cb36-667"></a><span class="fu"># All</span></span>
+<span id="cb36-668"><a href="#cb36-668"></a></span>
+<span id="cb36-669"><a href="#cb36-669"></a><span class="in">```python</span></span>
+<span id="cb36-670"><a href="#cb36-670"></a><span class="kw">def</span> find_large_prime(k):</span>
+<span id="cb36-671"><a href="#cb36-671"></a>    is_prime <span class="op">=</span> <span class="kw">lambda</span> n : <span class="bu">any</span>([n <span class="op">%</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span><span class="fl">.5</span>))])</span>
+<span id="cb36-672"><a href="#cb36-672"></a>    candidate <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> k <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb36-673"><a href="#cb36-673"></a>    <span class="co"># you need a prime tester</span></span>
+<span id="cb36-674"><a href="#cb36-674"></a>    <span class="cf">while</span> <span class="kw">not</span> is_prime(candidate):</span>
+<span id="cb36-675"><a href="#cb36-675"></a>        candidate <span class="op">+=</span> <span class="dv">6</span></span>
+<span id="cb36-676"><a href="#cb36-676"></a>    <span class="cf">return</span> candidate</span>
+<span id="cb36-677"><a href="#cb36-677"></a></span>
+<span id="cb36-678"><a href="#cb36-678"></a><span class="kw">def</span> extended_gcd(a, b):</span>
+<span id="cb36-679"><a href="#cb36-679"></a>    <span class="cf">if</span> b <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb36-680"><a href="#cb36-680"></a>        <span class="cf">return</span> a, <span class="dv">1</span>, <span class="dv">0</span></span>
+<span id="cb36-681"><a href="#cb36-681"></a>    r, s, t <span class="op">=</span> extended_gcd(b, a <span class="op">%</span> b)</span>
+<span id="cb36-682"><a href="#cb36-682"></a>    <span class="cf">return</span> r, t, s <span class="op">-</span> (a <span class="op">//</span> b) <span class="op">*</span> t <span class="co"># no graceful mod here</span></span>
+<span id="cb36-683"><a href="#cb36-683"></a></span>
+<span id="cb36-684"><a href="#cb36-684"></a></span>
+<span id="cb36-685"><a href="#cb36-685"></a><span class="kw">def</span> lcm(a, b):</span>
+<span id="cb36-686"><a href="#cb36-686"></a>    <span class="cf">return</span> a <span class="op">*</span> b <span class="op">//</span> extended_gcd(a,b)[<span class="dv">0</span>]</span>
+<span id="cb36-687"><a href="#cb36-687"></a></span>
+<span id="cb36-688"><a href="#cb36-688"></a>s <span class="op">=</span> <span class="st">"C"</span> <span class="co"># a random string</span></span>
+<span id="cb36-689"><a href="#cb36-689"></a>m <span class="op">=</span> <span class="bu">ord</span>(s) <span class="co"># to number</span></span>
+<span id="cb36-690"><a href="#cb36-690"></a></span>
+<span id="cb36-691"><a href="#cb36-691"></a>hide_p <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">6</span>)</span>
+<span id="cb36-692"><a href="#cb36-692"></a>hide_q <span class="op">=</span> <span class="kw">lambda</span>: find_large_prime(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">7</span>)</span>
+<span id="cb36-693"><a href="#cb36-693"></a>n <span class="op">=</span> hide_p() <span class="op">*</span> hide_q()</span>
+<span id="cb36-694"><a href="#cb36-694"></a></span>
+<span id="cb36-695"><a href="#cb36-695"></a>hide_λ <span class="op">=</span> <span class="kw">lambda</span>: lcm(hide_p() <span class="op">-</span> <span class="dv">1</span>,  hide_q() <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb36-696"><a href="#cb36-696"></a></span>
+<span id="cb36-697"><a href="#cb36-697"></a>e <span class="op">=</span> <span class="dv">65537</span> <span class="co"># encryptor</span></span>
+<span id="cb36-698"><a href="#cb36-698"></a></span>
+<span id="cb36-699"><a href="#cb36-699"></a><span class="kw">def</span> find_d():</span>
+<span id="cb36-700"><a href="#cb36-700"></a>    start <span class="op">=</span> extended_gcd(e,hide_λ())[<span class="dv">1</span>]</span>
+<span id="cb36-701"><a href="#cb36-701"></a>    <span class="cf">while</span> start <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb36-702"><a href="#cb36-702"></a>        start <span class="op">+=</span> hide_λ()</span>
+<span id="cb36-703"><a href="#cb36-703"></a>    <span class="cf">return</span> start</span>
+<span id="cb36-704"><a href="#cb36-704"></a></span>
+<span id="cb36-705"><a href="#cb36-705"></a><span class="kw">def</span> modexp(m, e, n):</span>
+<span id="cb36-706"><a href="#cb36-706"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb36-707"><a href="#cb36-707"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb36-708"><a href="#cb36-708"></a>    <span class="cf">if</span> e <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb36-709"><a href="#cb36-709"></a>        <span class="cf">return</span> m <span class="op">%</span> n</span>
+<span id="cb36-710"><a href="#cb36-710"></a>    <span class="cf">if</span> e <span class="op">%</span> <span class="dv">2</span>:</span>
+<span id="cb36-711"><a href="#cb36-711"></a>        <span class="cf">return</span> (m <span class="op">*</span> modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n)) <span class="op">%</span> n</span>
+<span id="cb36-712"><a href="#cb36-712"></a>    <span class="cf">return</span>  modexp(m<span class="op">*</span>m <span class="op">%</span> n, e<span class="op">//</span><span class="dv">2</span>, n) <span class="op">%</span> n</span>
+<span id="cb36-713"><a href="#cb36-713"></a></span>
+<span id="cb36-714"><a href="#cb36-714"></a>c <span class="op">=</span> modexp(m, e, n) <span class="co"># ciphertext</span></span>
+<span id="cb36-715"><a href="#cb36-715"></a></span>
+<span id="cb36-716"><a href="#cb36-716"></a>new_m <span class="op">=</span> modexp(c <span class="op">%</span> n, find_d(), n)</span>
+<span id="cb36-717"><a href="#cb36-717"></a></span>
+<span id="cb36-718"><a href="#cb36-718"></a><span class="bu">print</span>(<span class="bu">chr</span>(modexp(modexp(<span class="bu">ord</span>(<span class="st">"C"</span>), e, n), find_d(), n)))</span>
+<span id="cb36-719"><a href="#cb36-719"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
